@@ -3,33 +3,34 @@
 #include "raylib.h"
 #include <raymath.h>
 
-// enemy and possible attributes
-
-
 class Enemy
 {
-  public:
+public:
     Enemy(Vector2 startPos);
 
     void Update(float deltaTime, Vector2 playerPos);
     void Draw() const;
 
     Vector2 GetPos() const;
+    void SetPos(Vector2 newPos);
 
     float GetRadius() const;
 
     void TakeDamage(int amount);
-
     bool isDead() const;
 
     int GetHealth() const;
-
     void SetStats(int hp, float spd);
 
-  private:
+private:
     Vector2 position;
     float speed;
 
     int health;
     int maxHealth;
+
+    float separationRadius = 28.0f;
+
+    float rotation = 0.0f;
+    bool facingLeft = false;
 };

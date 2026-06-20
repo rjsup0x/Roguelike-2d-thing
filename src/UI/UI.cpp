@@ -64,7 +64,7 @@ void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
 
     DrawText(
         text,
-        (int)(barPos.x + (barWidth / 2) - (textWidth / 2)), // centered above bar
+        (int)(barPos.x + (barWidth / 2) - ((float)textWidth / 2)),
         (int)(barPos.y - 14), // ABOVE the bar
         fontSize,
         BLACK

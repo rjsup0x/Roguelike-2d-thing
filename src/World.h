@@ -39,6 +39,8 @@ public:
     // get players max health potential
     int GetPlayerMaxHealth() const;
 
+    void HandleEnemySeparation();
+
     Spawner& GetSpawner();
 
 private:
