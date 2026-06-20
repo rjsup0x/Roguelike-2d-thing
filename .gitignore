@@ -1,0 +1,40 @@
+# macOS
+.DS_Store
+
+# Build directories
+build/
+cmake-build-*/
+.cache/
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+
+# Executables
+roli
+*.app
+*.out
+*.exe
+
+# Object / binary files
+*.o
+*.obj
+*.d
+*.a
+*.so
+*.dylib
+
+# Zed
+.zed/
+
+# clangd
+.cache/clangd/
+
+# Other IDEs
+.vscode/
+.idea/
+
+*.info.txt
