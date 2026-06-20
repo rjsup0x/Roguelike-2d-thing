@@ -18,12 +18,43 @@ Enemy::Enemy(Vector2 startPos)
 void Enemy::Update(float deltaTime, Vector2 playerPos)
 {
     // -------------------------
+    // timers
+    // -------------------------
+    if (hitFlashTimer > 0.0f)
+        hitFlashTimer -= deltaTime;
+
+    if (freezeTimer > 0.0f)
+        freezeTimer -= deltaTime;
+
+    // -------------------------
+    // update damage numbers
+    // -------------------------
+    for (auto &d : damageNumbers)
+    {
+        d.timer -= deltaTime;
+        d.pos.y -= 30.0f * deltaTime;
+        d.alpha = d.timer / 0.6f;
+    }
+
+    damageNumbers.erase(
+        std::remove_if(damageNumbers.begin(), damageNumbers.end(),
+        [](DamageNumber &d) { return d.timer <= 0.0f; }),
+        damageNumbers.end()
+    );
+
+    // -------------------------
     // KNOCKBACK MOVEMENT
     // -------------------------
     position = Vector2Add(position, Vector2Scale(velocity, deltaTime));
 
     // apply friction (important or they slide forever)
     velocity = Vector2Scale(velocity, 0.90f);
+
+    // -------------------------
+    // freeze = no AI movement
+    // -------------------------
+    if (freezeTimer > 0.0f)
+        return;
 
     // -------------------------
     // AI MOVE TOWARD PLAYER
@@ -39,12 +70,6 @@ void Enemy::Update(float deltaTime, Vector2 playerPos)
     }
 
     // -------------------------
-    // HIT FLASH TIMER
-    // -------------------------
-    if (hitFlashTimer > 0.0f)
-        hitFlashTimer -= deltaTime;
-
-    // -------------------------
     // UPDATE FACING (FIX)
     // -------------------------
     Vector2 toPlayer = Vector2Subtract(playerPos, position);
@@ -56,6 +81,12 @@ void Enemy::Update(float deltaTime, Vector2 playerPos)
         // only flip direction (do NOT use for movement)
         facingLeft = (toPlayer.x < 0.0f);
     }
+
+    // -------------------------
+    // HIT FLASH TIMER
+    // -------------------------
+    if (hitFlashTimer > 0.0f)
+        hitFlashTimer -= deltaTime;
 }
 
 void Enemy::Draw() const
@@ -99,6 +130,17 @@ void Enemy::Draw() const
     );
 
     UI::DrawHealthBar(position, health, maxHealth);
+
+    for (const auto &d : damageNumbers)
+    {
+        DrawText(
+            TextFormat("%d", d.value),
+            (int)d.pos.x,
+            (int)d.pos.y,
+            18,
+            Fade(RED, d.alpha)
+        );
+    }
 }
 
 Vector2 Enemy::GetPos() const { return position; }
@@ -110,22 +152,30 @@ float Enemy::GetRadius() const { return 16.0f; }
 void Enemy::TakeDamage(int amount, Vector2 hitDir)
 {
     health -= amount;
-    if (health < 0) health = 0;
+        if (health < 0) health = 0;
 
-    // -------------------------
-    // KNOCKBACK
-    // -------------------------
-    float knockbackStrength = 250.0f;
+    // knockback
+    float knockback = 250.0f;
 
     velocity = Vector2Add(
         velocity,
-        Vector2Scale(hitDir, knockbackStrength)
+        Vector2Scale(hitDir, knockback)
     );
 
-    // -------------------------
-    // HIT FLASH
-    // -------------------------
-    hitFlashTimer = 0.12f; // short flash
+    // freeze enemy briefly
+    freezeTimer = 0.08f;
+
+    // flash red
+    hitFlashTimer = 0.12f;
+
+    // spawn damage number
+    DamageNumber d;
+    d.value = amount;
+    d.pos = position;
+    d.timer = 0.6f;
+    d.alpha = 1.0f;
+
+    damageNumbers.push_back(d);
 }
 
 bool Enemy::isDead() const

@@ -3,12 +3,16 @@
 #include <raylib.h>
 #include <raymath.h>
 
+#include <memory>
+#include <vector>
+#include "weapons/Weapon.h"
+
 class Player
 {
 public:
     Player();
 
-    void Update(float deltaTime);
+    void Update(float dt, Vector2 aimDir);
     void Draw() const;
 
     Vector2 GetPos() const;
@@ -24,6 +28,8 @@ public:
 
     Vector2 GetVelocity() const;
 
+    std::vector<std::unique_ptr<Weapon>>& GetWeapons();
+
 private:
     Vector2 position;
     Vector2 velocity;
@@ -32,4 +38,5 @@ private:
 
     int health;
     int maxHealth;
+    std::vector<std::unique_ptr<Weapon>> weapons;
 };

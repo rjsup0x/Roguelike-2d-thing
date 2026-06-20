@@ -1,7 +1,7 @@
 #include "Player.h"
 #include "UI/UI.h"
 #include "AssetManager.h"
-
+#include "weapons/BulletWeapon.h"
 #include <raylib.h>
 
 
@@ -12,12 +12,11 @@ Player::Player()
       health(100),
       maxHealth(100)
 {
-
+    weapons.push_back(std::make_unique<BulletWeapon>());
 }
 
-void Player::Update(float deltaTime)
+void Player::Update(float deltaTime, Vector2 aimDir)
 {
-    // update player movement
     velocity = {0.0f, 0.0f};
 
     if (IsKeyDown(KEY_W)) velocity.y -= 1;
@@ -25,13 +24,15 @@ void Player::Update(float deltaTime)
     if (IsKeyDown(KEY_A)) velocity.x -= 1;
     if (IsKeyDown(KEY_D)) velocity.x += 1;
 
-    // normalize it for verticle movement
     if (Vector2Length(velocity) > 0.0f)
     {
         velocity = Vector2Normalize(velocity);
+        position = Vector2Add(position, Vector2Scale(velocity, speed * deltaTime));
+    }
 
-        position.x += velocity.x * speed * deltaTime;
-        position.y += velocity.y * speed * deltaTime;
+    for (auto &w : weapons)
+    {
+        w->Update(deltaTime, position, aimDir);
     }
 }
 
@@ -51,7 +52,18 @@ void Player::Draw() const
         WHITE
     );
 
+    // draw weapon
+    for (auto& w : weapons)
+    {
+        w->Draw();
+    }
+
     UI::DrawHealthBar(position, health, maxHealth);
+}
+
+std::vector<std::unique_ptr<Weapon>>& Player::GetWeapons()
+{
+    return weapons;
 }
 
 // get player atrtibutes

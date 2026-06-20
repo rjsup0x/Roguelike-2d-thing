@@ -1,7 +1,17 @@
 #pragma once
 
 #include "raylib.h"
+
 #include <raymath.h>
+#include <vector>
+
+struct DamageNumber
+{
+    int value;
+    Vector2 pos;
+    float timer;
+    float alpha;
+};
 
 class Enemy
 {
@@ -37,4 +47,7 @@ private:
     bool facingLeft = false;
 
     float hitFlashTimer = 0.0f;
+    float freezeTimer = 0.0f;
+
+    std::vector<DamageNumber> damageNumbers;
 };
