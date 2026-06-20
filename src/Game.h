@@ -1,6 +1,7 @@
 #pragma once
 
 #include "World.h"
+#include "UI/UI.h"
 
 class Game
 {

@@ -70,3 +70,39 @@ void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
         BLACK
     );
 }
+
+void UI::DrawXPBar(int xp, int maxXP, int level)
+{
+    float barWidth = 400.0f;
+    float barHeight = 12.0f;
+
+    float screenX = GetScreenWidth() * 0.5f - barWidth * 0.5f;
+    float screenY = GetScreenHeight() - 40;
+
+    float percent = (float)xp / (float)maxXP;
+    if (percent > 1.0f) percent = 1.0f;
+
+    // background
+    DrawRectangle(screenX, screenY, barWidth, barHeight, DARKGRAY);
+
+    // fill
+    DrawRectangle(screenX, screenY, barWidth * percent, barHeight, SKYBLUE);
+
+    // text LEFT (level)
+    DrawText(
+        TextFormat("LV %d", level),
+        screenX - 60,
+        screenY - 2,
+        12,
+        WHITE
+    );
+
+    // text RIGHT (next level)
+    DrawText(
+        "NEXT LEVEL",
+        screenX + barWidth + 10,
+        screenY - 2,
+        12,
+        WHITE
+    );
+}

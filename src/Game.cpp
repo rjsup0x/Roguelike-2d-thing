@@ -1,5 +1,5 @@
 #include "Game.h"
-// #include "UI/UI.h"
+#include "UI/UI.h"
 
 #include <raylib.h>
 
@@ -56,6 +56,12 @@ void Game::Draw()
             // =========================
             // HUD (SCREEN SPACE) draw on screen UI here
             // =========================
+            //
+            UI::DrawXPBar(
+                world.GetPlayer().GetXP(),
+                world.GetPlayer().GetXPToNextLevel(),
+                world.GetPlayer().GetLevel()
+            );
 
 
             if (world.GetSpawner().ShouldShowWaveText())

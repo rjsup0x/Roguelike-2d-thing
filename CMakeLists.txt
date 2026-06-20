@@ -19,6 +19,8 @@ add_executable(roli
 
     src/weapons/BulletWeapon.cpp
 
+    src/xp/XPOrb.cpp
+
     src/UI/UI.cpp
 )
 

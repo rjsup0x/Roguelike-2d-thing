@@ -12,4 +12,6 @@ public:
 
     // SCREEN SPACE (HUD)
     // static void DrawHUDHealthBar(Vector2 screenPosition, int health, int maxHealth);
+    //
+    static void DrawXPBar(int xp, int maxXP, int level);
 };

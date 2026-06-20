@@ -8,6 +8,8 @@
 #include "entities/Enemy.h"
 #include "Spawner.h"
 #include "weapons/Weapon.h"
+#include "xp/XPOrb.h"
+#include <vector>
 
 class World
 {
@@ -48,4 +50,7 @@ private:
     void HandleCollisions();
     void HandleEnemySeparation();
     void RemoveDeadEnemies();
+
+    // xp things
+    std::vector<XPOrb> xpOrbs;
 };

@@ -71,6 +71,29 @@ void World::Update(float dt)
     HandleEnemySeparation();
     HandleCollisions();
     RemoveDeadEnemies();
+
+    // -------------------------
+    // COLLECT ORBS
+    // -------------------------
+    for (auto& orb : xpOrbs)
+    {
+        orb.Update(dt, player.GetPos());
+
+        if (orb.IsCollected())
+        {
+            player.AddXP(orb.GetValue());
+        }
+    }
+
+    // remove collected
+    xpOrbs.erase(
+        std::remove_if(xpOrbs.begin(), xpOrbs.end(),
+            [](const XPOrb& o)
+            {
+                return o.IsCollected();
+            }),
+        xpOrbs.end()
+    );
 }
 
 void World::Draw()
@@ -83,6 +106,9 @@ void World::Draw()
 
     for (Enemy& e : enemies)
         e.Draw();
+
+    for (const auto& orb : xpOrbs)
+        orb.Draw();
 
     EndMode2D();
 }
@@ -120,8 +146,11 @@ void World::RemoveDeadEnemies()
 {
     for (int i = 0; i < (int)enemies.size(); i++)
     {
+        // if deal drop xp
         if (enemies[i].isDead())
         {
+            xpOrbs.emplace_back(enemies[i].GetPos(), 10); // drop XP
+
             enemies.erase(enemies.begin() + i);
             i--;
         }

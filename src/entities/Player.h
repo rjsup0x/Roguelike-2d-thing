@@ -30,6 +30,12 @@ public:
 
     std::vector<std::unique_ptr<Weapon>>& GetWeapons();
 
+    // xp functions
+    void AddXP(int amount);
+    int GetLevel() const;
+    int GetXP() const;
+    int GetXPToNextLevel() const;
+
 private:
     Vector2 position;
     Vector2 velocity;
@@ -39,4 +45,9 @@ private:
     int health;
     int maxHealth;
     std::vector<std::unique_ptr<Weapon>> weapons;
+
+    // xp things
+    int xp = 0;
+    int level = 1;
+    int xpToNextLevel = 100;
 };

@@ -2,8 +2,10 @@
 #include "UI/UI.h"
 #include "AssetManager.h"
 #include "weapons/BulletWeapon.h"
+
 #include <raylib.h>
 
+#include <iostream>
 
 Player::Player()
     : position(400.0f, 225.0f),
@@ -93,3 +95,20 @@ Vector2 Player::GetVelocity() const
 {
     return velocity;
 }
+
+// xp functions
+void Player::AddXP(int amount)
+{
+    xp += amount;
+
+    if (xp >= xpToNextLevel)
+    {
+        xp -= xpToNextLevel;
+        level++;
+        xpToNextLevel = (int)(xpToNextLevel * 1.25f); // scaling
+    }
+}
+
+int Player::GetLevel() const { return level; }
+int Player::GetXP() const { return xp; }
+int Player::GetXPToNextLevel() const { return xpToNextLevel; }
