@@ -16,7 +16,7 @@ public:
 
     float GetRadius() const;
 
-    void TakeDamage(int amount);
+    void TakeDamage(int amount, Vector2 hitDir);
     bool isDead() const;
 
     int GetHealth() const;
@@ -24,6 +24,8 @@ public:
 
 private:
     Vector2 position;
+    Vector2 velocity;
+
     float speed;
 
     int health;
@@ -33,4 +35,6 @@ private:
 
     float rotation = 0.0f;
     bool facingLeft = false;
+
+    float hitFlashTimer = 0.0f;
 };

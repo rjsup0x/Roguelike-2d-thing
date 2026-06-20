@@ -130,8 +130,11 @@ void World::HandleCollisions()
                     enemies[j].GetPos(),
                     enemies[j].GetRadius()))
             {
-                // then take damage
-                enemies[j].TakeDamage(bullets[i].GetDamage());
+                Vector2 hitDir = Vector2Normalize(
+                    Vector2Subtract(enemies[j].GetPos(), bullets[i].GetPos())
+                );
+
+                enemies[j].TakeDamage(bullets[i].GetDamage(), hitDir);
 
                 // remove bullet if it collides
                 bullets.erase(bullets.begin() + i);
