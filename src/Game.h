@@ -16,7 +16,8 @@ private:
     {
         MENU,
         PLAYING,
-        GAMEOVER
+        GAMEOVER,
+        LEVEL_UP_SELECT
     };
 
     // init screen as menu

@@ -3,7 +3,6 @@
 #include "AssetManager.h"
 #include "renderer/Renderer.h"
 #include "weapons/BulletWeapon.h"
-#include "weapons/OrbitalWeapon.h"
 
 #include <memory>
 #include <raylib.h>
@@ -21,7 +20,7 @@ Player::Player()
     // 1st BulletWeapon
     // 2nd OrbitalWeapon
     weapons.push_back(std::make_unique<BulletWeapon>());
-    weapons.push_back(std::make_unique<OrbitalWeapon>());
+    // weapons.push_back(std::make_unique<OrbitalWeapon>());
 }
 
 void Player::Update(float deltaTime, Vector2 aimDir)
@@ -196,21 +195,37 @@ Vector2 Player::GetVelocity() const
 // xp functions
 void Player::AddXP(int amount)
 {
-    // how much xp to add
     xp += amount;
 
-    // if xp is enough to level up
-    if (xp >= xpToNextLevel)
+    while (xp >= xpToNextLevel)
     {
-        // refresh xp
         xp -= xpToNextLevel;
-        // go up a level + 1
         level++;
-        // make xp to next level more than it previously was
-        xpToNextLevel = (int)(xpToNextLevel * 1.25f); // scaling
+
+        xpToNextLevel = (int)(xpToNextLevel * 1.25f);
+
+        if (onLevelUp)
+            onLevelUp(level);
     }
 }
 
 int Player::GetLevel() const { return level; }
 int Player::GetXP() const { return xp; }
 int Player::GetXPToNextLevel() const { return xpToNextLevel; }
+
+// level up system
+void Player::SetLevelUpCallback(std::function<void(int)> callback)
+{
+    onLevelUp = callback;
+}
+
+void Player::IncreaseMaxHealth(int amount)
+{
+    maxHealth += amount;
+    health += amount;
+}
+
+void Player::IncreaseDamage(int amount)
+{
+    damageBonus += amount;
+}

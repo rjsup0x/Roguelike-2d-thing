@@ -1,4 +1,5 @@
 #include "World.h"
+#include "weapons/OrbitalWeapon.h"
 // #include "AssetManager.h"
 
 #include <raymath.h>
@@ -14,6 +15,12 @@ World::World()
     camera.rotation = 0.0f;
     camera.offset = {640, 360};
     camera.target = {0, 0};
+
+    // callback hook
+    player.SetLevelUpCallback([this](int level)
+        {
+            OnPlayerLevelUp(level);
+        });
 }
 
 void World::Reset()
@@ -31,6 +38,9 @@ bool World::IsPlayerDead() const
 
 void World::Update(float dt)
 {
+    // pause game on upgrade
+    if (levelUpActive)
+            return;
     // -------------------------
     // AIM DIRECTION
     // -------------------------
@@ -242,4 +252,45 @@ int World::GetPlayerMaxHealth() const
 Spawner& World::GetSpawner()
 {
     return spawner;
+}
+
+// level up system
+void World::OnPlayerLevelUp(int level)
+{
+    EnterLevelUp();
+}
+
+void World::EnterLevelUp()
+{
+    levelUpActive = true;
+    options.clear();
+
+    options.push_back({UpgradeType::OrbitalWeapon, "Orbital Weapon"});
+    options.push_back({UpgradeType::MaxHealth, "Max Health +20"});
+    options.push_back({UpgradeType::Damage, "Damage +1"});
+}
+
+void World::ApplyUpgrade(int index)
+{
+    if (index < 0 || index >= (int)options.size())
+        return;
+
+    switch (options[index].type)
+    {
+        case UpgradeType::OrbitalWeapon:
+            player.GetWeapons().push_back(
+                std::make_unique<OrbitalWeapon>()
+            );
+            break;
+
+        case UpgradeType::MaxHealth:
+            player.IncreaseMaxHealth(20);
+            break;
+
+        case UpgradeType::Damage:
+            player.IncreaseDamage(1);
+            break;
+    }
+
+    levelUpActive = false;
 }

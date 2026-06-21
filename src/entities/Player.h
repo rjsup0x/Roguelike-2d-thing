@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <vector>
+#include <functional>
 
 #include "weapons/Weapon.h"
 #include "animation/Animation.h"
@@ -39,6 +40,13 @@ public:
     int GetXP() const;
     int GetXPToNextLevel() const;
 
+    void SetLevelUpCallback(std::function<void(int)> callback);
+
+    void IncreaseMaxHealth(int amount);
+    void IncreaseDamage(int amount);
+
+    int GetDamageBonus() const { return damageBonus; }
+
 private:
     Vector2 position;
     Vector2 velocity;
@@ -62,4 +70,10 @@ private:
     AnimationState animationState = AnimationState::Idle;
 
     Direction facingDirection = Direction::Down;
+
+    // for level up system
+    std::function<void(int)> onLevelUp;
+
+    // simple combat scaling hook
+    int damageBonus = 0;
 };

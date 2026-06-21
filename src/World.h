@@ -10,6 +10,14 @@
 #include "weapons/Weapon.h"
 #include "xp/XPOrb.h"
 #include <vector>
+#include "UpgradeType.h"
+#include <vector>
+
+struct UpgradeOption
+{
+    UpgradeType type;
+    const char* name;
+};
 
 class World
 {
@@ -40,6 +48,16 @@ public:
 
     // get spawner instance in world
     Spawner& GetSpawner();
+
+    // update system
+    bool levelUpActive = false;
+    std::vector<UpgradeOption> options;
+
+    void OnPlayerLevelUp(int level);
+    void EnterLevelUp();
+    void ApplyUpgrade(int index);
+
+    bool IsLevelUpActive() const { return levelUpActive; }
 
 private:
     // seperate world bounds to screen bounds
