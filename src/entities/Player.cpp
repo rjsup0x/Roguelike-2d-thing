@@ -20,7 +20,7 @@ Player::Player()
     // 1st BulletWeapon
     // 2nd OrbitalWeapon
     weapons.push_back(std::make_unique<BulletWeapon>());
-    // weapons.push_back(std::make_unique<OrbitalWeapon>());
+    weapons.back()->SetDamage(GetDamage());
 }
 
 void Player::Update(float deltaTime, Vector2 aimDir)
@@ -182,6 +182,11 @@ void Player::TakeDamage(int amount)
     if (health < 0) health = 0;
 }
 
+int Player::GetDamage() const
+{
+    return baseDamage + damageBonus;
+}
+
 bool Player::isDead() const
 {
     return health <= 0;
@@ -228,4 +233,11 @@ void Player::IncreaseMaxHealth(int amount)
 void Player::IncreaseDamage(int amount)
 {
     damageBonus += amount;
+
+    int newDamage = GetDamage();
+
+    for (auto& weapon : weapons)
+    {
+        weapon->SetDamage(newDamage);
+    }
 }

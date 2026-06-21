@@ -278,10 +278,14 @@ void World::ApplyUpgrade(int index)
     switch (options[index].type)
     {
         case UpgradeType::OrbitalWeapon:
-            player.GetWeapons().push_back(
-                std::make_unique<OrbitalWeapon>()
-            );
+        {
+            auto weapon = std::make_unique<OrbitalWeapon>();
+
+            weapon->SetDamage(player.GetDamage());
+
+            player.GetWeapons().push_back(std::move(weapon));
             break;
+        }
 
         case UpgradeType::MaxHealth:
             player.IncreaseMaxHealth(20);

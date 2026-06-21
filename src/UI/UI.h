@@ -1,6 +1,7 @@
 #pragma once
 
 #include <raylib.h>
+#include "World.h"
 
 class UI
 {
@@ -14,4 +15,8 @@ public:
     // static void DrawHUDHealthBar(Vector2 screenPosition, int health, int maxHealth);
     //
     static void DrawXPBar(int xp, int maxXP, int level);
+
+    //
+    static void DrawLevelUp(World& world);
+    static void HandleLevelUpInput(World& world);
 };

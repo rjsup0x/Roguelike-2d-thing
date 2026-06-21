@@ -34,7 +34,6 @@ public:
 
     std::vector<std::unique_ptr<Weapon>>& GetWeapons();
 
-    // xp functions
     void AddXP(int amount);
     int GetLevel() const;
     int GetXP() const;
@@ -47,6 +46,8 @@ public:
 
     int GetDamageBonus() const { return damageBonus; }
 
+    int GetDamage() const;
+
 private:
     Vector2 position;
     Vector2 velocity;
@@ -55,25 +56,21 @@ private:
 
     int health;
     int maxHealth;
-    // weapons is an array of potential weapon types
-    // unique pointer meaning player can ony controll one weapon type uniquely
+
     std::vector<std::unique_ptr<Weapon>> weapons;
 
-    // xp things
     int xp = 0;
     int level = 1;
     int xpToNextLevel = 100;
 
-    // anims
     Animation animation;
 
     AnimationState animationState = AnimationState::Idle;
 
     Direction facingDirection = Direction::Down;
 
-    // for level up system
     std::function<void(int)> onLevelUp;
 
-    // simple combat scaling hook
+    int baseDamage = 10;
     int damageBonus = 0;
 };

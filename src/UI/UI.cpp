@@ -18,7 +18,7 @@ void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
 
     // small gap from texture
     Vector2 barPos = {
-        position.x + -20.0f,
+        position.x + -26.0f,
         position.y - barHeight * 0.5f
     };
 
@@ -105,4 +105,130 @@ void UI::DrawXPBar(int xp, int maxXP, int level)
         12,
         WHITE
     );
+}
+
+void UI::HandleLevelUpInput(World& world)
+{
+    if (!world.IsLevelUpActive())
+        return;
+
+    Vector2 mouse = GetMousePosition();
+
+    int screenW = GetScreenWidth();
+    int screenH = GetScreenHeight();
+
+    int panelW = 600;
+    int panelH = 250;
+
+    Rectangle panel = {
+        (screenW - panelW) * 0.5f,
+        (screenH - panelH) * 0.5f,
+        (float)panelW,
+        (float)panelH
+    };
+
+    int boxW = 160;
+    int boxH = 100;
+    int spacing = 20;
+
+    float startX = panel.x + (panelW - (boxW * 3 + spacing * 2)) * 0.5f;
+    float y = panel.y + 80;
+
+    for (int i = 0; i < 3; i++)
+    {
+        Rectangle rect = {
+            startX + i * (boxW + spacing),
+            y,
+            (float)boxW,
+            (float)boxH
+        };
+
+        if (CheckCollisionPointRec(mouse, rect))
+        {
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            {
+                world.ApplyUpgrade(i);
+            }
+        }
+    }
+}
+
+void UI::DrawLevelUp(World& world)
+{
+    if (!world.IsLevelUpActive())
+        return;
+
+    float t = GetTime();
+    float pulse = 1.0f + sinf(t * 6.0f) * 0.03f;
+
+    int screenW = GetScreenWidth();
+    int screenH = GetScreenHeight();
+
+    int panelW = 600;
+    int panelH = 250;
+
+    Rectangle panel = {
+        (screenW - panelW) * 0.5f,
+        (screenH - panelH) * 0.5f,
+        (float)panelW,
+        (float)panelH
+    };
+
+    // ONLY panel darkening (not full screen)
+    DrawRectangleRec(panel, Fade(BLACK, 0.25f));
+    DrawRectangleLinesEx(panel, 2, WHITE);
+
+    DrawText("LEVEL UP!", panel.x + 20, panel.y + 15, 28, WHITE);
+
+    int boxW = 160;
+    int boxH = 100;
+    int spacing = 20;
+
+    float startX = panel.x + (panelW - (boxW * 3 + spacing * 2)) * 0.5f;
+    float y = panel.y + 80;
+
+    for (int i = 0; i < 3; i++)
+    {
+        float x = startX + i * (boxW + spacing);
+
+        float w = boxW * pulse;
+        float h = boxH * pulse;
+
+        float ox = (w - boxW) * 0.5f;
+        float oy = (h - boxH) * 0.5f;
+
+        Rectangle rect = {
+            x - ox,
+            y - oy,
+            w,
+            h
+        };
+
+        bool hovered = CheckCollisionPointRec(GetMousePosition(), rect);
+
+        Color base = hovered ? DARKGRAY : Fade(DARKGRAY, 0.9f);
+
+        DrawRectangleRec(rect, base);
+        DrawRectangleLinesEx(rect, 2, hovered ? YELLOW : WHITE);
+
+        // subtle highlight
+        if (hovered)
+            DrawRectangleRec(rect, Fade(YELLOW, 0.2f));
+
+        DrawText(
+            world.options[i].name,
+            (int)rect.x + 10,
+            (int)rect.y + 30,
+            12,
+            WHITE
+        );
+
+        DrawText(
+            TextFormat("[ %d ]", i + 1),
+            (int)rect.x + 10,
+            (int)rect.y + 65,
+            12,
+            GRAY
+        );
+    }
 }

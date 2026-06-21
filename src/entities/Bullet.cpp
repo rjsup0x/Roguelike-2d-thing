@@ -8,10 +8,11 @@
 #include <raymath.h>
 
 // bullet constructor
-Bullet::Bullet(Vector2 startPos, Vector2 direction, Vector2 playerVelocity)
+Bullet::Bullet(Vector2 startPos, Vector2 direction, Vector2 playerVelocity, int damage)
     : position(startPos),
       speed(600.0f),
-      animation(5, 1, 0.12f)
+      animation(5, 1, 0.12f),
+      damage(damage)
 {
     Vector2 dirNorm = Vector2Normalize(direction);
 
@@ -129,11 +130,14 @@ void Bullet::Draw() const
     );
 }
 
+int Bullet::GetDamage() const
+{
+    return damage;
+}
+
 Vector2 Bullet::GetPos() const { return position; }
 
 float Bullet::GetRadius() const { return 5.0f; }
-
-int Bullet::GetDamage() const { return 10; }
 
 // check if the bullet goes of world space
 bool Bullet::IsOffScreen() const

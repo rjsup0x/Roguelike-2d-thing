@@ -9,7 +9,8 @@ BulletWeapon::BulletWeapon()
     : fireRate(0.15),
       fireTimer(0.0f)
 {
-
+    // Another weapon another update of (weapon.h) damage value
+    // damage = 10;
 }
 
 void BulletWeapon::Update(float dt, Vector2 playerPos, Vector2 aimDir)
@@ -30,7 +31,7 @@ void BulletWeapon::Update(float dt, Vector2 playerPos, Vector2 aimDir)
         // store playerpos and scale in bullets
         bullets.push_back({
             playerPos,
-            Vector2Scale(dir, 600.0f)
+            Vector2Scale(dir, 600.0f),
         });
     }
 
@@ -89,7 +90,7 @@ void BulletWeapon::HandleCollisions(Enemy& enemy)
             );
 
             // if so enemey takes damage
-            enemy.TakeDamage(bullets[i].GetDamage(), hitDir);
+            enemy.TakeDamage(damage, hitDir);
 
             // remove the bullet from data
             bullets.erase(bullets.begin() + i);

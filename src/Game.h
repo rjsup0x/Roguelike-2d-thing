@@ -17,7 +17,6 @@ private:
         MENU,
         PLAYING,
         GAMEOVER,
-        LEVEL_UP_SELECT
     };
 
     // init screen as menu

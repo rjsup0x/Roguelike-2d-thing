@@ -19,34 +19,24 @@ void Game::Update(float dt)
 
         case State::PLAYING:
         {
-            world.Update(dt);
+            // toggle pause via world flag
+            if (!world.IsLevelUpActive())
+            {
+                world.Update(dt);
+            }
 
             if (world.IsLevelUpActive())
-                state = State::LEVEL_UP_SELECT;
+            {
+                UI::HandleLevelUpInput(world);
+                UI::DrawLevelUp(world);
+            }
 
             if (world.IsPlayerDead())
                 state = State::GAMEOVER;
 
-            break;
-        }
-        case State::LEVEL_UP_SELECT:
-        {
-            if (IsKeyPressed(KEY_ONE))
-            {
-                world.ApplyUpgrade(0);
-                state = State::PLAYING;
-            }
-            if (IsKeyPressed(KEY_TWO))
-            {
-                world.ApplyUpgrade(1);
-                state = State::PLAYING;
-            }
+            if (IsKeyPressed(KEY_M))
+                state = State::MENU;
 
-            if (IsKeyPressed(KEY_THREE))
-            {
-                world.ApplyUpgrade(2);
-                state = State::PLAYING;
-            }
             break;
         }
 
@@ -83,13 +73,11 @@ void Game::Draw()
             // =========================
             // HUD (SCREEN SPACE) draw on screen UI here
             // =========================
-            //
             UI::DrawXPBar(
                 world.GetPlayer().GetXP(),
                 world.GetPlayer().GetXPToNextLevel(),
                 world.GetPlayer().GetLevel()
             );
-
 
             if (world.GetSpawner().ShouldShowWaveText())
             {
@@ -106,29 +94,82 @@ void Game::Draw()
                 DrawText(text, x, y, fontSize, GRAY);
             }
 
-            EndDrawing();
-            break;
-        }
-
-        case State::LEVEL_UP_SELECT:
-        {
-            BeginDrawing();
-            ClearBackground(BLACK);
-
-            DrawText("LEVEL UP!", 520, 80, 30, WHITE);
-
-            for (int i = 0; i < 3; i++)
+            // =========================
+            // UPGRADE UI (CENTER PANEL)
+            // =========================
+            if (world.IsLevelUpActive())
             {
-                int x = 300 + i * 250;
-                int y = 250;
+                float t = GetTime();
+                float pulse = 1.0f + sinf(t * 6.0f) * 0.03f;
 
-                DrawRectangle(x, y, 200, 120, GRAY);
-                DrawRectangleLines(x, y, 200, 120, WHITE);
+                int screenW = GetScreenWidth();
+                int screenH = GetScreenHeight();
 
-                DrawText(world.options[i].name, x + 20, y + 50, 15, WHITE);
+                int panelW = 600;
+                int panelH = 250;
 
-                DrawText(TextFormat("Press %d", i + 1),
-                         x + 40, y + 90, 10, GRAY);
+                Rectangle panel = {
+                    (screenW - panelW) * 0.5f,
+                    (screenH - panelH) * 0.5f,
+                    (float)panelW,
+                    (float)panelH
+                };
+
+                DrawRectangleRec(panel, Fade(BLACK, 0.65f));
+                DrawRectangleLinesEx(panel, 2, WHITE);
+
+                DrawText("LEVEL UP!", panel.x + 20, panel.y + 15, 28, WHITE);
+
+                int boxW = 160;
+                int boxH = 100;
+                int spacing = 20;
+
+                float startX = panel.x + (panelW - (boxW * 3 + spacing * 2)) * 0.5f;
+                float y = panel.y + 80;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    float x = startX + i * (boxW + spacing);
+
+                    float w = boxW * pulse;
+                    float h = boxH * pulse;
+
+                    float ox = (w - boxW) * 0.5f;
+                    float oy = (h - boxH) * 0.5f;
+
+                    Rectangle rect = {
+                        x - ox,
+                        y - oy,
+                        w,
+                        h
+                    };
+
+                    bool hovered = (world.hoveredUpgradeIndex == i);
+
+                    Color base = hovered ? DARKGRAY : DARKGRAY;
+                    Color border = hovered ? YELLOW : WHITE;
+
+                    DrawRectangleRec(rect, base);
+                    DrawRectangleLinesEx(rect, 2, border);
+
+                    DrawRectangleRec(rect, Fade(WHITE, hovered ? 0.12f : 0.08f));
+
+                    DrawText(
+                        world.options[i].name,
+                        (int)rect.x + 10,
+                        (int)rect.y + 30,
+                        12,
+                        WHITE
+                    );
+
+                    DrawText(
+                        TextFormat("[ %d ]", i + 1),
+                        (int)rect.x + 10,
+                        (int)rect.y + 65,
+                        12,
+                        GRAY
+                    );
+                }
             }
 
             EndDrawing();
@@ -149,7 +190,6 @@ void Game::Draw()
 
 void Game::UpdateMenu(float dt)
 {
-    // menu to game = playing
     if (IsKeyPressed(KEY_ENTER))
         state = State::PLAYING;
 }
@@ -162,7 +202,6 @@ void Game::DrawMenu()
 
 void Game::UpdateGameOver(float dt)
 {
-    // gameover to play again = r
     if (IsKeyPressed(KEY_R))
     {
         world.Reset();

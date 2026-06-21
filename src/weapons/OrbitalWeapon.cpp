@@ -7,6 +7,8 @@ OrbitalWeapon::OrbitalWeapon()
       rotationSpeed(180.0f),
       currentAngle(0.0f)
 {
+    // each type of weapon inits its own damage which overrides (weapon.h) damage
+    damage = 15;
     orbitalPositions.resize(4);
 }
 
@@ -79,7 +81,7 @@ void OrbitalWeapon::HandleCollisions(Enemy& enemy)
                 )
             );
 
-            enemy.TakeDamage(5, hitDir);
-        }
+            // when that weapon collides with enemy they take the damage
+            enemy.TakeDamage(damage, hitDir);        }
     }
 }

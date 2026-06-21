@@ -22,6 +22,8 @@ struct UpgradeOption
 class World
 {
 public:
+    int hoveredUpgradeIndex = -1;
+
     // world constructor
     World();
 
