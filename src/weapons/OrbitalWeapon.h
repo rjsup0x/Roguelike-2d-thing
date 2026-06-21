@@ -1,7 +1,6 @@
 #pragma once
 
 #include "weapons/Weapon.h"
-#include "AssetManager.h"
 
 #include <raylib.h>
 #include <vector>
@@ -12,7 +11,7 @@ class OrbitalWeapon : public Weapon
         OrbitalWeapon();
 
         // overriding from weapon
-        void Update(float dt, Vector2 playerPos, Vector2 aimDir) override;
+        void Update(float deltaTime, Vector2 playerPos, Vector2 aimDir) override;
         void Draw() const override;
 
         // check collisions weapon vs enemy

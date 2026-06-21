@@ -1,5 +1,6 @@
 #include "OrbitalWeapon.h"
 #include "entities/Enemy.h"
+#include "AssetManager.h"
 
 OrbitalWeapon::OrbitalWeapon()
     : orbitRadius(80.0f),
@@ -9,10 +10,13 @@ OrbitalWeapon::OrbitalWeapon()
     orbitalPositions.resize(4);
 }
 
-void OrbitalWeapon::Update(float dt, Vector2 playerPos, Vector2 aimDir)
+void OrbitalWeapon::Update(float deltaTime, Vector2 playerPos, Vector2 aimDir)
 {
-    currentAngle += rotationSpeed * dt;
+    // 0 += 180 * dt
+    // spin 180 degrees * deltatime
+    currentAngle += rotationSpeed * deltaTime;
 
+    //
     float baseAngle = currentAngle * DEG2RAD;
 
     for (int i = 0; i < 4; i++)

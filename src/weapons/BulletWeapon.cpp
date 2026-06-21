@@ -1,5 +1,6 @@
 #include "BulletWeapon.h"
 #include "entities/Enemy.h"
+#include "AssetManager.h"
 
 #include <raymath.h>
 #include <raylib.h>

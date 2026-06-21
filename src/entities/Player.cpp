@@ -7,8 +7,6 @@
 #include <memory>
 #include <raylib.h>
 
-#include <iostream>
-
 Player::Player()
     : position(400.0f, 225.0f),
       velocity({0, 0}),
@@ -18,6 +16,7 @@ Player::Player()
 {
     // push weapons into the array
     // 1st BulletWeapon
+    // 2nd OrbitalWeapon
     weapons.push_back(std::make_unique<BulletWeapon>());
     weapons.push_back(std::make_unique<OrbitalWeapon>());
 }

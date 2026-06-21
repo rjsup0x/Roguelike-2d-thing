@@ -1,10 +1,8 @@
 #pragma once
 
 #include "weapons/Weapon.h"
-#include "AssetManager.h"
 
 #include <vector>
-#include <algorithm>
 
 // bulletWeapon is inhereting weapon
 class BulletWeapon : public Weapon

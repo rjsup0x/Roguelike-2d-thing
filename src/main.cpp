@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "AssetManager.h"
 
-int main()
+int main(void)
 {
     InitWindow(1280, 720, "roli");
     SetTargetFPS(60);
