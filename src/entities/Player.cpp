@@ -2,7 +2,9 @@
 #include "UI/UI.h"
 #include "AssetManager.h"
 #include "weapons/BulletWeapon.h"
+#include "weapons/OrbitalWeapon.h"
 
+#include <memory>
 #include <raylib.h>
 
 #include <iostream>
@@ -17,6 +19,7 @@ Player::Player()
     // push weapons into the array
     // 1st BulletWeapon
     weapons.push_back(std::make_unique<BulletWeapon>());
+    weapons.push_back(std::make_unique<OrbitalWeapon>());
 }
 
 void Player::Update(float deltaTime, Vector2 aimDir)

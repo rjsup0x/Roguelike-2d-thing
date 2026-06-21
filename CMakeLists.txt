@@ -18,6 +18,7 @@ add_executable(roli
     src/entities/Bullet.cpp
 
     src/weapons/BulletWeapon.cpp
+    src/weapons/OrbitalWeapon.cpp
 
     src/xp/XPOrb.cpp
 

@@ -1,9 +1,11 @@
 #include "AssetManager.h"
+#include <raylib.h>
 
 // define static textures
 Texture2D AssetManager::PlayerTex = {};
 Texture2D AssetManager::EnemyTex = {};
 Texture2D AssetManager::BulletTex = {};
+Texture2D AssetManager::OrbitalTex = {};
 
 void AssetManager::Init()
 {
@@ -11,6 +13,7 @@ void AssetManager::Init()
     PlayerTex = LoadTexture("/Users/ry/projects/roli/src/assets/Player.png");
     EnemyTex  = LoadTexture("/Users/ry/projects/roli/src/assets/Enemy.png");
     BulletTex = LoadTexture("/Users/ry/projects/roli/src/assets/Bullet.png");
+    OrbitalTex = LoadTexture("/Users/ry/projects/roli/src/assets/Bullet.png");
 }
 
 void AssetManager::Shutdown()
@@ -19,4 +22,5 @@ void AssetManager::Shutdown()
     UnloadTexture(PlayerTex);
     UnloadTexture(EnemyTex);
     UnloadTexture(BulletTex);
+    UnloadTexture(OrbitalTex);
 }

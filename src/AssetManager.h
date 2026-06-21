@@ -12,4 +12,5 @@ public:
     static Texture2D PlayerTex;
     static Texture2D EnemyTex;
     static Texture2D BulletTex;
+    static Texture2D OrbitalTex;
 };
