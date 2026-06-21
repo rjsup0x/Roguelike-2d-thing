@@ -15,6 +15,7 @@ public:
     bool ShouldShowWaveText() const;
 
 private:
+    // wave settings
     int wave = 0;
     bool waveActive = false;
 
@@ -22,6 +23,7 @@ private:
     bool showWaveText = false;
     bool waveTextVisible = false;
 
+    // ui wave test blinking
     float blinkTimer = 0.0f;
     int blinkCount = 0;
     int maxBlinks = 6;

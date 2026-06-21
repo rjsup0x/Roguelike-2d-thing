@@ -10,16 +10,20 @@ int main()
     // init assets
     AssetManager::Init();
 
+    // init game instance
     Game game;
 
     while (!WindowShouldClose())
     {
+        // get deltatime
         float dt = GetFrameTime();
 
+        // update game state
         game.Update(dt);
         game.Draw();
     }
 
+    // deinit assets
     AssetManager::Shutdown();
     CloseWindow();
 }

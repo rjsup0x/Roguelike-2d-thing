@@ -91,23 +91,28 @@ void Enemy::Update(float deltaTime, Vector2 playerPos)
 
 void Enemy::Draw() const
 {
+    // drawing enemy texture as size
     Vector2 size = {
         (float)AssetManager::EnemyTex.width,
         (float)AssetManager::EnemyTex.height
     };
 
+    // for getting hit
     Color tint = WHITE;
 
+    // if player hit flash red
     if (hitFlashTimer > 0.0f)
         tint = RED;
 
+    // src of enemies
     Rectangle source = {
         0,
         0,
-        facingLeft ? -size.x : size.x, // FLIP LEFT/RIGHT ONLY
+        facingLeft ? -size.x : size.x,
         size.y
     };
 
+    // destination of enemies
     Rectangle dest = {
         position.x,
         position.y,
@@ -115,11 +120,13 @@ void Enemy::Draw() const
         size.y
     };
 
+    // origin of enemies
     Vector2 origin = {
         size.x / 2.0f,
         size.y / 2.0f
     };
 
+    // draw the enemies with texture an attributes
     DrawTexturePro(
         AssetManager::EnemyTex,
         source,
@@ -129,10 +136,13 @@ void Enemy::Draw() const
         tint
     );
 
+    // add healthbar beside enemies
     UI::DrawHealthBar(position, health, maxHealth);
 
+    // for all damage number in the array
     for (const auto &d : damageNumbers)
     {
+        // draw them above the enemy when hot
         DrawText(
             TextFormat("%d", d.value),
             (int)d.pos.x,
@@ -170,11 +180,13 @@ void Enemy::TakeDamage(int amount, Vector2 hitDir)
 
     // spawn damage number
     DamageNumber d;
+    // damage number = amount of damage took
     d.value = amount;
     d.pos = position;
     d.timer = 0.6f;
     d.alpha = 1.0f;
 
+    // add the damage number to the array of damage numbers
     damageNumbers.push_back(d);
 }
 

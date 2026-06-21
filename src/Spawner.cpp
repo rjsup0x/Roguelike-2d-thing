@@ -3,16 +3,15 @@
 #include <raylib.h>
 
 Spawner::Spawner()
+    : wave(0),
+    waveActive(false),
+    showWaveText(false),
+    waveTextVisible(false),
+    blinkTimer(0.0f),
+    blinkCount(0),
+    maxBlinks(6)
 {
-    wave = 0;
-    waveActive = false;
 
-    showWaveText = false;
-    waveTextVisible = false;
-
-    blinkTimer = 0.0f;
-    blinkCount = 0;
-    maxBlinks = 6;
 }
 
 int Spawner::GetWave() const
@@ -22,7 +21,6 @@ int Spawner::GetWave() const
 
 bool Spawner::ShouldShowWaveText() const
 {
-    // IMPORTANT: only draw when visible AND active
     return showWaveText && waveTextVisible;
 }
 
@@ -42,10 +40,12 @@ void Spawner::Update(float dt, std::vector<Enemy>& enemies, float worldWidth, fl
             // toggle visibility
             waveTextVisible = !waveTextVisible;
 
+            // how many times it has blinked
             blinkCount++;
 
             if (blinkCount >= maxBlinks)
             {
+                // stop when blinked # of times (should be 6)
                 showWaveText = false;
                 waveTextVisible = false;
             }
@@ -57,8 +57,10 @@ void Spawner::Update(float dt, std::vector<Enemy>& enemies, float worldWidth, fl
     // -------------------------
     if (!waveActive)
     {
+        // if wave not active and no enemies
         if (enemies.empty())
         {
+            // strat the wave produce enemies
             StartWave(enemies, worldWidth, worldHeight);
         }
         return;
@@ -72,6 +74,7 @@ void Spawner::Update(float dt, std::vector<Enemy>& enemies, float worldWidth, fl
 
 void Spawner::StartWave(std::vector<Enemy>& enemies, float worldWidth, float worldHeight)
 {
+    // add waves
     wave++;
     waveActive = true;
 
@@ -85,31 +88,38 @@ void Spawner::StartWave(std::vector<Enemy>& enemies, float worldWidth, float wor
     int health = 50;
     float speed = 100.0f;
 
+    // wave logic for enemies
     if (wave == 1)
     {
+        // enemies 1
         enemyCount = 10;
         health = 50;
         speed = 90.0f;
     }
     else if (wave == 2)
     {
+        // enemies 2
         enemyCount = 25;
         health = 80;
         speed = 110.0f;
     }
     else
     {
+        // enemies 3
         enemyCount = 30;
         health = 120;
         speed = 130.0f;
     }
 
+    // for all enemies
     for (int i = 0; i < enemyCount; i++)
     {
+        // get reandom side to spawn on
         int side = GetRandomValue(0, 3);
 
         Vector2 pos;
 
+        // depending on side position the enemy there
         if (side == 0)
             pos = { (float)GetRandomValue(0, (int)worldWidth), -32 };
         else if (side == 1)

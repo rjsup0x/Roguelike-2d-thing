@@ -14,11 +14,14 @@ Player::Player()
       health(100),
       maxHealth(100)
 {
+    // push weapons into the array
+    // 1st BulletWeapon
     weapons.push_back(std::make_unique<BulletWeapon>());
 }
 
 void Player::Update(float deltaTime, Vector2 aimDir)
 {
+    // update player movement
     velocity = {0.0f, 0.0f};
 
     if (IsKeyDown(KEY_W)) velocity.y -= 1;
@@ -26,25 +29,30 @@ void Player::Update(float deltaTime, Vector2 aimDir)
     if (IsKeyDown(KEY_A)) velocity.x -= 1;
     if (IsKeyDown(KEY_D)) velocity.x += 1;
 
+    // normaize the movement - when moving on angle stop it going faster
     if (Vector2Length(velocity) > 0.0f)
     {
         velocity = Vector2Normalize(velocity);
         position = Vector2Add(position, Vector2Scale(velocity, speed * deltaTime));
     }
 
+    // for all weapons
     for (auto &w : weapons)
     {
+        // update each weapons deltatime, position, and aim direction
         w->Update(deltaTime, position, aimDir);
     }
 }
 
 void Player::Draw() const
 {
+    // add the texture to the player as size
     Vector2 size = {
         (float)AssetManager::PlayerTex.width,
         (float)AssetManager::PlayerTex.height
     };
 
+    // draw that texture and its attributes
     DrawTextureV(
         AssetManager::PlayerTex,
         {
@@ -60,11 +68,13 @@ void Player::Draw() const
         w->Draw();
     }
 
+    // add healthbar to player - beside them
     UI::DrawHealthBar(position, health, maxHealth);
 }
 
 std::vector<std::unique_ptr<Weapon>>& Player::GetWeapons()
 {
+    // get all waepons player can use
     return weapons;
 }
 
@@ -99,12 +109,17 @@ Vector2 Player::GetVelocity() const
 // xp functions
 void Player::AddXP(int amount)
 {
+    // how much xp to add
     xp += amount;
 
+    // if xp is enough to level up
     if (xp >= xpToNextLevel)
     {
+        // refresh xp
         xp -= xpToNextLevel;
+        // go up a level + 1
         level++;
+        // make xp to next level more than it previously was
         xpToNextLevel = (int)(xpToNextLevel * 1.25f); // scaling
     }
 }

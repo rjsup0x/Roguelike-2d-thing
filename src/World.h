@@ -14,43 +14,62 @@
 class World
 {
 public:
+    // world constructor
     World();
 
+    // update world
     void Update(float dt);
+    // draw into world
     void Draw();
 
+    // reset the world
     void Reset();
+    // check if player in the world is dead
     bool IsPlayerDead() const;
 
+    // get the camera instance used in the world
     Camera2D& GetCamera();
 
+    // get the player instance in the world
     Player& GetPlayer();
     const Player& GetPlayer() const;
 
+    // get health atrtibutes of player in wolrd
     int GetPlayerHealth() const;
     int GetPlayerMaxHealth() const;
 
+    // get spawner instance in world
     Spawner& GetSpawner();
 
 private:
+    // seperate world bounds to screen bounds
     struct WorldBounds
     {
         float width;
         float height;
     };
 
+    // init world bounds instance
     WorldBounds bounds;
+
+    // init camera instance
     Camera2D camera;
 
+    // init player instance
     Player player;
+    // init enemies instance as array of enemies
     std::vector<Enemy> enemies;
 
+    // init spawner instance
     Spawner spawner;
 
+    // check collisons in world space
     void HandleCollisions();
+    // ensure enemies in world space dont clutter
     void HandleEnemySeparation();
+    // if enemy health < 0 remove them from world space
     void RemoveDeadEnemies();
 
-    // xp things
+    // init xpObrs instance as vector or orbs
     std::vector<XPOrb> xpOrbs;
 };

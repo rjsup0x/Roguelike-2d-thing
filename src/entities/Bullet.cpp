@@ -26,11 +26,13 @@ void Bullet::Update(float deltaTime)
 
 void Bullet::Draw() const
 {
+    // add texture to bullets as size
     Vector2 size = {
         (float)AssetManager::BulletTex.width,
         (float)AssetManager::BulletTex.height
     };
 
+    // draw the bullet with texture as pos attributes
     DrawTextureV(
         AssetManager::BulletTex,
         {

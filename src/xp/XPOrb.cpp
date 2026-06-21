@@ -4,7 +4,7 @@
 
 XPOrb::XPOrb(Vector2 pos, int value)
 {
-    position = pos;
+    this->position = pos;
     this->value = value;
     velocity = {0, 0};
 }

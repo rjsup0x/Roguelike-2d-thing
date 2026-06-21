@@ -44,6 +44,8 @@ private:
 
     int health;
     int maxHealth;
+    // weapons is an array of weapon type
+    // unique pointer meaning player can ony controll one weapon type uniquely
     std::vector<std::unique_ptr<Weapon>> weapons;
 
     // xp things

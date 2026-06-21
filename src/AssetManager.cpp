@@ -7,6 +7,7 @@ Texture2D AssetManager::BulletTex = {};
 
 void AssetManager::Init()
 {
+    // init all assets
     PlayerTex = LoadTexture("/Users/ry/projects/roli/src/assets/Player.png");
     EnemyTex  = LoadTexture("/Users/ry/projects/roli/src/assets/Enemy.png");
     BulletTex = LoadTexture("/Users/ry/projects/roli/src/assets/Bullet.png");
@@ -14,6 +15,7 @@ void AssetManager::Init()
 
 void AssetManager::Shutdown()
 {
+    // remove all assets from memory
     UnloadTexture(PlayerTex);
     UnloadTexture(EnemyTex);
     UnloadTexture(BulletTex);
