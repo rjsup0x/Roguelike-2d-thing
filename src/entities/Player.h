@@ -5,7 +5,10 @@
 
 #include <memory>
 #include <vector>
+
 #include "weapons/Weapon.h"
+#include "animation/Animation.h"
+#include "animation/AnimationState.h"
 
 class Player
 {
@@ -52,4 +55,11 @@ private:
     int xp = 0;
     int level = 1;
     int xpToNextLevel = 100;
+
+    // anims
+    Animation animation;
+
+    AnimationState animationState = AnimationState::Idle;
+
+    Direction facingDirection = Direction::Down;
 };

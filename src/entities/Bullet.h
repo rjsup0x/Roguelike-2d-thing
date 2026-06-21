@@ -3,6 +3,9 @@
 #include <raylib.h>
 #include <raymath.h>
 
+#include "animation/Animation.h"
+#include "animation/AnimationState.h"
+
 class Bullet
 {
 public:
@@ -21,4 +24,11 @@ private:
     Vector2 velocity;
 
     float speed;
+
+    // anims
+    Animation animation;
+
+    AnimationState animationState = AnimationState::Idle;
+
+    Direction facingDirection = Direction::Down;
 };

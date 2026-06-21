@@ -5,6 +5,9 @@
 #include <raymath.h>
 #include <vector>
 
+#include "animation/Animation.h"
+#include "animation/AnimationState.h"
+
 struct DamageNumber
 {
     int value;
@@ -50,4 +53,11 @@ private:
     float freezeTimer = 0.0f;
 
     std::vector<DamageNumber> damageNumbers;
+
+    // anims
+    Animation animation;
+
+    AnimationState animationState = AnimationState::Idle;
+
+    Direction facingDirection = Direction::Down;
 };

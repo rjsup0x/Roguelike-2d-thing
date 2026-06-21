@@ -4,13 +4,16 @@
 #include "Enemy.h"
 #include "UI/UI.h"
 #include "AssetManager.h"
+#include "animation/AnimationState.h"
+#include "renderer/Renderer.h"
 
 Enemy::Enemy(Vector2 startPos)
     : position(startPos),
       velocity({0, 0}),
       speed(100.0f),
       maxHealth(50),
-      health(50)
+      health(50),
+      animation(8, 1, 0.12f)
 {
 
 }
@@ -43,6 +46,99 @@ void Enemy::Update(float deltaTime, Vector2 playerPos)
     );
 
     // -------------------------
+    // ANIMATION + FACING
+    // -------------------------
+    Vector2 toPlayerForFacing = Vector2Subtract(playerPos, position);
+
+    if (Vector2Length(toPlayerForFacing) > 0.0f)
+    {
+        animationState = AnimationState::Walk;
+
+        toPlayerForFacing = Vector2Normalize(toPlayerForFacing);
+
+        if (fabs(toPlayerForFacing.x) > fabs(toPlayerForFacing.y))
+        {
+            if (toPlayerForFacing.x > 0.0f)
+                facingDirection = Direction::Right;
+            else
+                facingDirection = Direction::Left;
+        }
+        else
+        {
+            if (toPlayerForFacing.y > 0.0f)
+                facingDirection = Direction::Down;
+            else
+                facingDirection = Direction::Up;
+        }
+    }
+    else
+    {
+        animationState = AnimationState::Idle;
+    }
+
+    // update anim state
+    int row = 0;
+
+    switch (animationState)
+    {
+        case AnimationState::Idle:
+
+            switch (facingDirection)
+            {
+                case Direction::Down:  row = 0; break;
+                case Direction::Left:  row = 1; break;
+                case Direction::Right: row = 2; break;
+                case Direction::Up:    row = 3; break;
+            }
+
+            break;
+
+        case AnimationState::Walk:
+
+            switch (facingDirection)
+            {
+                case Direction::Down:  row = 4; break;
+                case Direction::Left:  row = 5; break;
+                case Direction::Right: row = 6; break;
+                case Direction::Up:    row = 7; break;
+            }
+
+            break;
+
+        case AnimationState::Attack:
+
+            switch (facingDirection)
+            {
+                case Direction::Down:  row = 8; break;
+                case Direction::Left:  row = 9; break;
+                case Direction::Right: row = 10; break;
+                case Direction::Up:    row = 11; break;
+            }
+
+            break;
+
+        case AnimationState::Hurt:
+
+            switch (facingDirection)
+            {
+                case Direction::Down:  row = 12; break;
+                case Direction::Left:  row = 13; break;
+                case Direction::Right: row = 14; break;
+                case Direction::Up:    row = 15; break;
+            }
+
+            break;
+
+        case AnimationState::Death:
+
+            row = 16;
+            break;
+    }
+
+    animation.SetRow(row);
+    animation.Update(deltaTime);
+
+    // -------------------------
     // KNOCKBACK MOVEMENT
     // -------------------------
     position = Vector2Add(position, Vector2Scale(velocity, deltaTime));
@@ -70,17 +166,17 @@ void Enemy::Update(float deltaTime, Vector2 playerPos)
     }
 
     // -------------------------
-    // UPDATE FACING (FIX)
+    // UPDATE FACING
     // -------------------------
-    Vector2 toPlayer = Vector2Subtract(playerPos, position);
+    // Vector2 toPlayer = Vector2Subtract(playerPos, position);
 
-    if (Vector2Length(toPlayer) > 0.0f)
-    {
-        toPlayer = Vector2Normalize(toPlayer);
+    // if (Vector2Length(toPlayer) > 0.0f)
+    // {
+    //     toPlayer = Vector2Normalize(toPlayer);
 
-        // only flip direction (do NOT use for movement)
-        facingLeft = (toPlayer.x < 0.0f);
-    }
+    //     // only flip direction (do NOT use for movement)
+    //     facingLeft = (toPlayer.x < 0.0f);
+    // }
 
     // -------------------------
     // HIT FLASH TIMER
@@ -91,50 +187,22 @@ void Enemy::Update(float deltaTime, Vector2 playerPos)
 
 void Enemy::Draw() const
 {
-    // drawing enemy texture as size
-    Vector2 size = {
-        (float)AssetManager::EnemyTex.width,
-        (float)AssetManager::EnemyTex.height
-    };
-
     // for getting hit
     Color tint = WHITE;
+
+    Renderer::DrawAnimatedTexture(
+        AssetManager::EnemyTex,
+        animation,
+        position,
+        1.0f,
+        0.0,
+        tint,
+        facingDirection == Direction::Left
+    );
 
     // if player hit flash red
     if (hitFlashTimer > 0.0f)
         tint = RED;
-
-    // src of enemies
-    Rectangle source = {
-        0,
-        0,
-        facingLeft ? -size.x : size.x,
-        size.y
-    };
-
-    // destination of enemies
-    Rectangle dest = {
-        position.x,
-        position.y,
-        size.x,
-        size.y
-    };
-
-    // origin of enemies
-    Vector2 origin = {
-        size.x / 2.0f,
-        size.y / 2.0f
-    };
-
-    // draw the enemies with texture an attributes
-    DrawTexturePro(
-        AssetManager::EnemyTex,
-        source,
-        dest,
-        origin,
-        0.0f,
-        tint
-    );
 
     // add healthbar beside enemies
     UI::DrawHealthBar(position, health, maxHealth);

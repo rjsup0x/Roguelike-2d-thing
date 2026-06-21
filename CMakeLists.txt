@@ -20,6 +20,10 @@ add_executable(roli
     src/weapons/BulletWeapon.cpp
     src/weapons/OrbitalWeapon.cpp
 
+    src/renderer/Renderer.cpp
+
+    src/animation/Animation.cpp
+
     src/xp/XPOrb.cpp
 
     src/UI/UI.cpp
