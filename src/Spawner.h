@@ -17,6 +17,8 @@ public:
         float worldHeight
     );
 
+    void Reset();
+
     int GetWave() const;
     bool ShouldShowWaveText() const;
 

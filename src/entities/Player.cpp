@@ -21,7 +21,10 @@ Player::Player()
     // 1st BulletWeapon
     // 2nd OrbitalWeapon
     weapons.emplace_back(std::make_unique<BulletWeapon>());
-    weapons.back()->SetDamage(GetDamage());
+
+    weapons.back()->SetDamage(
+        weapons.back()->GetBaseDamage() + damageBonus
+    );
 }
 
 void Player::Update(float deltaTime, Vector2 aimDir)
@@ -113,9 +116,10 @@ const std::vector<std::unique_ptr<Weapon>>& Player::GetWeapons() const
 
 void Player::AddWeapon(std::unique_ptr<Weapon> weapon)
 {
-    // set the damage to the new weapon
-    weapon->SetDamage(GetDamage());
-    // add the new weapon to weapons
+    weapon->SetDamage(
+        weapon->GetBaseDamage() + damageBonus
+    );
+
     weapons.push_back(std::move(weapon));
 }
 
@@ -189,10 +193,10 @@ void Player::IncreaseDamage(int amount)
 {
     damageBonus += amount;
 
-    int newDamage{GetDamage()};
-
     for (auto& weapon : weapons)
     {
-        weapon->SetDamage(newDamage);
+        weapon->SetDamage(
+            weapon->GetBaseDamage() + damageBonus
+        );
     }
 }

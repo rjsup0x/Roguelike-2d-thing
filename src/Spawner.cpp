@@ -73,9 +73,9 @@ void Spawner::StartWave(
     blinkTimer = 0.3f;
     blinkCount = 0;
 
-    int enemyCount = 10;
-    int health = 50;
-    float speed = 100.0f;
+    int enemyCount{};
+    int health{};
+    float speed{};
 
     if (wave == 1)
     {
@@ -85,13 +85,19 @@ void Spawner::StartWave(
     }
     else if (wave == 2)
     {
-        enemyCount = 25;
+        enemyCount = 10;
         health = 80;
         speed = 110.0f;
     }
+    else if (wave == 3)
+    {
+        enemyCount = 15;
+        health = 100;
+        speed = 130.0f;
+    }
     else
     {
-        enemyCount = 30;
+        enemyCount = 20;
         health = 120;
         speed = 130.0f;
     }
@@ -111,9 +117,24 @@ void Spawner::StartWave(
         else
             pos = { worldWidth + 32, (float)GetRandomValue(0, (int)worldHeight) };
 
+        // init enemies
         auto e = std::make_unique<BatEnemy>(pos);
+        // set the enemies stats
         e->SetStats(health, speed);
 
+        // move enemies into the array
         enemies.push_back(std::move(e));
     }
+}
+
+void Spawner::Reset()
+{
+    wave = 0;
+    waveActive = false;
+
+    showWaveText = false;
+    waveTextVisible = false;
+
+    blinkTimer = 0.0f;
+    blinkCount = 0;
 }

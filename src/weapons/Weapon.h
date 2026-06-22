@@ -6,9 +6,9 @@ class Weapon
 {
 public:
     explicit Weapon(int damage)
-        : damage{damage}
+        : baseDamage{damage},
+          damage{damage}
     {
-
     }
 
     virtual ~Weapon() = default;
@@ -17,7 +17,6 @@ public:
     virtual void Draw() const = 0;
     virtual void HandleCollisions(class Enemy& enemy) = 0;
 
-    // weapon holds the base damage numbers
     virtual void SetDamage(int newDamage)
     {
         damage = newDamage;
@@ -28,6 +27,12 @@ public:
         return damage;
     }
 
+    int GetBaseDamage() const
+    {
+        return baseDamage;
+    }
+
 protected:
+    int baseDamage{};
     int damage{};
 };

@@ -23,7 +23,19 @@ void World::Reset()
 {
     enemies.clear();
     xpOrbs.clear();
+
     player = Player();
+
+    player.SetLevelUpCallback([this](int level)
+    {
+        OnPlayerLevelUp(level);
+    });
+
+    spawner.Reset();
+
+    levelUpActive = false;
+    hoveredUpgradeIndex = -1;
+    options.clear();
 }
 
 bool World::IsPlayerDead() const
