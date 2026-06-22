@@ -28,9 +28,10 @@ private:
 
     float speed{};
 
+    static constexpr float BulletRadius{5.0f};
+
     // anims
     Animation animation;
-
     AnimationState animationState{AnimationState::Idle};
 
     Direction facingDirection{Direction::Down};

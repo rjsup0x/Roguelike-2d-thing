@@ -11,8 +11,8 @@ enum class AnimationState
 
 enum class Direction
 {
-    Down,
-    Left,
-    Right,
-    Up
+    Down = 0,
+    Left = 1,
+    Right = 2,
+    Up = 3
 };

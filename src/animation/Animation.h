@@ -1,5 +1,7 @@
 #pragma once
 
+#include <animation/AnimationState.h>
+
 #include <raylib.h>
 
 class Animation
@@ -14,6 +16,8 @@ public:
     void Update(float dt);
 
     void SetRow(int row);
+
+    void SetState(AnimationState state, Direction dir);
 
     Rectangle GetSourceRect(const Texture2D& tex) const;
 

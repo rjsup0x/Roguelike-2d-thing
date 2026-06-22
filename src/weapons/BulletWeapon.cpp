@@ -6,11 +6,11 @@
 #include <raylib.h>
 
 BulletWeapon::BulletWeapon()
-    : fireRate{0.15},
+    : Weapon{10},
+      fireRate{0.15},
       fireTimer{0.0f}
 {
-    // Another weapon another update of (weapon.h) damage value
-    // damage = 10;
+
 }
 
 void BulletWeapon::Update(float dt, Vector2 playerPos, Vector2 aimDir)
@@ -75,7 +75,7 @@ void BulletWeapon::Draw() const
 void BulletWeapon::HandleCollisions(Enemy& enemy)
 {
     // for all bullets
-    for (size_t i{}; i < (int)bullets.size(); ++i)
+    for (size_t i{}; i < bullets.size(); ++i)
     {
         // check if they collide with anything ever
         if (CheckCollisionCircles(
@@ -95,6 +95,21 @@ void BulletWeapon::HandleCollisions(Enemy& enemy)
             // remove the bullet from data
             bullets.erase(bullets.begin() + i);
             i--;
+
+            // replace with
+            // auto it = bullets.begin();
+
+            // while (it != bullets.end())
+            // {
+            //     if (collision)
+            //     {
+            //         it = bullets.erase(it);
+            //     }
+            //     else
+            //     {
+            //         ++it;
+            //     }
+            // }
         }
     }
 }

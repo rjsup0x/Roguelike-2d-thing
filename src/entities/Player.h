@@ -32,7 +32,10 @@ public:
 
     Vector2 GetVelocity() const;
 
-    std::vector<std::unique_ptr<Weapon>>& GetWeapons();
+    // only inspects weapons doesnt chnage them
+    const std::vector<std::unique_ptr<Weapon>>& GetWeapons() const;
+    // to add weapons
+    void AddWeapon(std::unique_ptr<Weapon> weapon);
 
     void AddXP(int amount);
     int GetLevel() const;
@@ -51,8 +54,10 @@ public:
 private:
     Vector2 position{};
     Vector2 velocity{};
+    float scale{1.0f};
 
     float speed{};
+    static constexpr float Radius{16.0f};
 
     int health{};
     int maxHealth{};
@@ -64,7 +69,6 @@ private:
     int xpToNextLevel{100};
 
     Animation animation;
-
     AnimationState animationState {AnimationState::Idle};
 
     Direction facingDirection {Direction::Down};

@@ -38,8 +38,12 @@ public:
 private:
     Vector2 position{};
     Vector2 velocity{};
+    float scale{1.0f};
+    float roatation{};
 
     float speed{};
+
+    static constexpr float Radius{16.0f};
 
     int health{};
     int maxHealth{};
@@ -56,7 +60,6 @@ private:
 
     // anims
     Animation animation;
-
     AnimationState animationState{AnimationState::Idle};
 
     Direction facingDirection{Direction::Down};

@@ -5,6 +5,12 @@
 class Weapon
 {
 public:
+    explicit Weapon(int damage)
+        : damage{damage}
+    {
+
+    }
+
     virtual ~Weapon() = default;
 
     virtual void Update(float dt, Vector2 playerPos, Vector2 aimDir) = 0;
@@ -23,5 +29,5 @@ public:
     }
 
 protected:
-    int damage{10};
+    int damage{};
 };

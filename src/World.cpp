@@ -2,6 +2,7 @@
 #include "weapons/OrbitalWeapon.h"
 // #include "AssetManager.h"
 
+#include <memory>
 #include <raymath.h>
 
 World::World()
@@ -279,11 +280,11 @@ void World::ApplyUpgrade(int index)
     {
         case UpgradeType::OrbitalWeapon:
         {
-            auto weapon = std::make_unique<OrbitalWeapon>();
-
-            weapon->SetDamage(player.GetDamage());
-
-            player.GetWeapons().push_back(std::move(weapon));
+            // when user choses to upgrade weapon
+            // add a weapon of type OrbitalWeapon
+            player.AddWeapon(
+                std::make_unique<OrbitalWeapon>()
+            );
             break;
         }
 

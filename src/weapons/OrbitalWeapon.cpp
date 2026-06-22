@@ -1,14 +1,14 @@
 #include "OrbitalWeapon.h"
 #include "entities/Enemy.h"
 #include "AssetManager.h"
+#include "weapons/Weapon.h"
 
 OrbitalWeapon::OrbitalWeapon()
-    : orbitRadius{80.0f},
+    : Weapon{15},
+      orbitRadius{80.0f},
       rotationSpeed{180.0f},
       currentAngle{0.0f}
 {
-    // each type of weapon inits its own damage which overrides (weapon.h) damage
-    damage = 15;
     orbitalPositions.resize(4);
 }
 

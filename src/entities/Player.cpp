@@ -6,6 +6,7 @@
 
 #include <memory>
 #include <raylib.h>
+#include <utility>
 
 Player::Player()
     : position{400.0f, 225.0f},
@@ -19,7 +20,7 @@ Player::Player()
     // push weapons into the array
     // 1st BulletWeapon
     // 2nd OrbitalWeapon
-    weapons.push_back(std::make_unique<BulletWeapon>());
+    weapons.emplace_back(std::make_unique<BulletWeapon>());
     weapons.back()->SetDamage(GetDamage());
 }
 
@@ -70,65 +71,7 @@ void Player::Update(float deltaTime, Vector2 aimDir)
     }
 
     // update anim state
-    int row{};
-
-    switch (animationState)
-    {
-        case AnimationState::Idle:
-
-            switch (facingDirection)
-            {
-                case Direction::Down:  row = 0; break;
-                case Direction::Left:  row = 1; break;
-                case Direction::Right: row = 2; break;
-                case Direction::Up:    row = 3; break;
-            }
-
-            break;
-
-        case AnimationState::Walk:
-
-            switch (facingDirection)
-            {
-                case Direction::Down:  row = 4; break;
-                case Direction::Left:  row = 5; break;
-                case Direction::Right: row = 6; break;
-                case Direction::Up:    row = 7; break;
-            }
-
-            break;
-
-        case AnimationState::Attack:
-
-            switch (facingDirection)
-            {
-                case Direction::Down:  row = 8; break;
-                case Direction::Left:  row = 9; break;
-                case Direction::Right: row = 10; break;
-                case Direction::Up:    row = 11; break;
-            }
-
-            break;
-
-        case AnimationState::Hurt:
-
-            switch (facingDirection)
-            {
-                case Direction::Down:  row = 12; break;
-                case Direction::Left:  row = 13; break;
-                case Direction::Right: row = 14; break;
-                case Direction::Up:    row = 15; break;
-            }
-
-            break;
-
-        case AnimationState::Death:
-
-            row = 16;
-            break;
-    }
-
-    animation.SetRow(row);
+    animation.SetState(animationState, facingDirection);
     animation.Update(deltaTime);
 
     // for all weapons
@@ -146,7 +89,7 @@ void Player::Draw() const
         AssetManager::PlayerTex,
         animation,
         position,
-        1.0f
+        scale
     );
 
     // draw weapon
@@ -159,10 +102,18 @@ void Player::Draw() const
     UI::DrawHealthBar(position, health, maxHealth);
 }
 
-std::vector<std::unique_ptr<Weapon>>& Player::GetWeapons()
+const std::vector<std::unique_ptr<Weapon>>& Player::GetWeapons() const
 {
     // get all waepons player can use
     return weapons;
+}
+
+void Player::AddWeapon(std::unique_ptr<Weapon> weapon)
+{
+    // set the damage to the new weapon
+    weapon->SetDamage(GetDamage());
+    // add the new weapon to weapons
+    weapons.push_back(std::move(weapon));
 }
 
 // get player atrtibutes
@@ -170,7 +121,7 @@ Vector2 Player::GetPos() const { return position; }
 
 void Player::SetPos(Vector2 newPos) { position = newPos; }
 
-float Player::GetRadius() const { return 16.0f; }
+float Player::GetRadius() const { return Radius; }
 
 int Player::GetHealth() const { return health; }
 
@@ -222,7 +173,7 @@ int Player::GetXPToNextLevel() const { return xpToNextLevel; }
 // level up system
 void Player::SetLevelUpCallback(std::function<void(int)> callback)
 {
-    onLevelUp = callback;
+    onLevelUp = std::move(callback);
 }
 
 void Player::IncreaseMaxHealth(int amount)

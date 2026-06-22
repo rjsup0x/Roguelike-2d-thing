@@ -34,6 +34,36 @@ void Animation::SetRow(int row)
     currentRow = row;
 }
 
+void Animation::SetState(AnimationState state, Direction dir)
+{
+    int row{};
+
+    switch (state)
+    {
+        case AnimationState::Idle:
+            row = 0 + static_cast<int>(dir);
+            break;
+
+        case AnimationState::Walk:
+            row = 4 + static_cast<int>(dir);
+            break;
+
+        case AnimationState::Attack:
+            row = 8 + static_cast<int>(dir);
+            break;
+
+        case AnimationState::Hurt:
+            row = 12 + static_cast<int>(dir);
+            break;
+
+        case AnimationState::Death:
+            row = 16;
+            break;
+    }
+
+    SetRow(row);
+}
+
 Rectangle Animation::GetSourceRect(const Texture2D& tex) const
 {
     float frameWidth =

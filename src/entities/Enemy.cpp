@@ -77,65 +77,7 @@ void Enemy::Update(float deltaTime, Vector2 playerPos)
     }
 
     // update anim state
-    int row{};
-
-    switch (animationState)
-    {
-        case AnimationState::Idle:
-
-            switch (facingDirection)
-            {
-                case Direction::Down:  row = 0; break;
-                case Direction::Left:  row = 1; break;
-                case Direction::Right: row = 2; break;
-                case Direction::Up:    row = 3; break;
-            }
-
-            break;
-
-        case AnimationState::Walk:
-
-            switch (facingDirection)
-            {
-                case Direction::Down:  row = 4; break;
-                case Direction::Left:  row = 5; break;
-                case Direction::Right: row = 6; break;
-                case Direction::Up:    row = 7; break;
-            }
-
-            break;
-
-        case AnimationState::Attack:
-
-            switch (facingDirection)
-            {
-                case Direction::Down:  row = 8; break;
-                case Direction::Left:  row = 9; break;
-                case Direction::Right: row = 10; break;
-                case Direction::Up:    row = 11; break;
-            }
-
-            break;
-
-        case AnimationState::Hurt:
-
-            switch (facingDirection)
-            {
-                case Direction::Down:  row = 12; break;
-                case Direction::Left:  row = 13; break;
-                case Direction::Right: row = 14; break;
-                case Direction::Up:    row = 15; break;
-            }
-
-            break;
-
-        case AnimationState::Death:
-
-            row = 16;
-            break;
-    }
-
-    animation.SetRow(row);
+    animation.SetState(animationState, facingDirection);
     animation.Update(deltaTime);
 
     // -------------------------
@@ -189,13 +131,14 @@ void Enemy::Draw() const
 {
     // for getting hit
     Color tint = WHITE;
+    float roatation{};
 
     Renderer::DrawAnimatedTexture(
         AssetManager::EnemyTex,
         animation,
         position,
-        1.0f,
-        0.0,
+        scale,
+        rotation,
         tint,
         facingDirection == Direction::Left
     );
@@ -225,9 +168,9 @@ Vector2 Enemy::GetPos() const { return position; }
 
 void Enemy::SetPos(Vector2 newPos) { position = newPos; }
 
-float Enemy::GetRadius() const { return 16.0f; }
+float Enemy::GetRadius() const { return Radius; }
 
-void Enemy::TakeDamage(int amount, Vector2 hitDir)
+void Enemy::TakeDamage(int amount, Vector2 hitDirection)
 {
     health -= amount;
         if (health < 0) health = 0;
@@ -237,7 +180,7 @@ void Enemy::TakeDamage(int amount, Vector2 hitDir)
 
     velocity = Vector2Add(
         velocity,
-        Vector2Scale(hitDir, knockback)
+        Vector2Scale(hitDirection, knockback)
     );
 
     // freeze enemy briefly
@@ -245,6 +188,8 @@ void Enemy::TakeDamage(int amount, Vector2 hitDir)
 
     // flash red
     hitFlashTimer = 0.12f;
+
+
 
     // spawn damage number
     damageNumbers.push_back(

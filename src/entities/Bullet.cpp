@@ -56,66 +56,7 @@ void Bullet::Update(float deltaTime)
         animationState = AnimationState::Idle;
     }
 
-    // update anim state
-    int row{};
-
-    switch (animationState)
-    {
-        case AnimationState::Idle:
-
-            switch (facingDirection)
-            {
-                case Direction::Down:  row = 0; break;
-                case Direction::Left:  row = 1; break;
-                case Direction::Right: row = 2; break;
-                case Direction::Up:    row = 3; break;
-            }
-
-            break;
-
-        case AnimationState::Walk:
-
-            switch (facingDirection)
-            {
-                case Direction::Down:  row = 4; break;
-                case Direction::Left:  row = 5; break;
-                case Direction::Right: row = 6; break;
-                case Direction::Up:    row = 7; break;
-            }
-
-            break;
-
-        case AnimationState::Attack:
-
-            switch (facingDirection)
-            {
-                case Direction::Down:  row = 8; break;
-                case Direction::Left:  row = 9; break;
-                case Direction::Right: row = 10; break;
-                case Direction::Up:    row = 11; break;
-            }
-
-            break;
-
-        case AnimationState::Hurt:
-
-            switch (facingDirection)
-            {
-                case Direction::Down:  row = 12; break;
-                case Direction::Left:  row = 13; break;
-                case Direction::Right: row = 14; break;
-                case Direction::Up:    row = 15; break;
-            }
-
-            break;
-
-        case AnimationState::Death:
-
-            row = 16;
-            break;
-    }
-
-    animation.SetRow(row);
+    animation.SetState(animationState, facingDirection);
     animation.Update(deltaTime);
 }
 
@@ -137,7 +78,7 @@ int Bullet::GetDamage() const
 
 Vector2 Bullet::GetPos() const { return position; }
 
-float Bullet::GetRadius() const { return 5.0f; }
+float Bullet::GetRadius() const { return BulletRadius; }
 
 // check if the bullet goes of world space
 bool Bullet::IsOffScreen() const
