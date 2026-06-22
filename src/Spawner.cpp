@@ -1,15 +1,16 @@
 #include "Spawner.h"
+#include <cstddef>
 #include <raymath.h>
 #include <raylib.h>
 
 Spawner::Spawner()
-    : wave(0),
-    waveActive(false),
-    showWaveText(false),
-    waveTextVisible(false),
-    blinkTimer(0.0f),
-    blinkCount(0),
-    maxBlinks(6)
+    : wave{},
+    waveActive{false},
+    showWaveText{false},
+    waveTextVisible{false},
+    blinkTimer{0.0f},
+    blinkCount{},
+    maxBlinks{6}
 {
 
 }
@@ -84,9 +85,9 @@ void Spawner::StartWave(std::vector<Enemy>& enemies, float worldWidth, float wor
     blinkTimer = 0.3f;
     blinkCount = 0;
 
-    int enemyCount = 10;
-    int health = 50;
-    float speed = 100.0f;
+    int enemyCount{10};
+    int health{50};
+    float speed{100.0f};
 
     // wave logic for enemies
     if (wave == 1)
@@ -112,7 +113,7 @@ void Spawner::StartWave(std::vector<Enemy>& enemies, float worldWidth, float wor
     }
 
     // for all enemies
-    for (int i = 0; i < enemyCount; i++)
+    for (size_t i{}; i < enemyCount; ++i)
     {
         // get reandom side to spawn on
         int side = GetRandomValue(0, 3);

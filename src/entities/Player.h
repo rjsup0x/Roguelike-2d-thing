@@ -49,28 +49,28 @@ public:
     int GetDamage() const;
 
 private:
-    Vector2 position;
-    Vector2 velocity;
+    Vector2 position{};
+    Vector2 velocity{};
 
-    float speed;
+    float speed{};
 
-    int health;
-    int maxHealth;
+    int health{};
+    int maxHealth{};
 
     std::vector<std::unique_ptr<Weapon>> weapons;
 
-    int xp = 0;
-    int level = 1;
-    int xpToNextLevel = 100;
+    int xp{};
+    int level{1};
+    int xpToNextLevel{100};
 
     Animation animation;
 
-    AnimationState animationState = AnimationState::Idle;
+    AnimationState animationState {AnimationState::Idle};
 
-    Direction facingDirection = Direction::Down;
+    Direction facingDirection {Direction::Down};
 
     std::function<void(int)> onLevelUp;
 
-    int baseDamage = 10;
-    int damageBonus = 0;
+    int baseDamage{10};
+    int damageBonus{};
 };

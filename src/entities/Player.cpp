@@ -8,13 +8,13 @@
 #include <raylib.h>
 
 Player::Player()
-    : position(400.0f, 225.0f),
-      velocity({0, 0}),
-      speed(250.0f),
-      health(100),
-      maxHealth(100),
+    : position{400.0f, 225.0f},
+      velocity{},
+      speed{250.0f},
+      health{100},
+      maxHealth{100},
       // depending on the sheet for the entity
-      animation(10, 1, 0.12f)
+      animation{10, 1, 0.12f}
 {
     // push weapons into the array
     // 1st BulletWeapon
@@ -26,7 +26,8 @@ Player::Player()
 void Player::Update(float deltaTime, Vector2 aimDir)
 {
     // update player movement
-    velocity = {0.0f, 0.0f};
+    // same as {0.0f, 0.0f}
+    velocity = {};
 
     if (IsKeyDown(KEY_W)) velocity.y -= 1;
     if (IsKeyDown(KEY_S)) velocity.y += 1;
@@ -69,7 +70,7 @@ void Player::Update(float deltaTime, Vector2 aimDir)
     }
 
     // update anim state
-    int row = 0;
+    int row{};
 
     switch (animationState)
     {
@@ -207,7 +208,7 @@ void Player::AddXP(int amount)
         xp -= xpToNextLevel;
         level++;
 
-        xpToNextLevel = (int)(xpToNextLevel * 1.25f);
+        xpToNextLevel = static_cast<int>(xpToNextLevel * 1.25f);
 
         if (onLevelUp)
             onLevelUp(level);
@@ -234,7 +235,7 @@ void Player::IncreaseDamage(int amount)
 {
     damageBonus += amount;
 
-    int newDamage = GetDamage();
+    int newDamage{GetDamage()};
 
     for (auto& weapon : weapons)
     {

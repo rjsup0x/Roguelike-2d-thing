@@ -3,9 +3,9 @@
 #include "AssetManager.h"
 
 OrbitalWeapon::OrbitalWeapon()
-    : orbitRadius(80.0f),
-      rotationSpeed(180.0f),
-      currentAngle(0.0f)
+    : orbitRadius{80.0f},
+      rotationSpeed{180.0f},
+      currentAngle{0.0f}
 {
     // each type of weapon inits its own damage which overrides (weapon.h) damage
     damage = 15;

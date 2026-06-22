@@ -15,14 +15,14 @@
 
 struct UpgradeOption
 {
-    UpgradeType type;
-    const char* name;
+    UpgradeType type{};
+    const char* name{};
 };
 
 class World
 {
 public:
-    int hoveredUpgradeIndex = -1;
+    int hoveredUpgradeIndex{-1};
 
     // world constructor
     World();
@@ -65,8 +65,8 @@ private:
     // seperate world bounds to screen bounds
     struct WorldBounds
     {
-        float width;
-        float height;
+        float width{};
+        float height{};
     };
 
     // init world bounds instance

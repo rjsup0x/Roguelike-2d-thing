@@ -23,5 +23,5 @@ public:
     }
 
 protected:
-    int damage = 10;
+    int damage{10};
 };

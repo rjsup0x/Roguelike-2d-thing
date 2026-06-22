@@ -21,17 +21,17 @@ public:
     int GetDamage() const;
 
 private:
-    Vector2 position;
-    Vector2 velocity;
+    Vector2 position{};
+    Vector2 velocity{};
 
-    int damage;
+    int damage{};
 
-    float speed;
+    float speed{};
 
     // anims
     Animation animation;
 
-    AnimationState animationState = AnimationState::Idle;
+    AnimationState animationState{AnimationState::Idle};
 
-    Direction facingDirection = Direction::Down;
+    Direction facingDirection{Direction::Down};
 };

@@ -9,10 +9,10 @@
 
 // bullet constructor
 Bullet::Bullet(Vector2 startPos, Vector2 direction, Vector2 playerVelocity, int damage)
-    : position(startPos),
-      speed(600.0f),
-      animation(5, 1, 0.12f),
-      damage(damage)
+    : position{startPos},
+      speed{600.0f},
+      animation{5, 1, 0.12f},
+      damage{damage}
 {
     Vector2 dirNorm = Vector2Normalize(direction);
 
@@ -36,7 +36,7 @@ void Bullet::Update(float deltaTime)
         if (fabs(velocity.x) > fabs(velocity.y))
         {
             // is facing right of left
-            if (velocity.x > 0)
+            if (velocity.x > 0.0f)
                 facingDirection = Direction::Right;
             else
                 facingDirection = Direction::Left;
@@ -44,7 +44,7 @@ void Bullet::Update(float deltaTime)
         else
         {
             // is facing up or down
-            if (velocity.y > 0)
+            if (velocity.y > 0.0f)
                 facingDirection = Direction::Down;
             else
                 facingDirection = Direction::Up;
@@ -57,7 +57,7 @@ void Bullet::Update(float deltaTime)
     }
 
     // update anim state
-    int row = 0;
+    int row{};
 
     switch (animationState)
     {

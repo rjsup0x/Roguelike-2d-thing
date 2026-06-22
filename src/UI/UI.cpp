@@ -7,8 +7,8 @@
 // =========================
 void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
 {
-    const float barWidth = 6.0f;
-    const float barHeight = 32.0f;
+    const float barWidth{6.0f};
+    const float barHeight{32.0f};
 
     float healthPercent = Clamp(
         (float)health / (float)maxHealth,
@@ -22,7 +22,7 @@ void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
         position.y - barHeight * 0.5f
     };
 
-    float fillHeight = barHeight * healthPercent;
+    float fillHeight{barHeight * healthPercent};
 
     Color fillColor = {
         (unsigned char)(255 * (1.0f - healthPercent)),
@@ -59,7 +59,7 @@ void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
 
     const char* text = TextFormat("%d / %d", health, maxHealth);
 
-    int fontSize = 6;
+    int fontSize{6};
     int textWidth = MeasureText(text, fontSize);
 
     DrawText(
@@ -73,13 +73,13 @@ void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
 
 void UI::DrawXPBar(int xp, int maxXP, int level)
 {
-    float barWidth = 400.0f;
-    float barHeight = 12.0f;
+    float barWidth{400.0f};
+    float barHeight{12.0f};
 
-    float screenX = GetScreenWidth() * 0.5f - barWidth * 0.5f;
+    float screenX{GetScreenWidth() * 0.5f - barWidth * 0.5f};
     float screenY = GetScreenHeight() - 40;
 
-    float percent = (float)xp / (float)maxXP;
+    float percent{(float)xp / (float)maxXP};
     if (percent > 1.0f) percent = 1.0f;
 
     // background
@@ -117,8 +117,8 @@ void UI::HandleLevelUpInput(World& world)
     int screenW = GetScreenWidth();
     int screenH = GetScreenHeight();
 
-    int panelW = 600;
-    int panelH = 250;
+    int panelW{600};
+    int panelH{250};
 
     Rectangle panel = {
         (screenW - panelW) * 0.5f,
@@ -127,9 +127,9 @@ void UI::HandleLevelUpInput(World& world)
         (float)panelH
     };
 
-    int boxW = 160;
-    int boxH = 100;
-    int spacing = 20;
+    int boxW{160};
+    int boxH{100};
+    int spacing{20};
 
     float startX = panel.x + (panelW - (boxW * 3 + spacing * 2)) * 0.5f;
     float y = panel.y + 80;
@@ -164,8 +164,8 @@ void UI::DrawLevelUp(World& world)
     int screenW = GetScreenWidth();
     int screenH = GetScreenHeight();
 
-    int panelW = 600;
-    int panelH = 250;
+    int panelW{600};
+    int panelH{250};
 
     Rectangle panel = {
         (screenW - panelW) * 0.5f,
@@ -180,9 +180,9 @@ void UI::DrawLevelUp(World& world)
 
     DrawText("LEVEL UP!", panel.x + 20, panel.y + 15, 28, WHITE);
 
-    int boxW = 160;
-    int boxH = 100;
-    int spacing = 20;
+    int boxW{160};
+    int boxH{100};
+    int spacing{20};
 
     float startX = panel.x + (panelW - (boxW * 3 + spacing * 2)) * 0.5f;
     float y = panel.y + 80;

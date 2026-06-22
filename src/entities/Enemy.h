@@ -10,10 +10,10 @@
 
 struct DamageNumber
 {
-    int value;
-    Vector2 pos;
-    float timer;
-    float alpha;
+    int value{};
+    Vector2 pos{};
+    float timer{};
+    float alpha{};
 };
 
 class Enemy
@@ -36,28 +36,28 @@ public:
     void SetStats(int hp, float spd);
 
 private:
-    Vector2 position;
-    Vector2 velocity;
+    Vector2 position{};
+    Vector2 velocity{};
 
-    float speed;
+    float speed{};
 
-    int health;
-    int maxHealth;
+    int health{};
+    int maxHealth{};
 
-    float separationRadius = 28.0f;
+    float separationRadius{28.0f};
 
-    float rotation = 0.0f;
-    bool facingLeft = false;
+    float rotation{};
+    bool facingLeft{};
 
-    float hitFlashTimer = 0.0f;
-    float freezeTimer = 0.0f;
+    float hitFlashTimer{};
+    float freezeTimer{};
 
     std::vector<DamageNumber> damageNumbers;
 
     // anims
     Animation animation;
 
-    AnimationState animationState = AnimationState::Idle;
+    AnimationState animationState{AnimationState::Idle};
 
-    Direction facingDirection = Direction::Down;
+    Direction facingDirection{Direction::Down};
 };

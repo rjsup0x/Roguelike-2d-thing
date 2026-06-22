@@ -83,13 +83,13 @@ void Game::Draw()
             {
                 const char* text = TextFormat("WAVE %d STARTING", world.GetSpawner().GetWave());
 
-                int fontSize = 30;
+                int fontSize{30};
                 int screenWidth = GetScreenWidth();
 
                 int textWidth = MeasureText(text, fontSize);
 
-                int x = (screenWidth - textWidth) / 2;
-                int y = 20;
+                int x{(screenWidth - textWidth) / 2};
+                int y{20};
 
                 DrawText(text, x, y, fontSize, GRAY);
             }
@@ -105,8 +105,8 @@ void Game::Draw()
                 int screenW = GetScreenWidth();
                 int screenH = GetScreenHeight();
 
-                int panelW = 600;
-                int panelH = 250;
+                int panelW{600};
+                int panelH{250};
 
                 Rectangle panel = {
                     (screenW - panelW) * 0.5f,
@@ -120,9 +120,9 @@ void Game::Draw()
 
                 DrawText("LEVEL UP!", panel.x + 20, panel.y + 15, 28, WHITE);
 
-                int boxW = 160;
-                int boxH = 100;
-                int spacing = 20;
+                int boxW{160};
+                int boxH{100};
+                int spacing{20};
 
                 float startX = panel.x + (panelW - (boxW * 3 + spacing * 2)) * 0.5f;
                 float y = panel.y + 80;

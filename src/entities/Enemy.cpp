@@ -8,12 +8,12 @@
 #include "renderer/Renderer.h"
 
 Enemy::Enemy(Vector2 startPos)
-    : position(startPos),
-      velocity({0, 0}),
-      speed(100.0f),
-      maxHealth(50),
-      health(50),
-      animation(8, 1, 0.12f)
+    : position{startPos},
+      velocity{},
+      speed{100.0f},
+      maxHealth{50},
+      health{50},
+      animation{8, 1, 0.12f}
 {
 
 }
@@ -77,7 +77,7 @@ void Enemy::Update(float deltaTime, Vector2 playerPos)
     }
 
     // update anim state
-    int row = 0;
+    int row{};
 
     switch (animationState)
     {
@@ -233,7 +233,7 @@ void Enemy::TakeDamage(int amount, Vector2 hitDir)
         if (health < 0) health = 0;
 
     // knockback
-    float knockback = 250.0f;
+    float knockback{250.0f};
 
     velocity = Vector2Add(
         velocity,
@@ -247,15 +247,14 @@ void Enemy::TakeDamage(int amount, Vector2 hitDir)
     hitFlashTimer = 0.12f;
 
     // spawn damage number
-    DamageNumber d;
-    // damage number = amount of damage took
-    d.value = amount;
-    d.pos = position;
-    d.timer = 0.6f;
-    d.alpha = 1.0f;
-
-    // add the damage number to the array of damage numbers
-    damageNumbers.push_back(d);
+    damageNumbers.push_back(
+        DamageNumber{
+            amount,
+            position,
+            0.6f,
+            1.0f
+        }
+    );
 }
 
 bool Enemy::isDead() const

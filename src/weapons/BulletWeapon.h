@@ -16,8 +16,8 @@ public:
 private:
     struct Bullet
     {
-        Vector2 pos;
-        Vector2 vel;
+        Vector2 pos{};
+        Vector2 vel{};
 
 
         Vector2 GetPos() const { return pos; }
@@ -26,6 +26,6 @@ private:
 
     std::vector<Bullet> bullets;
 
-    float fireRate;
-    float fireTimer;
+    float fireRate{};
+    float fireTimer{};
 };

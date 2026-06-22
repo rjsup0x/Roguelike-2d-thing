@@ -15,18 +15,19 @@ public:
     bool ShouldShowWaveText() const;
 
 private:
+    // {} = 0
     // wave settings
-    int wave = 0;
-    bool waveActive = false;
+    int wave{};
+    bool waveActive{false};
 
     // wave text system
-    bool showWaveText = false;
-    bool waveTextVisible = false;
+    bool showWaveText{false};
+    bool waveTextVisible{false};
 
     // ui wave test blinking
-    float blinkTimer = 0.0f;
-    int blinkCount = 0;
-    int maxBlinks = 6;
+    float blinkTimer{};
+    int blinkCount{};
+    int maxBlinks{6};
 
     void StartWave(std::vector<Enemy>& enemies, float worldWidth, float worldHeight);
 };

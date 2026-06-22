@@ -177,7 +177,7 @@ void World::HandleCollisions()
 void World::RemoveDeadEnemies()
 {
     // for all enemies
-    for (int i = 0; i < (int)enemies.size(); i++)
+    for (size_t i{}; i < (int)enemies.size(); ++i)
     {
         // if any of those enemeis are dead
         if (enemies[i].isDead())
@@ -198,7 +198,7 @@ void World::HandleEnemySeparation()
     const float minDist = 28.0f;
 
     // for all enemies until end of arr
-    for (size_t i = 0; i < enemies.size(); i++)
+    for (size_t i{}; i < enemies.size(); ++i)
     {
         // and backwards
         for (size_t j = i + 1; j < enemies.size(); j++)

@@ -17,11 +17,11 @@ class OrbitalWeapon : public Weapon
         // check collisions weapon vs enemy
         void HandleCollisions(class Enemy& enemy) override;
     private:
-        float orbitRadius;
-        float rotationSpeed;
-        float currentAngle;
+        float orbitRadius{};
+        float rotationSpeed{};
+        float currentAngle{};
 
-        Vector2 playerPos;
+        Vector2 playerPos{};
 
         std::vector<Vector2> orbitalPositions;
 };

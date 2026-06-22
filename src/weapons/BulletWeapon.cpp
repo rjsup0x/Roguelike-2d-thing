@@ -6,8 +6,8 @@
 #include <raylib.h>
 
 BulletWeapon::BulletWeapon()
-    : fireRate(0.15),
-      fireTimer(0.0f)
+    : fireRate{0.15},
+      fireTimer{0.0f}
 {
     // Another weapon another update of (weapon.h) damage value
     // damage = 10;
@@ -75,7 +75,7 @@ void BulletWeapon::Draw() const
 void BulletWeapon::HandleCollisions(Enemy& enemy)
 {
     // for all bullets
-    for (int i = 0; i < (int)bullets.size(); i++)
+    for (size_t i{}; i < (int)bullets.size(); ++i)
     {
         // check if they collide with anything ever
         if (CheckCollisionCircles(
