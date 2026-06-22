@@ -1,261 +1,108 @@
 #include "World.h"
-#include "weapons/OrbitalWeapon.h"
-// #include "AssetManager.h"
+#include "systems/UpgradeSystem.h"
 
-#include <memory>
 #include <raymath.h>
 
 World::World()
 {
-    // init world bounds - seperate from window bounds
     bounds.width = 3000.0f;
     bounds.height = 2000.0f;
 
-    // init camera in world
     camera.zoom = 1.0f;
     camera.rotation = 0.0f;
     camera.offset = {640, 360};
     camera.target = {0, 0};
 
-    // callback hook
     player.SetLevelUpCallback([this](int level)
-        {
-            OnPlayerLevelUp(level);
-        });
+    {
+        OnPlayerLevelUp(level);
+    });
 }
 
 void World::Reset()
 {
-    // on resert clear all enemies and make new player
     enemies.clear();
+    xpOrbs.clear();
     player = Player();
 }
 
 bool World::IsPlayerDead() const
 {
-    // check if player is dead (bool dead or nah)
     return player.isDead();
 }
 
 void World::Update(float dt)
 {
-    // pause game on upgrade
     if (levelUpActive)
-            return;
-    // -------------------------
-    // AIM DIRECTION
-    // -------------------------
-    // mouse pos from screen/window to world coords
-    Vector2 mouseWorld = GetScreenToWorld2D(GetMousePosition(), camera);
-    // aim from player to mouse pos
-    Vector2 aimDir = Vector2Subtract(mouseWorld, player.GetPos());
+        return;
 
-    // normalize aim movements
-    if (Vector2Length(aimDir) > 0.0f)
-        aimDir = Vector2Normalize(aimDir);
+    constexpr float AUTO_TARGET_RADIUS = 350.0f;
 
-    // -------------------------
-    // PLAYER UPDATE
-    // -------------------------
-    player.Update(dt, aimDir);
+    const Enemy* target =
+        targetingSystem.FindClosestEnemy(
+            player,
+            enemies,
+            AUTO_TARGET_RADIUS
+        );
 
-    // clamp player in world space
-    Vector2 p = player.GetPos();
-    p.x = Clamp(p.x, 0.0f, bounds.width);
-    p.y = Clamp(p.y, 0.0f, bounds.height);
-    player.SetPos(p);
+    Vector2 aimDir{0.0f, 0.0f};
 
-    // -------------------------
-    // ENEMIES UPDATE
-    // -------------------------
-    spawner.Update(dt, enemies, bounds.width, bounds.height);
+    if (target)
+    {
+        aimDir =
+            Vector2Normalize(
+                Vector2Subtract(
+                    target->GetPos(),
+                    player.GetPos()
+                )
+            );
+    }
 
-    for (Enemy& e : enemies)
-        e.Update(dt, player.GetPos());
+    playerSystem.Update(player, dt, aimDir, bounds.width, bounds.height);
 
-    // -------------------------
-    // CAMERA FOLLOW
-    // -------------------------
+    enemySystem.Update(dt, enemies, spawner, player.GetPos(), bounds.width, bounds.height, xpOrbs);
+
     camera.target = player.GetPos();
 
     float hw = camera.offset.x / camera.zoom;
     float hh = camera.offset.y / camera.zoom;
 
-    // clamp camera to target
     camera.target.x = Clamp(camera.target.x, hw, bounds.width - hw);
     camera.target.y = Clamp(camera.target.y, hh, bounds.height - hh);
 
-    // -------------------------
-    // COLLISION SYSTEM
-    // -------------------------
-    HandleEnemySeparation();
-    HandleCollisions();
-    RemoveDeadEnemies();
+    combatSystem.Update(player, enemies);
 
-    // -------------------------
-    // COLLECT ORBS
-    // -------------------------
-    // for all orbs
-    for (auto& orb : xpOrbs)
-    {
-        // update orbs
-        orb.Update(dt, player.GetPos());
+    collisionSystem.SeparateEnemies(enemies);
 
-        // if orb picked up
-        if (orb.IsCollected())
-        {
-            // update player xp
-            player.AddXP(orb.GetValue());
-        }
-    }
+    enemySystem.RemoveDead(enemies, xpOrbs);
 
-    // remove collected
-    xpOrbs.erase(
-        std::remove_if(xpOrbs.begin(), xpOrbs.end(),
-            [](const XPOrb& o)
-            {
-                return o.IsCollected();
-            }),
-        xpOrbs.end()
-    );
+    xpSystem.Update(dt, xpOrbs, player);
 }
 
 void World::Draw()
 {
-    BeginMode2D(camera);
-
-    // draw bounds limites
-    DrawRectangleLines(0, 0, bounds.width, bounds.height, GRAY);
-
-    player.Draw();
-
-    // draw all enemies in the array
-    for (Enemy& e : enemies)
+    for (auto& e : enemies)
         e.Draw();
 
-    // draw all orbs in the array
-    for (const auto& orb : xpOrbs)
+    for (auto& orb : xpOrbs)
         orb.Draw();
 
-    EndMode2D();
+    player.Draw();
 }
 
-void World::HandleCollisions()
-{
-    // -------------------------
-    // WEAPON vs ENEMY COLLISIONS
-    // -------------------------
-    // for all weapons available to player
-    for (auto& weapon : player.GetWeapons())
-    {
-        // for all enemies in the array
-        for (Enemy& enemy : enemies)
-        {
-            // check if weapon is colliding with enemy
-            weapon->HandleCollisions(enemy);
-        }
-    }
+// ---------------- GETTERS ----------------
 
-    // -------------------------
-    // PLAYER TOUCH DAMAGE
-    // -------------------------
-    // for all enemies in enemy array
-    for (Enemy& enemy : enemies)
-    {
-        // check if enemy collides with player
-        if (CheckCollisionCircles(
-            player.GetPos(),
-            player.GetRadius(),
-            enemy.GetPos(),
-            enemy.GetRadius()))
-        {
-            // if collides - player takes damage
-            player.TakeDamage(1);
-        }
-    }
-}
+Camera2D& World::GetCamera() { return camera; }
+Player& World::GetPlayer() { return player; }
+const Player& World::GetPlayer() const { return player; }
 
-void World::RemoveDeadEnemies()
-{
-    // for all enemies
-    for (size_t i{}; i < (int)enemies.size(); ++i)
-    {
-        // if any of those enemeis are dead
-        if (enemies[i].isDead())
-        {
-            // drop xp
-            xpOrbs.emplace_back(enemies[i].GetPos(), 10);
+int World::GetPlayerHealth() const { return player.GetHealth(); }
+int World::GetPlayerMaxHealth() const { return player.GetMaxHealth(); }
 
-            // erase enemy from array
-            enemies.erase(enemies.begin() + i);
-            i--;
-        }
-    }
-}
+Spawner& World::GetSpawner() { return spawner; }
 
-void World::HandleEnemySeparation()
-{
-    // distance enemies can be from eachother
-    const float minDist = 28.0f;
+// ---------------- LEVEL / UPGRADES ----------------
 
-    // for all enemies until end of arr
-    for (size_t i{}; i < enemies.size(); ++i)
-    {
-        // and backwards
-        for (size_t j = i + 1; j < enemies.size(); j++)
-        {
-            // check distance between them
-            Vector2 dir = Vector2Subtract(enemies[i].GetPos(), enemies[j].GetPos());
-            // distance bewteen them
-            float dist = Vector2Length(dir);
-
-            // check they are the correct distance away
-            if (dist < minDist && dist > 0.0f)
-            {
-                // if not move them away - never let them be close
-                Vector2 push = Vector2Scale(Vector2Normalize(dir), (minDist - dist) * 0.5f);
-
-                enemies[i].SetPos(Vector2Add(enemies[i].GetPos(), push));
-                enemies[j].SetPos(Vector2Subtract(enemies[j].GetPos(), push));
-            }
-        }
-    }
-}
-
-// -------------------------
-// GETTERS
-// -------------------------
-Camera2D& World::GetCamera()
-{
-    return camera;
-}
-
-Player& World::GetPlayer()
-{
-    return player;
-}
-
-const Player& World::GetPlayer() const
-{
-    return player;
-}
-
-int World::GetPlayerHealth() const
-{
-    return player.GetHealth();
-}
-
-int World::GetPlayerMaxHealth() const
-{
-    return player.GetMaxHealth();
-}
-
-Spawner& World::GetSpawner()
-{
-    return spawner;
-}
-
-// level up system
 void World::OnPlayerLevelUp(int level)
 {
     EnterLevelUp();
@@ -264,38 +111,10 @@ void World::OnPlayerLevelUp(int level)
 void World::EnterLevelUp()
 {
     levelUpActive = true;
-    options.clear();
-
-    options.push_back({UpgradeType::OrbitalWeapon, "Orbital Weapon"});
-    options.push_back({UpgradeType::MaxHealth, "Max Health +20"});
-    options.push_back({UpgradeType::Damage, "Damage +1"});
+    upgradeSystem.Enter(*this);
 }
 
 void World::ApplyUpgrade(int index)
 {
-    if (index < 0 || index >= (int)options.size())
-        return;
-
-    switch (options[index].type)
-    {
-        case UpgradeType::OrbitalWeapon:
-        {
-            // when user choses to upgrade weapon
-            // add a weapon of type OrbitalWeapon
-            player.AddWeapon(
-                std::make_unique<OrbitalWeapon>()
-            );
-            break;
-        }
-
-        case UpgradeType::MaxHealth:
-            player.IncreaseMaxHealth(20);
-            break;
-
-        case UpgradeType::Damage:
-            player.IncreaseDamage(1);
-            break;
-    }
-
-    levelUpActive = false;
+    upgradeSystem.Apply(*this, index);
 }

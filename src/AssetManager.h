@@ -1,16 +1,17 @@
 #pragma once
 
 #include <raylib.h>
+#include <unordered_map>
+#include <string>
 
 class AssetManager
 {
 public:
-    static void Init();
-    static void Shutdown();
+    static void Load();
+    static void Unload();
 
-    // assets
-    static Texture2D PlayerTex;
-    static Texture2D EnemyTex;
-    static Texture2D BulletTex;
-    static Texture2D OrbitalTex;
+    static const Texture2D& GetTexture(const std::string& name);
+
+private:
+    static std::unordered_map<std::string, Texture2D> textures;
 };

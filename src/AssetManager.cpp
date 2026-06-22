@@ -1,26 +1,33 @@
 #include "AssetManager.h"
 #include <raylib.h>
 
-// define static textures
-Texture2D AssetManager::PlayerTex = {};
-Texture2D AssetManager::EnemyTex = {};
-Texture2D AssetManager::BulletTex = {};
-Texture2D AssetManager::OrbitalTex = {};
-
-void AssetManager::Init()
+void AssetManager::Load()
 {
     // init all assets
-    PlayerTex = LoadTexture("/Users/ry/projects/roli/src/assets/Player.png");
-    EnemyTex  = LoadTexture("/Users/ry/projects/roli/src/assets/Enemy.png");
-    BulletTex = LoadTexture("/Users/ry/projects/roli/src/assets/Bullet.png");
-    OrbitalTex = LoadTexture("/Users/ry/projects/roli/src/assets/Bullet.png");
+    // characters
+    textures["player"] = LoadTexture("/Users/ry/projects/roli/src/assets/Player.png");
+    textures["enemy"]  = LoadTexture("/Users/ry/projects/roli/src/assets/Enemy.png");
+    // weapons
+    textures["bullet_weapon"] = LoadTexture("/Users/ry/projects/roli/src/assets/Bullet.png");
+    textures["orbital_weapon"] = LoadTexture("/Users/ry/projects/roli/src/assets/Bullet.png");
+    // world
+
+    // anything else
 }
 
-void AssetManager::Shutdown()
+void AssetManager::Unload()
 {
     // remove all assets from memory
-    UnloadTexture(PlayerTex);
-    UnloadTexture(EnemyTex);
-    UnloadTexture(BulletTex);
-    UnloadTexture(OrbitalTex);
+    for (auto& [name, tex] : textures)
+    {
+        UnloadTexture(tex);
+    }
+    textures.clear();
 }
+
+const Texture2D& AssetManager::GetTexture(const std::string& name)
+{
+    return textures.at(name);
+}
+
+std::unordered_map<std::string, Texture2D> AssetManager::textures;

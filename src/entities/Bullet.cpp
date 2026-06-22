@@ -62,8 +62,11 @@ void Bullet::Update(float deltaTime)
 
 void Bullet::Draw() const
 {
+    // bullet texture
+    const Texture2D& BulletWeaponTexture = AssetManager::GetTexture("bullet_weapon");
+
     Renderer::DrawAnimatedTexture(
-        AssetManager::BulletTex,
+        BulletWeaponTexture,
         animation,
         position,
         1.0f,

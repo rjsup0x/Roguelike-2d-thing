@@ -8,7 +8,7 @@ int main(void)
     SetTargetFPS(60);
 
     // init assets
-    AssetManager::Init();
+    AssetManager::Load();
 
     // init game instance
     Game game;
@@ -24,6 +24,6 @@ int main(void)
     }
 
     // deinit assets
-    AssetManager::Shutdown();
+    AssetManager::Unload();
     CloseWindow();
 }

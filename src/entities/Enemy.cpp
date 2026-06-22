@@ -133,8 +133,12 @@ void Enemy::Draw() const
     Color tint = WHITE;
     float roatation{};
 
+    // enemy texture
+    const Texture2D& EnemyTexture = AssetManager::GetTexture("enemy");
+
+
     Renderer::DrawAnimatedTexture(
-        AssetManager::EnemyTex,
+        EnemyTexture,
         animation,
         position,
         scale,

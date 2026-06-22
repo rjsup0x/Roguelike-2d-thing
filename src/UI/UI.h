@@ -19,4 +19,6 @@ public:
     //
     static void DrawLevelUp(World& world);
     static void HandleLevelUpInput(World& world);
+
+    static constexpr int fontSize{6};
 };

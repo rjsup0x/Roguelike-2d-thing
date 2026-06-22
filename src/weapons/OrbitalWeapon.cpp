@@ -3,6 +3,8 @@
 #include "AssetManager.h"
 #include "weapons/Weapon.h"
 
+#include <raylib.h>
+
 OrbitalWeapon::OrbitalWeapon()
     : Weapon{15},
       orbitRadius{80.0f},
@@ -43,17 +45,19 @@ void OrbitalWeapon::Draw() const
     }
     */
 
-    // TEXTURE VERSION
+    // TEXTURE for orbital weapon
+    const Texture2D& OrbitalTexture = AssetManager::GetTexture("orbital_weapon");
+
     Vector2 size =
     {
-        (float)AssetManager::OrbitalTex.width,
-        (float)AssetManager::OrbitalTex.height
+        (float)OrbitalTexture.width,
+        (float)OrbitalTexture.height
     };
 
     for (const auto& pos : orbitalPositions)
     {
         DrawTextureV(
-            AssetManager::OrbitalTex,
+            OrbitalTexture,
             {
                 pos.x - size.x / 2.0f,
                 pos.y - size.y / 2.0f
@@ -82,6 +86,6 @@ void OrbitalWeapon::HandleCollisions(Enemy& enemy)
             );
 
             // when that weapon collides with enemy they take the damage
-            enemy.TakeDamage(damage, hitDir);        }
+            enemy.TakeDamage(damage, hitDir); }
     }
 }

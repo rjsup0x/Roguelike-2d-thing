@@ -27,6 +27,14 @@ add_executable(roli
     src/xp/XPOrb.cpp
 
     src/UI/UI.cpp
+
+    src/systems/PlayerSystem.cpp
+    src/systems/EnemySystem.cpp
+    src/systems/CombatSystem.cpp
+    src/systems/XPSystem.cpp
+    src/systems/CollisionSystem.cpp
+    src/systems/UpgradeSystem.cpp
+    src/systems/TargetingSystem.cpp
 )
 
 target_include_directories(roli PRIVATE

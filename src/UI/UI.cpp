@@ -59,7 +59,6 @@ void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
 
     const char* text = TextFormat("%d / %d", health, maxHealth);
 
-    int fontSize{6};
     int textWidth = MeasureText(text, fontSize);
 
     DrawText(
@@ -93,7 +92,7 @@ void UI::DrawXPBar(int xp, int maxXP, int level)
         TextFormat("LV %d", level),
         screenX - 60,
         screenY - 2,
-        12,
+        fontSize,
         WHITE
     );
 
@@ -102,7 +101,7 @@ void UI::DrawXPBar(int xp, int maxXP, int level)
         "NEXT LEVEL",
         screenX + barWidth + 10,
         screenY - 2,
-        12,
+        fontSize,
         WHITE
     );
 }
@@ -158,8 +157,8 @@ void UI::DrawLevelUp(World& world)
     if (!world.IsLevelUpActive())
         return;
 
-    float t = GetTime();
-    float pulse = 1.0f + sinf(t * 6.0f) * 0.03f;
+    float time = GetTime();
+    float pulse = 1.0f + sinf(time * 6.0f) * 0.03f;
 
     int screenW = GetScreenWidth();
     int screenH = GetScreenHeight();
@@ -219,7 +218,7 @@ void UI::DrawLevelUp(World& world)
             world.options[i].name,
             (int)rect.x + 10,
             (int)rect.y + 30,
-            12,
+            fontSize,
             WHITE
         );
 
@@ -227,7 +226,7 @@ void UI::DrawLevelUp(World& world)
             TextFormat("[ %d ]", i + 1),
             (int)rect.x + 10,
             (int)rect.y + 65,
-            12,
+            fontSize,
             GRAY
         );
     }

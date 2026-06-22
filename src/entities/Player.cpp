@@ -84,9 +84,12 @@ void Player::Update(float deltaTime, Vector2 aimDir)
 
 void Player::Draw() const
 {
+    // get player texture
+    const Texture2D& PlayerTexture = AssetManager::GetTexture("player");
+
     // use renderer to draw texture, use animations, get position
     Renderer::DrawAnimatedTexture(
-        AssetManager::PlayerTex,
+        PlayerTexture,
         animation,
         position,
         scale
@@ -186,7 +189,7 @@ void Player::IncreaseDamage(int amount)
 {
     damageBonus += amount;
 
-    int newDamage{GetDamage()};
+    int newDamage{GetDamage() + damageBonus};
 
     for (auto& weapon : weapons)
     {

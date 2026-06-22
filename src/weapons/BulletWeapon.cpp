@@ -17,44 +17,51 @@ void BulletWeapon::Update(float dt, Vector2 playerPos, Vector2 aimDir)
 {
     fireTimer -= dt;
 
-    // controlling fire timing
-    if (fireTimer <= 0.0f)
-    {
-        fireTimer = fireRate;
+        bool hasTarget =
+            Vector2LengthSqr(aimDir) > 0.001f;
 
-        Vector2 dir = aimDir;
-
-        // normalize the direction (straight shoot from when fired)
-        if (Vector2Length(dir) > 0.0f)
-            dir = Vector2Normalize(dir);
-
-        // store playerpos and scale in bullets
-        bullets.push_back({
-            playerPos,
-            Vector2Scale(dir, 600.0f),
-        });
-    }
-
-    // for all bullets
-    for (auto& b : bullets)
-        b.pos = Vector2Add(b.pos, Vector2Scale(b.vel, dt));
-
-    // removing bullets from array once shot
-    bullets.erase(std::remove_if(bullets.begin(), bullets.end(),
-        [](const Bullet& b)
+        // only shoot if target exists
+        if (hasTarget && fireTimer <= 0.0f)
         {
-            return b.pos.x < -200 || b.pos.x > 3000 ||
-                   b.pos.y < -200 || b.pos.y > 2000;
-        }),
-        bullets.end());
+            fireTimer = fireRate;
+
+            bullets.push_back({
+                playerPos,
+                Vector2Scale(aimDir, 600.0f)
+            });
+        }
+
+        // always update existing bullets
+        for (auto& b : bullets)
+        {
+            b.pos = Vector2Add(
+                b.pos,
+                Vector2Scale(b.vel, dt)
+            );
+        }
+
+        bullets.erase(
+            std::remove_if(
+                bullets.begin(),
+                bullets.end(),
+                [](const Bullet& b)
+                {
+                    return b.pos.x < -200 ||
+                           b.pos.x > 3000 ||
+                           b.pos.y < -200 ||
+                           b.pos.y > 2000;
+                }),
+            bullets.end()
+        );
 }
 
 void BulletWeapon::Draw() const
 {
-    // using asset manager to draw texture to bullet
+    // draw bulletweapon texture
+    const Texture2D& BulletWeaponTexture = AssetManager::GetTexture("bullet_weapon");
     Vector2 size = {
-        (float)AssetManager::BulletTex.width,
-        (float)AssetManager::BulletTex.height
+        (float)BulletWeaponTexture.width,
+        (float)BulletWeaponTexture.height
     };
 
     // for all bullets
@@ -62,7 +69,7 @@ void BulletWeapon::Draw() const
     {
         // draw them with texture and location
         DrawTextureV(
-            AssetManager::BulletTex,
+            BulletWeaponTexture,
             {
                 b.pos.x - size.x / 2.0f,
                 b.pos.y - size.y / 2.0f
