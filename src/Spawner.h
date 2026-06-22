@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include "entities/Enemy.h"
 #include <raylib.h>
 
@@ -9,25 +10,30 @@ class Spawner
 public:
     Spawner();
 
-    void Update(float dt, std::vector<Enemy>& enemies, float worldWidth, float worldHeight);
+    void Update(
+        float dt,
+        std::vector<std::unique_ptr<Enemy>>& enemies,
+        float worldWidth,
+        float worldHeight
+    );
 
     int GetWave() const;
     bool ShouldShowWaveText() const;
 
 private:
-    // {} = 0
-    // wave settings
     int wave{};
     bool waveActive{false};
 
-    // wave text system
     bool showWaveText{false};
     bool waveTextVisible{false};
 
-    // ui wave test blinking
     float blinkTimer{};
     int blinkCount{};
     int maxBlinks{6};
 
-    void StartWave(std::vector<Enemy>& enemies, float worldWidth, float worldHeight);
+    void StartWave(
+        std::vector<std::unique_ptr<Enemy>>& enemies,
+        float worldWidth,
+        float worldHeight
+    );
 };

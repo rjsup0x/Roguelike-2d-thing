@@ -1,41 +1,27 @@
 #include "TargetingSystem.h"
-
 #include "entities/Enemy.h"
 #include "entities/Player.h"
-
 #include <raymath.h>
 #include <cfloat>
 
 const Enemy* TargetingSystem::FindClosestEnemy(
     const Player& player,
-    const std::vector<Enemy>& enemies,
-    float radius
-) const
+    const std::vector<std::unique_ptr<Enemy>>& enemies,
+    float radius) const
 {
-    const Enemy* closestEnemy = nullptr;
+    const Enemy* closest = nullptr;
+    float bestDist = radius * radius;
 
-    float closestDistanceSq = FLT_MAX;
-    float radiusSq = radius * radius;
-
-    Vector2 playerPos = player.GetPos();
-
-    for (const auto& enemy : enemies)
+    for (const auto& e : enemies)
     {
-        float distSq =
-            Vector2DistanceSqr(
-                playerPos,
-                enemy.GetPos()
-            );
+        float d = Vector2DistanceSqr(player.GetPos(), e->GetPos());
 
-        if (distSq > radiusSq)
-            continue;
-
-        if (distSq < closestDistanceSq)
+        if (d < bestDist)
         {
-            closestDistanceSq = distSq;
-            closestEnemy = &enemy;
+            bestDist = d;
+            closest = e.get();
         }
     }
 
-    return closestEnemy;
+    return closest;
 }

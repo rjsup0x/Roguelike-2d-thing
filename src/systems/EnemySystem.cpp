@@ -1,9 +1,12 @@
 #include "EnemySystem.h"
+
 #include <algorithm>
+#include <limits>
+
 
 void EnemySystem::Update(
     float dt,
-    std::vector<Enemy>& enemies,
+    std::vector<std::unique_ptr<Enemy>>& enemies,
     Spawner& spawner,
     Vector2 playerPos,
     float worldW,
@@ -13,27 +16,47 @@ void EnemySystem::Update(
     spawner.Update(dt, enemies, worldW, worldH);
 
     for (auto& e : enemies)
-        e.Update(dt, playerPos);
+        e->Update(dt, playerPos);
 }
 
 void EnemySystem::RemoveDead(
-    std::vector<Enemy>& enemies,
+    std::vector<std::unique_ptr<Enemy>>& enemies,
     std::vector<XPOrb>& xpOrbs)
 {
     for (auto& e : enemies)
     {
-        if (e.isDead())
+        if (e->isDead())
         {
-            xpOrbs.emplace_back(e.GetPos(), 10); // XP DROP FIX
+            xpOrbs.emplace_back(e->GetPos(), 10);
         }
     }
 
     enemies.erase(
         std::remove_if(enemies.begin(), enemies.end(),
-            [](Enemy& e)
+            [](const std::unique_ptr<Enemy>& e)
             {
-                return e.isDead();
+                return e->isDead();
             }),
         enemies.end()
     );
+}
+
+Enemy* EnemySystem::GetClosestEnemy(
+    std::vector<std::unique_ptr<Enemy>>& enemies,
+    Vector2 position)
+{
+    Enemy* closest = nullptr;
+    float bestDist = std::numeric_limits<float>::max();
+
+    for (auto& e : enemies)
+    {
+        float d = Vector2DistanceSqr(e->GetPos(), position);
+        if (d < bestDist)
+        {
+            bestDist = d;
+            closest = e.get();
+        }
+    }
+
+    return closest;
 }

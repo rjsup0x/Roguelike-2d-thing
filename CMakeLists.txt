@@ -16,6 +16,7 @@ add_executable(roli
     src/entities/Player.cpp
     src/entities/Enemy.cpp
     src/entities/Bullet.cpp
+    src/entities/BatEnemy.cpp
 
     src/weapons/BulletWeapon.cpp
     src/weapons/OrbitalWeapon.cpp

@@ -1,9 +1,8 @@
 #pragma once
 
 #include "raylib.h"
-
-#include <raymath.h>
 #include <vector>
+#include <raymath.h>
 
 #include "animation/Animation.h"
 #include "animation/AnimationState.h"
@@ -20,10 +19,12 @@ class Enemy
 {
 public:
     Enemy(Vector2 startPos);
+    virtual ~Enemy() = default;
 
-    void Update(float deltaTime, Vector2 playerPos);
-    void Draw() const;
+    virtual void Update(float dt, Vector2 playerPos);
+    virtual void Draw() const;
 
+    // shared API
     Vector2 GetPos() const;
     void SetPos(Vector2 newPos);
 
@@ -35,30 +36,26 @@ public:
     int GetHealth() const;
     void SetStats(int hp, float spd);
 
-private:
+protected:
+    // shared helper for subclasses
+    void UpdateCommon(float dt);
+
+protected:
     Vector2 position{};
     Vector2 velocity{};
-    float scale{1.0f};
-    float roatation{};
 
-    float speed{};
+    float speed{100.0f};
 
     static constexpr float Radius{16.0f};
 
-    int health{};
-    int maxHealth{};
-
-    float separationRadius{28.0f};
-
-    float rotation{};
-    bool facingLeft{};
+    int health{50};
+    int maxHealth{50};
 
     float hitFlashTimer{};
     float freezeTimer{};
 
     std::vector<DamageNumber> damageNumbers;
 
-    // anims
     Animation animation;
     AnimationState animationState{AnimationState::Idle};
 

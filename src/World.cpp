@@ -82,7 +82,7 @@ void World::Update(float dt)
 void World::Draw()
 {
     for (auto& e : enemies)
-        e.Draw();
+        e->Draw();
 
     for (auto& orb : xpOrbs)
         orb.Draw();

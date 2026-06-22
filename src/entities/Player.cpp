@@ -189,7 +189,7 @@ void Player::IncreaseDamage(int amount)
 {
     damageBonus += amount;
 
-    int newDamage{GetDamage() + damageBonus};
+    int newDamage{GetDamage()};
 
     for (auto& weapon : weapons)
     {
