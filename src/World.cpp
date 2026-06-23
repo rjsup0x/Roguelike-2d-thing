@@ -24,6 +24,8 @@ void World::Reset()
     enemies.clear();
     xpOrbs.clear();
 
+    survivalTime = {0.0f};
+
     player = Player();
 
     player.SetLevelUpCallback([this](int level)
@@ -38,6 +40,11 @@ void World::Reset()
     options.clear();
 }
 
+float World::GetSurvivalTime() const
+{
+    return survivalTime;
+}
+
 bool World::IsPlayerDead() const
 {
     return player.isDead();
@@ -47,6 +54,8 @@ void World::Update(float dt)
 {
     if (levelUpActive)
         return;
+
+    survivalTime += dt;
 
     constexpr float AUTO_TARGET_RADIUS = 350.0f;
 

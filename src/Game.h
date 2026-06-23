@@ -5,6 +5,9 @@
 class Game
 {
 public:
+    bool ShouldExit() const;
+    bool shouldExit{};
+
     Game();
 
     void Update(float dt);

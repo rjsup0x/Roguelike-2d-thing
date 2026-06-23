@@ -13,7 +13,7 @@ int main(void)
     // init game instance
     Game game;
 
-    while (!WindowShouldClose())
+    while (!WindowShouldClose() && !game.ShouldExit())
     {
         // get deltatime
         float dt = GetFrameTime();

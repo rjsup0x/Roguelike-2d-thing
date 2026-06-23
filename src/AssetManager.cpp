@@ -4,6 +4,9 @@
 void AssetManager::Load()
 {
     // init all assets
+
+    // menu background
+    textures["menu_background"] = LoadTexture("/Users/ry/projects/roli/src/assets/backgroundImg.png");
     // characters
     textures["player"] = LoadTexture("/Users/ry/projects/roli/src/assets/Player.png");
     textures["enemy"]  = LoadTexture("/Users/ry/projects/roli/src/assets/Enemy.png");

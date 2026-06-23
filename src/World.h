@@ -36,6 +36,7 @@ public:
     void Update(float dt);
     void Draw();
 
+    float GetSurvivalTime() const;
     void Reset();
     bool IsPlayerDead() const;
 
@@ -55,6 +56,7 @@ public:
     void ApplyUpgrade(int index);
 
 private:
+    float survivalTime{};
     struct WorldBounds
     {
         float width{};

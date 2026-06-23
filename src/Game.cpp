@@ -1,7 +1,9 @@
 #include "Game.h"
+#include "AssetManager.h"
 #include "UI/UI.h"
 
 #include <raylib.h>
+#include <string>
 
 Game::Game()
 {
@@ -63,8 +65,11 @@ void Game::Draw()
             BeginDrawing();
             ClearBackground(RAYWHITE);
 
+            // world timer
+            UI::DrawTimer(world);
+
             // =========================
-            // WORLD SPACE - UI
+            // SPACE - UI
             // =========================
             BeginMode2D(world.GetCamera());
             world.Draw();
@@ -85,11 +90,12 @@ void Game::Draw()
 
                 int fontSize{30};
                 int screenWidth = GetScreenWidth();
+                int screenHeight = GetScreenHeight();
 
                 int textWidth = MeasureText(text, fontSize);
 
                 int x{(screenWidth - textWidth) / 2};
-                int y{20};
+                int y{(screenHeight / 4)};
 
                 DrawText(text, x, y, fontSize, GRAY);
             }
@@ -190,27 +196,247 @@ void Game::Draw()
 
 void Game::UpdateMenu(float dt)
 {
-    if (IsKeyPressed(KEY_ENTER))
-        state = State::PLAYING;
+    int screenW = GetScreenWidth();
+
+        const int buttonW = 280;
+        const int buttonH = 70;
+
+        Rectangle playButton =
+        {
+            (screenW - buttonW) / 2.0f,
+            280,
+            (float)buttonW,
+            (float)buttonH
+        };
+
+        Rectangle settingsButton =
+        {
+            (screenW - buttonW) / 2.0f,
+            370,
+            (float)buttonW,
+            (float)buttonH
+        };
+
+        Rectangle exitButton =
+        {
+            (screenW - buttonW) / 2.0f,
+            460,
+            (float)buttonW,
+            (float)buttonH
+        };
+
+        Vector2 mouse = GetMousePosition();
+
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            if (CheckCollisionPointRec(mouse, playButton))
+            {
+                state = State::PLAYING;
+            }
+
+            if (CheckCollisionPointRec(mouse, settingsButton))
+            {
+                // Add settings screen later
+            }
+
+            if (CheckCollisionPointRec(mouse, exitButton))
+            {
+                shouldExit = true;
+            }
+        }
 }
 
 void Game::DrawMenu()
 {
-    DrawText("ROLI", 600, 300, 40, BLACK);
-    DrawText("Press ENTER to start", 550, 360, 20, DARKGRAY);
+    // get texture
+    const Texture2D& Menu_Background = AssetManager::GetTexture("menu_background");
+
+    // draw texture as screen size
+    DrawTexturePro(
+      Menu_Background,
+      {0, 0, (float)Menu_Background.width, (float)Menu_Background.height},
+      {0, 0, (float)GetScreenWidth(), (float)GetScreenHeight()},
+      {0, 0},
+      0.0f,
+      WHITE
+    );
+
+    // fade living over the top of it
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.35f));
+
+    // set up buttons
+    int screenWidth{GetScreenWidth()};
+
+    const int buttonWidth{280};
+    const int buttonHeight{70};
+
+    // playe button
+    Rectangle playButton =
+    {
+        (screenWidth - buttonWidth) / 2.0f,
+        280,
+        (float)buttonWidth,
+        (float)buttonHeight,
+    };
+
+    // settings
+    Rectangle settingsButton =
+    {
+        (screenWidth - buttonWidth) / 2.0f,
+        370,
+        (float)buttonWidth,
+        (float)buttonHeight,
+    };
+
+    Rectangle exitButton =
+    {
+        (screenWidth - buttonWidth) / 2.0f,
+        460,
+        (float)buttonWidth,
+        (float)buttonHeight,
+    };
+
+    const char* title = "ROLI";
+
+    int titleSize = 72;
+
+    int titleWidth =
+        MeasureText(title, titleSize);
+
+    DrawText(
+           title,
+           (screenWidth - titleWidth) / 2,
+           120,
+           titleSize,
+           WHITE
+       );
+
+    // draw to ui
+    UI::DrawMenuButton(playButton, "Play");
+    UI::DrawMenuButton(settingsButton, "Settings");
+    UI::DrawMenuButton(exitButton, "Exit");
 }
 
 void Game::UpdateGameOver(float dt)
 {
-    if (IsKeyPressed(KEY_R))
+    // get mouse pos for use of mouse
+    Vector2 mouse = GetMousePosition();
+
+    // buttons
+    Rectangle restartButton =
     {
-        world.Reset();
-        state = State::PLAYING;
+        (float)GetScreenWidth() / 2 - 260,
+        350,
+        220,
+        70
+    };
+
+    Rectangle menuButton =
+    {
+        (float)GetScreenWidth() / 2 + 40,
+        350,
+        220,
+        70
+    };
+
+    // check if mouse collides with buttons
+    if (CheckCollisionPointRec(mouse, restartButton))
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            world.Reset();
+            state = State::PLAYING;
+        }
+    }
+
+    if (CheckCollisionPointRec(mouse, menuButton))
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            world.Reset();
+            state = State::MENU;
+        }
     }
 }
 
 void Game::DrawGameOver()
 {
-    DrawText("GAME OVER", 550, 300, 40, RED);
-    DrawText("Press R to restart", 520, 360, 20, DARKGRAY);
+    // d'know if i want a texture on gameover screen yet
+    // const Texture2D& Menu_Background = AssetManager::GetTexture("menu_background");
+
+    // // draw texture as screen size
+    // DrawTexturePro(
+    //   Menu_Background,
+    //   {0, 0, (float)Menu_Background.width, (float)Menu_Background.height},
+    //   {0, 0, (float)GetScreenWidth(), (float)GetScreenHeight()},
+    //   {0, 0},
+    //   0.0f,
+    //   WHITE
+    // );
+
+    // fade background
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.35f));
+
+    // get size of screen
+    int screenWidth{GetScreenWidth()};
+    int screenHeight{GetScreenHeight()};
+
+    // set up button sizing
+    const int buttonWidth{280};
+    const int buttonHeight{70};
+
+    // set up title + sizing
+    const char* title = "GameOver";
+    int titleSize = 60;
+    int titleWidth = MeasureText(title, titleSize);
+
+    // draw title with sizings
+    DrawText(
+           title,
+           (screenWidth - titleWidth) / 2,
+           140,
+           titleSize,
+           RED
+    );
+
+    int totalSeconds = (int)world.GetSurvivalTime();
+
+    int minutes = totalSeconds / 60;
+    int seconds = totalSeconds % 60;
+
+    DrawText(
+        TextFormat("Survived %02d:%02d", minutes, seconds),
+        (screenWidth - MeasureText("Survived 00:00", 24)) / 2,
+        220,
+        24,
+        BLACK
+    );
+
+    // add buttons
+    // restart button
+    Rectangle restartButton =
+    {
+        (float)screenWidth / 2 - 260,
+        350,
+        220,
+        70
+    };
+
+    // back to menu
+    Rectangle menuButton =
+    {
+        (float)screenWidth / 2 + 40,
+        350,
+        220,
+        70
+    };
+
+    // draw to ui
+    UI::DrawMenuButton(restartButton, "Retry");
+    UI::DrawMenuButton(menuButton, "Menu");
+}
+
+bool Game::ShouldExit() const
+{
+    return shouldExit;
 }

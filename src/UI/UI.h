@@ -20,5 +20,9 @@ public:
     static void DrawLevelUp(World& world);
     static void HandleLevelUpInput(World& world);
 
+    static void DrawMenuButton(Rectangle rect, const char* text);
+
+    static void DrawTimer(const World& world);
+
     static constexpr int fontSize{6};
 };

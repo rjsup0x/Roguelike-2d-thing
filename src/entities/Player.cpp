@@ -33,10 +33,10 @@ void Player::Update(float deltaTime, Vector2 aimDir)
     // same as {0.0f, 0.0f}
     velocity = {};
 
-    if (IsKeyDown(KEY_W)) velocity.y -= 1;
-    if (IsKeyDown(KEY_S)) velocity.y += 1;
-    if (IsKeyDown(KEY_A)) velocity.x -= 1;
-    if (IsKeyDown(KEY_D)) velocity.x += 1;
+    if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)) velocity.y -= 1;
+    if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN)) velocity.y += 1;
+    if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) velocity.x -= 1;
+    if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) velocity.x += 1;
 
     // normaize the movement - when moving on angle stop it going faster
     if (Vector2Length(velocity) > 0.0f)

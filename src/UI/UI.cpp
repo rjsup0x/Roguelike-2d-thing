@@ -72,7 +72,7 @@ void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
 
 void UI::DrawXPBar(int xp, int maxXP, int level)
 {
-    float barWidth{400.0f};
+    float barWidth = GetScreenWidth() - 200;
     float barHeight{12.0f};
 
     float screenX{GetScreenWidth() * 0.5f - barWidth * 0.5f};
@@ -93,7 +93,7 @@ void UI::DrawXPBar(int xp, int maxXP, int level)
         screenX - 60,
         screenY - 2,
         fontSize,
-        WHITE
+        BLACK
     );
 
     // text RIGHT (next level)
@@ -102,7 +102,7 @@ void UI::DrawXPBar(int xp, int maxXP, int level)
         screenX + barWidth + 10,
         screenY - 2,
         fontSize,
-        WHITE
+        BLACK
     );
 }
 
@@ -230,4 +230,60 @@ void UI::DrawLevelUp(World& world)
             GRAY
         );
     }
+}
+
+void UI::DrawMenuButton(Rectangle rect, const char* text)
+{
+    bool hovered =
+        CheckCollisionPointRec(
+            GetMousePosition(),
+            rect
+        );
+
+    Color fill =
+        hovered
+        ? Fade(DARKGRAY, 0.9f)
+        : Fade(BLACK, 0.7f);
+
+    DrawRectangleRec(rect, fill);
+    DrawRectangleLinesEx(rect, 2, WHITE);
+
+    int fontSize = 24;
+
+    int textWidth =
+        MeasureText(text, fontSize);
+
+    DrawText(
+        text,
+        (int)(rect.x + (rect.width - textWidth) * 0.5f),
+        (int)(rect.y + (rect.height - fontSize) * 0.5f),
+        fontSize,
+        WHITE
+    );
+}
+
+void UI::DrawTimer(const World& world)
+{
+    // get seconds
+    int seconds = (int)world.GetSurvivalTime();
+    // get minutes
+    int minutes = seconds / 60;
+    // seconds
+    seconds %= 60;
+
+    // length of screen
+    int screenWidth = GetScreenWidth();
+
+    // text to display
+    const char* text = TextFormat("%02d:%02d", minutes, seconds);
+    // text width
+    int textWidth = MeasureText(text, 30);
+
+    DrawText(
+        text,
+        (screenWidth - textWidth) / 2,
+        20,
+        30,
+        BLACK
+    );
 }
