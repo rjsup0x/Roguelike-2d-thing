@@ -100,8 +100,7 @@ void World::Update(float dt)
     xpSystem.Update(dt, xpOrbs, player);
 }
 
-void World::Draw()
-{
+void World::Draw() const {
     for (auto& e : enemies)
         e->Draw();
 
@@ -115,7 +114,6 @@ void World::Draw()
 
 Camera2D& World::GetCamera() { return camera; }
 Player& World::GetPlayer() { return player; }
-const Player& World::GetPlayer() const { return player; }
 
 int World::GetPlayerHealth() const { return player.GetHealth(); }
 int World::GetPlayerMaxHealth() const { return player.GetMaxHealth(); }

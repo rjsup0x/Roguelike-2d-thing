@@ -7,11 +7,11 @@
 // =========================
 void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
 {
-    const float barWidth{6.0f};
-    const float barHeight{32.0f};
+    constexpr float barWidth{6.0f};
+    constexpr float barHeight{32.0f};
 
     float healthPercent = Clamp(
-        (float)health / (float)maxHealth,
+        static_cast<float>(health) / static_cast<float>(maxHealth),
         0.0f,
         1.0f
     );
@@ -25,8 +25,8 @@ void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
     float fillHeight{barHeight * healthPercent};
 
     Color fillColor = {
-        (unsigned char)(255 * (1.0f - healthPercent)),
-        (unsigned char)(255 * healthPercent),
+        static_cast<unsigned char>(255 * (1.0f - healthPercent)),
+        static_cast<unsigned char>(255 * healthPercent),
         0,
         255
     };
@@ -35,10 +35,10 @@ void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
     // BAR BACKGROUND
     // =========================
     DrawRectangle(
-        (int)barPos.x,
-        (int)barPos.y,
-        (int)barWidth,
-        (int)barHeight,
+        static_cast<int>(barPos.x),
+        static_cast<int>(barPos.y),
+        static_cast<int>(barWidth),
+        static_cast<int>(barHeight),
         DARKGRAY
     );
 
@@ -46,10 +46,10 @@ void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
     // BAR FILL
     // =========================
     DrawRectangle(
-        (int)barPos.x,
-        (int)(barPos.y + barHeight - fillHeight),
-        (int)barWidth,
-        (int)fillHeight,
+        static_cast<int>(barPos.x),
+        static_cast<int>(barPos.y + barHeight - fillHeight),
+        static_cast<int>(barWidth),
+        static_cast<int>(fillHeight),
         fillColor
     );
 
@@ -63,8 +63,8 @@ void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
 
     DrawText(
         text,
-        (int)(barPos.x + (barWidth / 2) - ((float)textWidth / 2)),
-        (int)(barPos.y - 14), // ABOVE the bar
+        static_cast<int>(barPos.x + (barWidth / 2) - (static_cast<float>(textWidth) / 2)),
+        static_cast<int>(barPos.y - 14), // ABOVE the bar
         fontSize,
         BLACK
     );
@@ -100,7 +100,7 @@ void UI::DrawXPBar(int xp, int maxXP, int level)
     // move bar down INTO the panel
     float screenY = panelY + (panelHeight * 0.5f) - (barHeight * 0.5f);
 
-    float percent = (float)xp / (float)maxXP;
+    float percent = static_cast<float>(xp) / static_cast<float>(maxXP);
     if (percent > 1.0f) percent = 1.0f;
 
     // background bar
@@ -148,12 +148,11 @@ void UI::HandleLevelUpInput(World& world)
     Rectangle panel = {
         (screenW - panelW) * 0.5f,
         (screenH - panelH) * 0.5f,
-        (float)panelW,
-        (float)panelH
+        static_cast<float>(panelW),
+        static_cast<float>(panelH)
     };
 
     int boxW{160};
-    int boxH{100};
     int spacing{20};
 
     float startX = panel.x + (panelW - (boxW * 3 + spacing * 2)) * 0.5f;
@@ -161,11 +160,12 @@ void UI::HandleLevelUpInput(World& world)
 
     for (int i = 0; i < 3; i++)
     {
+        int boxH{100};
         Rectangle rect = {
             startX + i * (boxW + spacing),
             y,
-            (float)boxW,
-            (float)boxH
+            static_cast<float>(boxW),
+            static_cast<float>(boxH)
         };
 
         if (CheckCollisionPointRec(mouse, rect))
@@ -178,7 +178,7 @@ void UI::HandleLevelUpInput(World& world)
     }
 }
 
-void UI::DrawLevelUp(World& world)
+void UI::DrawLevelUp(const World& world)
 {
     if (!world.IsLevelUpActive())
         return;
@@ -195,8 +195,8 @@ void UI::DrawLevelUp(World& world)
     Rectangle panel = {
         (screenW - panelW) * 0.5f,
         (screenH - panelH) * 0.5f,
-        (float)panelW,
-        (float)panelH
+        static_cast<float>(panelW),
+        static_cast<float>(panelH)
     };
 
     // ONLY panel darkening (not full screen)
@@ -206,7 +206,6 @@ void UI::DrawLevelUp(World& world)
     DrawText("LEVEL UP!", panel.x + 20, panel.y + 15, 28, WHITE);
 
     int boxW{160};
-    int boxH{100};
     int spacing{20};
 
     float startX = panel.x + (panelW - (boxW * 3 + spacing * 2)) * 0.5f;
@@ -214,6 +213,7 @@ void UI::DrawLevelUp(World& world)
 
     for (int i = 0; i < 3; i++)
     {
+        constexpr int boxH{100};
         float x = startX + i * (boxW + spacing);
 
         float w = boxW * pulse;
@@ -231,34 +231,34 @@ void UI::DrawLevelUp(World& world)
 
         bool hovered = CheckCollisionPointRec(GetMousePosition(), rect);
 
-        Color base = hovered ? DARKGRAY : Fade(DARKGRAY, 0.9f);
+        Color base = hovered ? YELLOW : Fade(DARKGRAY, 0.9f);
 
         DrawRectangleRec(rect, base);
         DrawRectangleLinesEx(rect, 2, hovered ? YELLOW : WHITE);
 
         // subtle highlight
         if (hovered)
-            DrawRectangleRec(rect, Fade(YELLOW, 0.2f));
+            DrawRectangleRec(rect, base);
 
         DrawText(
             world.options[i].name,
-            (int)rect.x + 10,
-            (int)rect.y + 30,
+            static_cast<int>(rect.x) + 10,
+            static_cast<int>(rect.y) + 30,
             fontSize,
             WHITE
         );
 
         DrawText(
             TextFormat("[ %d ]", i + 1),
-            (int)rect.x + 10,
-            (int)rect.y + 65,
+            static_cast<int>(rect.x) + 10,
+            static_cast<int>(rect.y) + 65,
             fontSize,
             GRAY
         );
     }
 }
 
-void UI::DrawMenuButton(Rectangle rect, const char* text)
+void UI::DrawMenuButton(const Rectangle rect, const char* text)
 {
     bool hovered =
         CheckCollisionPointRec(
@@ -274,15 +274,15 @@ void UI::DrawMenuButton(Rectangle rect, const char* text)
     DrawRectangleRec(rect, fill);
     DrawRectangleLinesEx(rect, 2, WHITE);
 
-    int fontSize = 24;
+    int fontSize{24};
 
     int textWidth =
         MeasureText(text, fontSize);
 
     DrawText(
         text,
-        (int)(rect.x + (rect.width - textWidth) * 0.5f),
-        (int)(rect.y + (rect.height - fontSize) * 0.5f),
+        static_cast<int>(rect.x + (rect.width - textWidth) * 0.5f),
+        static_cast<int>(rect.y + (rect.height - fontSize) * 0.5f),
         fontSize,
         WHITE
     );
@@ -291,7 +291,7 @@ void UI::DrawMenuButton(Rectangle rect, const char* text)
 void UI::DrawTimer(const World& world)
 {
     // get seconds
-    int seconds = (int)world.GetSurvivalTime();
+    int seconds = static_cast<int>(world.GetSurvivalTime());
     // get minutes
     int minutes = seconds / 60;
     // seconds

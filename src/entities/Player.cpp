@@ -6,6 +6,7 @@
 
 #include <memory>
 #include <raylib.h>
+#include <raymath.h>
 #include <utility>
 
 Player::Player()
@@ -128,7 +129,7 @@ Vector2 Player::GetPos() const { return position; }
 
 void Player::SetPos(Vector2 newPos) { position = newPos; }
 
-float Player::GetRadius() const { return Radius; }
+float Player::GetRadius() { return Radius; }
 
 int Player::GetHealth() const { return health; }
 

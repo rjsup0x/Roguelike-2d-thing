@@ -2,7 +2,7 @@
 #include <raylib.h>
 #include <raymath.h>
 
-XPOrb::XPOrb(Vector2 pos, int value)
+XPOrb::XPOrb(const Vector2 pos, int value)
 {
     this->position = pos;
     this->value = value;

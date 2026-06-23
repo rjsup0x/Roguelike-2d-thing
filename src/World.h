@@ -34,22 +34,22 @@ public:
     World();
 
     void Update(float dt);
-    void Draw();
+    void Draw() const;
 
-    float GetSurvivalTime() const;
+    [[nodiscard]] float GetSurvivalTime() const;
     void Reset();
-    bool IsPlayerDead() const;
+    [[nodiscard]] bool IsPlayerDead() const;
 
     Camera2D& GetCamera();
-    Player& GetPlayer();
-    const Player& GetPlayer() const;
+    [[nodiscard]] Player& GetPlayer();
+    // const Player& GetPlayer() const;
 
-    int GetPlayerHealth() const;
-    int GetPlayerMaxHealth() const;
+    [[nodiscard]] int GetPlayerHealth() const;
+    [[nodiscard]] int GetPlayerMaxHealth() const;
 
     Spawner& GetSpawner();
 
-    bool IsLevelUpActive() const { return levelUpActive; }
+    [[nodiscard]] bool IsLevelUpActive() const { return levelUpActive; }
 
     void OnPlayerLevelUp(int level);
     void EnterLevelUp();

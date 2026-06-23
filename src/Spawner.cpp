@@ -1,5 +1,5 @@
 #include "Spawner.h"
-#include <raymath.h>
+// #include <raymath.h>
 #include "entities/BatEnemy.h"
 
 Spawner::Spawner()
@@ -109,13 +109,13 @@ void Spawner::StartWave(
         Vector2 pos;
 
         if (side == 0)
-            pos = { (float)GetRandomValue(0, (int)worldWidth), -32 };
+            pos = { static_cast<float>(GetRandomValue(0, static_cast<int>(worldWidth))), -32 };
         else if (side == 1)
-            pos = { (float)GetRandomValue(0, (int)worldWidth), worldHeight + 32 };
+            pos = { static_cast<float>(GetRandomValue(0, static_cast<int>(worldWidth))), worldHeight + 32 };
         else if (side == 2)
-            pos = { -32, (float)GetRandomValue(0, (int)worldHeight) };
+            pos = { -32, static_cast<float>(GetRandomValue(0, static_cast<int>(worldHeight))) };
         else
-            pos = { worldWidth + 32, (float)GetRandomValue(0, (int)worldHeight) };
+            pos = { worldWidth + 32, static_cast<float>(GetRandomValue(0, static_cast<int>(worldHeight))) };
 
         // init enemies
         auto e = std::make_unique<BatEnemy>(pos);

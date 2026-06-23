@@ -9,9 +9,9 @@ class Player;
 class TargetingSystem
 {
 public:
-    const Enemy* FindClosestEnemy(
+        static  const Enemy* FindClosestEnemy(
         const Player& player,
         const std::vector<std::unique_ptr<Enemy>>& enemies,
         float radius
-    ) const;
+    ) ;
 };

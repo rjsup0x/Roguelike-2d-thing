@@ -1,8 +1,9 @@
 #include "Enemy.h"
-
 #include "AssetManager.h"
 #include "renderer/Renderer.h"
 #include "UI/UI.h"
+
+#include <raymath.h>
 
 
 Enemy::Enemy(Vector2 startPos)
@@ -32,11 +33,8 @@ void Enemy::Update(float dt, Vector2 playerPos)
         d.alpha = d.timer / 0.6f;
     }
 
-    damageNumbers.erase(
-        std::remove_if(damageNumbers.begin(), damageNumbers.end(),
-            [](DamageNumber& d) { return d.timer <= 0.0f; }),
-        damageNumbers.end()
-    );
+    std::erase_if(damageNumbers,
+                  [](const DamageNumber& d) { return d.timer <= 0.0f; });
 
     // movement integration (knockback etc)
     position = Vector2Add(position, Vector2Scale(velocity, dt));
@@ -65,8 +63,8 @@ void Enemy::Draw() const
     {
         DrawText(
             TextFormat("%d", d.value),
-            (int)d.pos.x,
-            (int)d.pos.y,
+            static_cast<int>(d.pos.x),
+            static_cast<int>(d.pos.y),
             18,
             Fade(RED, d.alpha)
         );
@@ -76,7 +74,7 @@ void Enemy::Draw() const
 Vector2 Enemy::GetPos() const { return position; }
 void Enemy::SetPos(Vector2 newPos) { position = newPos; }
 
-float Enemy::GetRadius() const { return Radius; }
+float Enemy::GetRadius() { return Radius; }
 
 bool Enemy::isDead() const { return health <= 0; }
 

@@ -7,5 +7,5 @@
 class XPSystem
 {
 public:
-    void Update(float dt, std::vector<XPOrb>& orbs, Player& player);
+    static void Update(float dt, std::vector<XPOrb>& orbs, Player& player);
 };

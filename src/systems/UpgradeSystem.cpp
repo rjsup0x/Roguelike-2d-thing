@@ -16,7 +16,7 @@ void UpgradeSystem::Enter(World& world)
 
 void UpgradeSystem::Apply(World& world, int index)
 {
-    if (index < 0 || index >= (int)world.options.size())
+    if (index < 0 || index >= static_cast<int>(world.options.size()))
         return;
 
     switch (world.options[index].type)

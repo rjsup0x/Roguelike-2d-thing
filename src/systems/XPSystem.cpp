@@ -1,5 +1,5 @@
 #include "XPSystem.h"
-#include <algorithm>
+// #include <algorithm>
 
 void XPSystem::Update(float dt, std::vector<XPOrb>& orbs, Player& player)
 {
@@ -13,12 +13,9 @@ void XPSystem::Update(float dt, std::vector<XPOrb>& orbs, Player& player)
         }
     }
 
-    orbs.erase(
-        std::remove_if(orbs.begin(), orbs.end(),
-            [](const XPOrb& o)
-            {
-                return o.IsCollected();
-            }),
-        orbs.end()
-    );
+    std::erase_if(orbs,
+                  [](const XPOrb& o)
+                  {
+                      return o.IsCollected();
+                  });
 }

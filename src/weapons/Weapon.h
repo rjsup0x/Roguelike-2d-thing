@@ -22,12 +22,12 @@ public:
         damage = newDamage;
     }
 
-    int GetDamage() const
+    [[nodiscard]] int GetDamage() const
     {
         return damage;
     }
 
-    int GetBaseDamage() const
+    [[nodiscard]] int GetBaseDamage() const
     {
         return baseDamage;
     }

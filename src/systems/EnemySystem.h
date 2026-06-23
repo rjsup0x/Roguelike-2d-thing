@@ -9,7 +9,7 @@
 class EnemySystem
 {
 public:
-    void Update(
+    static void Update(
         float dt,
         std::vector<std::unique_ptr<Enemy>>& enemies,
         Spawner& spawner,
@@ -19,13 +19,13 @@ public:
         std::vector<XPOrb>& xpOrbs
     );
 
-    void RemoveDead(
+    static void RemoveDead(
         std::vector<std::unique_ptr<Enemy>>& enemies,
         std::vector<XPOrb>& xpOrbs
     );
 
-    Enemy* GetClosestEnemy(
-        std::vector<std::unique_ptr<Enemy>>& enemies,
+    static Enemy* GetClosestEnemy(
+        const std::vector<std::unique_ptr<Enemy>>& enemies,
         Vector2 position
     );
 };

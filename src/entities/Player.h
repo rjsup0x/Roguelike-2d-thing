@@ -1,7 +1,7 @@
 #pragma once
 
 #include <raylib.h>
-#include <raymath.h>
+// #include <raymath.h>
 
 #include <memory>
 #include <vector>
@@ -19,37 +19,37 @@ public:
     void Update(float dt, Vector2 aimDir);
     void Draw() const;
 
-    Vector2 GetPos() const;
+    [[nodiscard]] Vector2 GetPos() const;
     void SetPos(Vector2 newPos);
 
-    float GetRadius() const;
+    static float GetRadius() ;
 
-    int GetHealth() const;
-    int GetMaxHealth() const;
+    [[nodiscard]] int GetHealth() const;
+    [[nodiscard]] int GetMaxHealth() const;
 
     void TakeDamage(int amount);
-    bool isDead() const;
+    [[nodiscard]] bool isDead() const;
 
-    Vector2 GetVelocity() const;
+    [[nodiscard]] Vector2 GetVelocity() const;
 
     // only inspects weapons doesnt chnage them
-    const std::vector<std::unique_ptr<Weapon>>& GetWeapons() const;
+    [[nodiscard]] const std::vector<std::unique_ptr<Weapon>>& GetWeapons() const;
     // to add weapons
     void AddWeapon(std::unique_ptr<Weapon> weapon);
 
     void AddXP(int amount);
-    int GetLevel() const;
-    int GetXP() const;
-    int GetXPToNextLevel() const;
+    [[nodiscard]] int GetLevel() const;
+    [[nodiscard]] int GetXP() const;
+    [[nodiscard]] int GetXPToNextLevel() const;
 
     void SetLevelUpCallback(std::function<void(int)> callback);
 
     void IncreaseMaxHealth(int amount);
     void IncreaseDamage(int amount);
 
-    int GetDamageBonus() const { return damageBonus; }
+    [[nodiscard]] int GetDamageBonus() const { return damageBonus; }
 
-    int GetDamage() const;
+    [[nodiscard]] int GetDamage() const;
 
 private:
     Vector2 position{};

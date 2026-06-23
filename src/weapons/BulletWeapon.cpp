@@ -41,16 +41,15 @@ void BulletWeapon::Update(float dt, Vector2 playerPos, Vector2 aimDir)
         }
 
         bullets.erase(
-            std::remove_if(
-                bullets.begin(),
-                bullets.end(),
-                [](const Bullet& b)
-                {
-                    return b.pos.x < -200 ||
-                           b.pos.x > 3000 ||
-                           b.pos.y < -200 ||
-                           b.pos.y > 2000;
-                }),
+            std::ranges::remove_if(bullets
+                                   ,
+                                   [](const Bullet& b)
+                                   {
+                                       return b.pos.x < -200 ||
+                                              b.pos.x > 3000 ||
+                                              b.pos.y < -200 ||
+                                              b.pos.y > 2000;
+                                   }).begin(),
             bullets.end()
         );
 }
@@ -60,8 +59,8 @@ void BulletWeapon::Draw() const
     // draw bulletweapon texture
     const Texture2D& BulletWeaponTexture = AssetManager::GetTexture("bullet_weapon");
     Vector2 size = {
-        (float)BulletWeaponTexture.width,
-        (float)BulletWeaponTexture.height
+        static_cast<float>(BulletWeaponTexture.width),
+        static_cast<float>(BulletWeaponTexture.height)
     };
 
     // for all bullets

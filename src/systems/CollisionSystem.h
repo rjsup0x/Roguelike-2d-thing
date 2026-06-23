@@ -6,7 +6,7 @@
 class CollisionSystem
 {
 public:
-    void SeparateEnemies(
-        std::vector<std::unique_ptr<Enemy>>& enemies
+    static void SeparateEnemies(
+        const std::vector<std::unique_ptr<Enemy>>& enemies
     );
 };

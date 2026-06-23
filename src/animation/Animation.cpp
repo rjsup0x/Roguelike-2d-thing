@@ -67,10 +67,10 @@ void Animation::SetState(AnimationState state, Direction dir)
 Rectangle Animation::GetSourceRect(const Texture2D& tex) const
 {
     float frameWidth =
-        (float)tex.width / (float)frameCount;
+        static_cast<float>(tex.width) / static_cast<float>(frameCount);
 
     float frameHeight =
-        (float)tex.height / (float)rowCount;
+        static_cast<float>(tex.height) / static_cast<float>(rowCount);
 
     return {
         currentFrame * frameWidth,

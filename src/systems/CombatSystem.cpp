@@ -4,7 +4,7 @@
 
 void CombatSystem::Update(
     Player& player,
-    std::vector<std::unique_ptr<Enemy>>& enemies)
+    const std::vector<std::unique_ptr<Enemy>>& enemies)
 {
     // weapon vs enemy
     for (auto& weapon : player.GetWeapons())

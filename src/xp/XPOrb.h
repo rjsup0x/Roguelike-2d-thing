@@ -1,7 +1,7 @@
 #pragma once
 
 #include <raylib.h>
-#include <raymath.h>
+// #include <raymath.h>
 
 class XPOrb
 {
@@ -11,13 +11,13 @@ public:
     void Update(float dt, Vector2 playerPos);
     void Draw() const;
 
-    bool IsCollected() const;
+    [[nodiscard]] bool IsCollected() const;
 
-    int GetValue() const;
+    [[nodiscard]] int GetValue() const;
 
 private:
-    Vector2 position;
-    Vector2 velocity;
+    Vector2 position{};
+    Vector2 velocity{};
 
     int value;
     bool collected = false;

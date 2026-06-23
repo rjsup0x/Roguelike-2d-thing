@@ -5,7 +5,7 @@
 class Game
 {
 public:
-    bool ShouldExit() const;
+    [[nodiscard]] bool ShouldExit() const;
     bool shouldExit{};
 
     Game();
@@ -29,10 +29,10 @@ private:
     World world;
 
     void UpdateMenu(float dt);
-    void DrawMenu();
+    static void DrawMenu();
 
     void UpdateGameOver(float dt);
-    void DrawGameOver();
+    void DrawGameOver() const;
 
-    void DrawPlaying();
+    // void DrawPlaying();
 };

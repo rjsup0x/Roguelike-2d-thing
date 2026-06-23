@@ -2,7 +2,7 @@
 
 #include "raylib.h"
 #include <vector>
-#include <raymath.h>
+// #include <raymath.h>
 
 #include "animation/Animation.h"
 #include "animation/AnimationState.h"
@@ -25,15 +25,15 @@ public:
     virtual void Draw() const;
 
     // shared API
-    Vector2 GetPos() const;
+    [[nodiscard]] Vector2 GetPos() const;
     void SetPos(Vector2 newPos);
 
-    float GetRadius() const;
+    static float GetRadius() ;
 
     void TakeDamage(int amount, Vector2 hitDir);
-    bool isDead() const;
+    [[nodiscard]] bool isDead() const;
 
-    int GetHealth() const;
+    [[nodiscard]] int GetHealth() const;
     void SetStats(int hp, float spd);
 
 protected:

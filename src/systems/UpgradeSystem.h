@@ -5,6 +5,6 @@ class World;
 class UpgradeSystem
 {
 public:
-    void Enter(World& world);
-    void Apply(World& world, int index);
+    static void Enter(World& world);
+    static void Apply(World& world, int index);
 };

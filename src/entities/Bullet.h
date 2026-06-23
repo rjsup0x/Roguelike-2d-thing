@@ -1,7 +1,7 @@
 #pragma once
 
 #include <raylib.h>
-#include <raymath.h>
+// #include <raymath.h>
 
 #include "animation/Animation.h"
 #include "animation/AnimationState.h"
@@ -14,11 +14,11 @@ public:
     void Update(float deltaTime);
     void Draw() const;
 
-    Vector2 GetPos() const;
-    float GetRadius() const;
-    bool IsOffScreen() const;
+    [[nodiscard]] Vector2 GetPos() const;
+    static float GetRadius() ;
+    [[nodiscard]] bool IsOffScreen() const;
 
-    int GetDamage() const;
+    [[nodiscard]] int GetDamage() const;
 
 private:
     Vector2 position{};

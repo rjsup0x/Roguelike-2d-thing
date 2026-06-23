@@ -3,7 +3,6 @@
 #include <vector>
 #include <memory>
 #include "entities/Enemy.h"
-#include <raylib.h>
 
 class Spawner
 {
@@ -19,8 +18,8 @@ public:
 
     void Reset();
 
-    int GetWave() const;
-    bool ShouldShowWaveText() const;
+    [[nodiscard]] int GetWave() const;
+    [[nodiscard]] bool ShouldShowWaveText() const;
 
 private:
     int wave{};

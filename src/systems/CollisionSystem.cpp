@@ -2,9 +2,9 @@
 #include <raymath.h>
 
 void CollisionSystem::SeparateEnemies(
-    std::vector<std::unique_ptr<Enemy>>& enemies)
+    const std::vector<std::unique_ptr<Enemy>>& enemies)
 {
-    const float minDist = 28.0f;
+    constexpr float minDist = 28.0f;
 
     for (size_t i = 0; i < enemies.size(); i++)
     {

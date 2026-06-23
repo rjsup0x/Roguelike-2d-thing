@@ -9,7 +9,7 @@ public:
     // WORLD SPACE (follows entities, inside camera)
     static void DrawHealthBar(Vector2 worldPosition, int health, int maxHealth);
 
-    static void DrawPlayerHealthHUD(int health, int maxHealth);
+    // static void DrawPlayerHealthHUD(int health, int maxHealth);
 
     // SCREEN SPACE (HUD)
     // static void DrawHUDHealthBar(Vector2 screenPosition, int health, int maxHealth);
@@ -17,7 +17,7 @@ public:
     static void DrawXPBar(int xp, int maxXP, int level);
 
     //
-    static void DrawLevelUp(World& world);
+    static void DrawLevelUp(const World& world);
     static void HandleLevelUpInput(World& world);
 
     static void DrawMenuButton(Rectangle rect, const char* text);

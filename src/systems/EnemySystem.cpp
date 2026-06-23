@@ -1,7 +1,9 @@
 #include "EnemySystem.h"
 
-#include <algorithm>
+// #include <algorithm>
 #include <limits>
+
+#include <raymath.h>
 
 
 void EnemySystem::Update(
@@ -31,18 +33,15 @@ void EnemySystem::RemoveDead(
         }
     }
 
-    enemies.erase(
-        std::remove_if(enemies.begin(), enemies.end(),
-            [](const std::unique_ptr<Enemy>& e)
-            {
-                return e->isDead();
-            }),
-        enemies.end()
-    );
+    std::erase_if(enemies,
+                  [](const std::unique_ptr<Enemy>& e)
+                  {
+                      return e->isDead();
+                  });
 }
 
 Enemy* EnemySystem::GetClosestEnemy(
-    std::vector<std::unique_ptr<Enemy>>& enemies,
+    const std::vector<std::unique_ptr<Enemy>>& enemies,
     Vector2 position)
 {
     Enemy* closest = nullptr;

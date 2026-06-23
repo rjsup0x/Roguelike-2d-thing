@@ -4,6 +4,7 @@
 #include "weapons/Weapon.h"
 
 #include <raylib.h>
+#include <raymath.h>
 
 OrbitalWeapon::OrbitalWeapon()
     : Weapon{15},
@@ -50,8 +51,8 @@ void OrbitalWeapon::Draw() const
 
     Vector2 size =
     {
-        (float)OrbitalTexture.width,
-        (float)OrbitalTexture.height
+        static_cast<float>(OrbitalTexture.width),
+        static_cast<float>(OrbitalTexture.height)
     };
 
     for (const auto& pos : orbitalPositions)

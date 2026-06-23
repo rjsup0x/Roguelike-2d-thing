@@ -118,8 +118,8 @@ void Game::Draw()
                 Rectangle panel = {
                     (screenW - panelW) * 0.5f,
                     (screenH - panelH) * 0.5f,
-                    (float)panelW,
-                    (float)panelH
+                    static_cast<float>(panelW),
+                    static_cast<float>(panelH)
                 };
 
                 DrawRectangleRec(panel, Fade(BLACK, 0.65f));
@@ -127,8 +127,7 @@ void Game::Draw()
 
                 DrawText("LEVEL UP!", panel.x + 20, panel.y + 15, 28, WHITE);
 
-                int boxW{160};
-                int boxH{100};
+                constexpr int boxW{160};
                 int spacing{20};
 
                 float startX = panel.x + (panelW - (boxW * 3 + spacing * 2)) * 0.5f;
@@ -136,6 +135,7 @@ void Game::Draw()
 
                 for (int i = 0; i < 3; i++)
                 {
+                    int boxH{100};
                     float x = startX + i * (boxW + spacing);
 
                     float w = boxW * pulse;
@@ -153,7 +153,7 @@ void Game::Draw()
 
                     bool hovered = (world.hoveredUpgradeIndex == i);
 
-                    Color base = hovered ? DARKGRAY : DARKGRAY;
+                    Color base = hovered ? YELLOW : DARKGRAY;
                     Color border = hovered ? YELLOW : WHITE;
 
                     DrawRectangleRec(rect, base);
@@ -163,16 +163,16 @@ void Game::Draw()
 
                     DrawText(
                         world.options[i].name,
-                        (int)rect.x + 10,
-                        (int)rect.y + 30,
+                        static_cast<int>(rect.x) + 10,
+                        static_cast<int>(rect.y) + 30,
                         12,
                         WHITE
                     );
 
                     DrawText(
                         TextFormat("[ %d ]", i + 1),
-                        (int)rect.x + 10,
-                        (int)rect.y + 65,
+                        static_cast<int>(rect.x) + 10,
+                        static_cast<int>(rect.y) + 65,
                         12,
                         GRAY
                     );
@@ -199,31 +199,31 @@ void Game::UpdateMenu(float dt)
 {
     int screenW = GetScreenWidth();
 
-        const int buttonW = 280;
-        const int buttonH = 70;
+        constexpr int buttonW = 280;
+        constexpr int buttonH = 70;
 
         Rectangle playButton =
         {
             (screenW - buttonW) / 2.0f,
             280,
-            (float)buttonW,
-            (float)buttonH
+            static_cast<float>(buttonW),
+            static_cast<float>(buttonH)
         };
 
         Rectangle settingsButton =
         {
             (screenW - buttonW) / 2.0f,
             370,
-            (float)buttonW,
-            (float)buttonH
+            static_cast<float>(buttonW),
+            static_cast<float>(buttonH)
         };
 
         Rectangle exitButton =
         {
             (screenW - buttonW) / 2.0f,
             460,
-            (float)buttonW,
-            (float)buttonH
+            static_cast<float>(buttonW),
+            static_cast<float>(buttonH)
         };
 
         Vector2 mouse = GetMousePosition();
@@ -255,8 +255,8 @@ void Game::DrawMenu()
     // draw texture as screen size
     DrawTexturePro(
       Menu_Background,
-      {0, 0, (float)Menu_Background.width, (float)Menu_Background.height},
-      {0, 0, (float)GetScreenWidth(), (float)GetScreenHeight()},
+      {0, 0, static_cast<float>(Menu_Background.width), static_cast<float>(Menu_Background.height)},
+      {0, 0, static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight())},
       {0, 0},
       0.0f,
       WHITE
@@ -268,16 +268,16 @@ void Game::DrawMenu()
     // set up buttons
     int screenWidth{GetScreenWidth()};
 
-    const int buttonWidth{280};
-    const int buttonHeight{70};
+    constexpr int buttonWidth{280};
+    constexpr int buttonHeight{70};
 
     // playe button
     Rectangle playButton =
     {
         (screenWidth - buttonWidth) / 2.0f,
         280,
-        (float)buttonWidth,
-        (float)buttonHeight,
+        static_cast<float>(buttonWidth),
+        static_cast<float>(buttonHeight),
     };
 
     // settings
@@ -285,16 +285,16 @@ void Game::DrawMenu()
     {
         (screenWidth - buttonWidth) / 2.0f,
         370,
-        (float)buttonWidth,
-        (float)buttonHeight,
+        static_cast<float>(buttonWidth),
+        static_cast<float>(buttonHeight),
     };
 
     Rectangle exitButton =
     {
         (screenWidth - buttonWidth) / 2.0f,
         460,
-        (float)buttonWidth,
-        (float)buttonHeight,
+        static_cast<float>(buttonWidth),
+        static_cast<float>(buttonHeight),
     };
 
     const char* title = "ROLI";
@@ -326,7 +326,7 @@ void Game::UpdateGameOver(float dt)
     // buttons
     Rectangle restartButton =
     {
-        (float)GetScreenWidth() / 2 - 260,
+        static_cast<float>(GetScreenWidth()) / 2 - 260,
         350,
         220,
         70
@@ -334,7 +334,7 @@ void Game::UpdateGameOver(float dt)
 
     Rectangle menuButton =
     {
-        (float)GetScreenWidth() / 2 + 40,
+        static_cast<float>(GetScreenWidth()) / 2 + 40,
         350,
         220,
         70
@@ -360,8 +360,7 @@ void Game::UpdateGameOver(float dt)
     }
 }
 
-void Game::DrawGameOver()
-{
+void Game::DrawGameOver() const {
     // d'know if i want a texture on gameover screen yet
     // const Texture2D& Menu_Background = AssetManager::GetTexture("menu_background");
 
@@ -383,8 +382,8 @@ void Game::DrawGameOver()
     int screenHeight{GetScreenHeight()};
 
     // set up button sizing
-    const int buttonWidth{280};
-    const int buttonHeight{70};
+    constexpr int buttonWidth{220};
+    constexpr int buttonHeight{70};
 
     // set up title + sizing
     const char* title = "GameOver";
@@ -400,7 +399,7 @@ void Game::DrawGameOver()
            RED
     );
 
-    int totalSeconds = (int)world.GetSurvivalTime();
+    int totalSeconds = static_cast<int>(world.GetSurvivalTime());
 
     int minutes = totalSeconds / 60;
     int seconds = totalSeconds % 60;
@@ -417,19 +416,19 @@ void Game::DrawGameOver()
     // restart button
     Rectangle restartButton =
     {
-        (float)screenWidth / 2 - 260,
+        static_cast<float>(screenWidth) / 2 - 260,
         350,
-        220,
-        70
+        buttonWidth,
+        buttonHeight
     };
 
     // back to menu
     Rectangle menuButton =
     {
-        (float)screenWidth / 2 + 40,
+        static_cast<float>(screenWidth) / 2 + 40,
         350,
-        220,
-        70
+        buttonWidth,
+        buttonHeight
     };
 
     // draw to ui

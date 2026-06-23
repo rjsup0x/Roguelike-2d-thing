@@ -19,7 +19,7 @@ public:
 
     void SetState(AnimationState state, Direction dir);
 
-    Rectangle GetSourceRect(const Texture2D& tex) const;
+    [[nodiscard]] Rectangle GetSourceRect(const Texture2D& tex) const;
 
 private:
     int currentFrame;

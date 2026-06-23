@@ -10,9 +10,9 @@
 // bullet constructor
 Bullet::Bullet(Vector2 startPos, Vector2 direction, Vector2 playerVelocity, int damage)
     : position{startPos},
+      damage{damage},
       speed{600.0f},
-      animation{5, 1, 0.12f},
-      damage{damage}
+      animation{5, 1, 0.12f}
 {
     Vector2 dirNorm = Vector2Normalize(direction);
 
@@ -81,7 +81,7 @@ int Bullet::GetDamage() const
 
 Vector2 Bullet::GetPos() const { return position; }
 
-float Bullet::GetRadius() const { return BulletRadius; }
+float Bullet::GetRadius() { return BulletRadius; }
 
 // check if the bullet goes of world space
 bool Bullet::IsOffScreen() const

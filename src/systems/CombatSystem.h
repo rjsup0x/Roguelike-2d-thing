@@ -7,8 +7,8 @@
 class CombatSystem
 {
 public:
-    void Update(
+    static void Update(
         Player& player,
-        std::vector<std::unique_ptr<Enemy>>& enemies
+        const std::vector<std::unique_ptr<Enemy>>& enemies
     );
 };

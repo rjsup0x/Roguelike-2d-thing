@@ -2,9 +2,13 @@
 #include "Game.h"
 #include "AssetManager.h"
 
-int main(void)
+int main()
 {
-    InitWindow(1280, 720, "roli");
+    constexpr int screenWidth{1280};
+    constexpr int screenHeight{720};
+    const char* title = "roli";
+
+    InitWindow(screenWidth, screenHeight, title);
     SetTargetFPS(60);
 
     // init assets
@@ -16,10 +20,10 @@ int main(void)
     while (!WindowShouldClose() && !game.ShouldExit())
     {
         // get deltatime
-        float dt = GetFrameTime();
+        const float deltaTime = GetFrameTime();
 
         // update game state
-        game.Update(dt);
+        game.Update(deltaTime);
         game.Draw();
     }
 
