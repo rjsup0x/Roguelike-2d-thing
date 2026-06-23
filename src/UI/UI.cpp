@@ -89,9 +89,9 @@ void UI::DrawXPBar(int xp, int maxXP, int level)
 
     // text LEFT (level)
     DrawText(
-        TextFormat("LV %d", level),
-        screenX - 60,
-        screenY - 2,
+        TextFormat("LVL: %d", level),
+        screenX - 40,
+        screenY,
         fontSize,
         BLACK
     );
@@ -100,7 +100,7 @@ void UI::DrawXPBar(int xp, int maxXP, int level)
     DrawText(
         "NEXT LEVEL",
         screenX + barWidth + 10,
-        screenY - 2,
+        screenY,
         fontSize,
         BLACK
     );
