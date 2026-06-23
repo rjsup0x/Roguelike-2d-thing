@@ -72,37 +72,63 @@ void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
 
 void UI::DrawXPBar(int xp, int maxXP, int level)
 {
-    float barWidth = GetScreenWidth() - 200;
-    float barHeight{12.0f};
+    float screenW = GetScreenWidth();
+    float screenH = GetScreenHeight();
 
-    float screenX{GetScreenWidth() * 0.5f - barWidth * 0.5f};
-    float screenY = GetScreenHeight() - 40;
+    // =========================
+    // HUD BACKGROUND PANEL
+    // =========================
+    float panelHeight = 60.0f;
+    float panelY = screenH - panelHeight;
 
-    float percent{(float)xp / (float)maxXP};
-    if (percent > 1.0f) percent = 1.0f;
-
-    // background
-    DrawRectangle(screenX, screenY, barWidth, barHeight, DARKGRAY);
-
-    // fill
-    DrawRectangle(screenX, screenY, barWidth * percent, barHeight, SKYBLUE);
-
-    // text LEFT (level)
-    DrawText(
-        TextFormat("LVL: %d", level),
-        screenX - 40,
-        screenY,
-        fontSize,
-        BLACK
+    DrawRectangle(
+        0,
+        panelY,
+        screenW,
+        panelHeight,
+        Fade(BLACK, 0.9f)
     );
 
-    // text RIGHT (next level)
+    // =========================
+    // XP BAR
+    // =========================
+    float barWidth = screenW - 200;
+    float barHeight = 12.0f;
+
+    float screenX = screenW * 0.5f - barWidth * 0.5f;
+
+    // move bar down INTO the panel
+    float screenY = panelY + (panelHeight * 0.5f) - (barHeight * 0.5f);
+
+    float percent = (float)xp / (float)maxXP;
+    if (percent > 1.0f) percent = 1.0f;
+
+    // background bar
+    DrawRectangle(screenX, screenY, barWidth, barHeight, DARKGRAY);
+
+    // fill bar
+    DrawRectangle(screenX, screenY, barWidth * percent, barHeight, SKYBLUE);
+
+    // =========================
+    // TEXT
+    // =========================
+
+    // level (left inside panel)
     DrawText(
-        "NEXT LEVEL",
-        screenX + barWidth + 10,
-        screenY,
-        fontSize,
-        BLACK
+        TextFormat("LVL: %d", level),
+        50,
+        panelY + 25,
+        12,
+        WHITE
+    );
+
+    // next level (right side)
+    DrawText(
+        "NEXT LVL",
+        screenW - 80,
+        panelY + 25,
+        12,
+        WHITE
     );
 }
 

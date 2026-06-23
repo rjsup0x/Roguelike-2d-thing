@@ -64,7 +64,7 @@ private:
     };
 
     WorldBounds bounds;
-    Camera2D camera;
+    Camera2D camera{};
 
     Player player;
     std::vector<std::unique_ptr<Enemy>> enemies;

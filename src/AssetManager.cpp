@@ -10,6 +10,8 @@ void AssetManager::Load()
     // characters
     textures["player"] = LoadTexture("/Users/ry/projects/roli/src/assets/Player.png");
     textures["enemy"]  = LoadTexture("/Users/ry/projects/roli/src/assets/Enemy.png");
+    // test char
+    textures["player_testing"] = LoadTexture("/Users/ry/projects/roli/src/assets/PlayerOld.png");
     // weapons
     textures["bullet_weapon"] = LoadTexture("/Users/ry/projects/roli/src/assets/Bullet.png");
     textures["orbital_weapon"] = LoadTexture("/Users/ry/projects/roli/src/assets/Bullet.png");

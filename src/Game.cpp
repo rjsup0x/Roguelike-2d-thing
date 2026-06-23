@@ -7,7 +7,8 @@
 
 Game::Game()
 {
-
+    // stop "esc" closing window
+    SetExitKey(0);
 }
 
 void Game::Update(float dt)
@@ -36,7 +37,7 @@ void Game::Update(float dt)
             if (world.IsPlayerDead())
                 state = State::GAMEOVER;
 
-            if (IsKeyPressed(KEY_M))
+            if (IsKeyPressed(KEY_ESCAPE))
                 state = State::MENU;
 
             break;

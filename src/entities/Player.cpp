@@ -88,7 +88,7 @@ void Player::Update(float deltaTime, Vector2 aimDir)
 void Player::Draw() const
 {
     // get player texture
-    const Texture2D& PlayerTexture = AssetManager::GetTexture("player");
+    const Texture2D& PlayerTexture = AssetManager::GetTexture("player_testing");
 
     // use renderer to draw texture, use animations, get position
     Renderer::DrawAnimatedTexture(

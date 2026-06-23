@@ -53,7 +53,7 @@ void Enemy::Draw() const
         tex,
         animation,
         position,
-        1.0f,
+        1.5f,
         0.0f,
         tint,
         facingDirection == Direction::Left
