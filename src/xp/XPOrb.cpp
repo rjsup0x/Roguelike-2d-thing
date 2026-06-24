@@ -2,6 +2,8 @@
 #include <raylib.h>
 #include <raymath.h>
 
+#include "AssetManager.h"
+
 XPOrb::XPOrb(const Vector2 pos, int value)
 {
     this->position = pos;
@@ -35,6 +37,8 @@ void XPOrb::Draw() const
 
 bool XPOrb::IsCollected() const
 {
+
+
     return collected;
 }
 

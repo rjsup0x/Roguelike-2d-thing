@@ -26,7 +26,12 @@ private:
     State state = State::MENU;
     State previousState = State::MENU;
 
-    bool menuMusicPlaying = false;
+    bool menuMusicStarted = false;
+
+    Music currentMusic{};
+    State musicState = State::GAMEOVER;
+
+    void UpdateMusicSystem();
 
     // init the world
     World world;

@@ -14,33 +14,18 @@ Game::Game()
 
 void Game::Update(float dt)
 {
-    bool justEnteredState = (state != previousState);
+    UpdateMusicSystem();
 
-    // depens on state which screen to update
     switch (state)
     {
         case State::MENU:
-            // if just entered state - play sound
-            if (justEnteredState)
-            {
-                PlayMusicStream(AssetManager::GetMusic("menu_music"));
-            }
-
-            UpdateMusicStream(AssetManager::GetMusic("menu_music"));
-
             UpdateMenu(dt);
             break;
 
         case State::PLAYING:
         {
-            // dont play music
-            menuMusicPlaying = false;
-
-            // toggle pause via world flag
             if (!world.IsLevelUpActive())
-            {
                 world.Update(dt);
-            }
 
             if (world.IsLevelUpActive())
             {
@@ -58,11 +43,10 @@ void Game::Update(float dt)
         }
 
         case State::GAMEOVER:
-            // dont play music
-            menuMusicPlaying = false;
             UpdateGameOver(dt);
             break;
     }
+
     previousState = state;
 }
 
@@ -451,6 +435,34 @@ void Game::DrawGameOver() const {
     // draw to ui
     UI::DrawMenuButton(restartButton, "Retry");
     UI::DrawMenuButton(menuButton, "Menu");
+}
+
+void Game::UpdateMusicSystem()
+{
+    static State lastMusicState = State::GAMEOVER;
+
+    if (state == State::MENU)
+    {
+        if (lastMusicState != State::MENU)
+        {
+            StopMusicStream(currentMusic);
+
+            currentMusic = AssetManager::GetMusic("menu_music");
+            PlayMusicStream(currentMusic);
+
+            lastMusicState = State::MENU;
+        }
+
+        UpdateMusicStream(currentMusic);
+    }
+    else
+    {
+        if (lastMusicState == State::MENU)
+        {
+            StopMusicStream(currentMusic);
+            lastMusicState = state;
+        }
+    }
 }
 
 bool Game::ShouldExit() const

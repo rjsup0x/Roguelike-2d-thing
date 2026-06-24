@@ -1,4 +1,6 @@
 #include "XPSystem.h"
+
+#include "AssetManager.h"
 // #include <algorithm>
 
 void XPSystem::Update(float dt, std::vector<XPOrb>& orbs, Player& player)
@@ -10,6 +12,10 @@ void XPSystem::Update(float dt, std::vector<XPOrb>& orbs, Player& player)
         if (orb.IsCollected())
         {
             player.AddXP(orb.GetValue());
+
+            PlaySound(
+                AssetManager::GetSound("orb_pickup")
+            );
         }
     }
 

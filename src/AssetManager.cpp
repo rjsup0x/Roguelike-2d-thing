@@ -19,6 +19,8 @@ void AssetManager::Load()
     // sounds
     // hit arrow sound
     sounds["arrow_hit"] = LoadSound("/Users/ry/projects/roli/src/assets/sounds/ArrowHit.wav");
+    // orb pickup sound
+    sounds["orb_pickup"] = LoadSound("/Users/ry/projects/roli/src/assets/sounds/Pick_Up.wav");
     // menu sound
     music["menu_music"] = LoadMusicStream("/Users/ry/projects/roli/src/assets/sounds/Menu_Music.ogg");    // world
 
