@@ -3,6 +3,7 @@
 #include "UI/UI.h"
 
 #include <raylib.h>
+
 #include <string>
 
 Game::Game()
@@ -13,15 +14,28 @@ Game::Game()
 
 void Game::Update(float dt)
 {
+    bool justEnteredState = (state != previousState);
+
     // depens on state which screen to update
     switch (state)
     {
         case State::MENU:
+            // if just entered state - play sound
+            if (justEnteredState)
+            {
+                PlayMusicStream(AssetManager::GetMusic("menu_music"));
+            }
+
+            UpdateMusicStream(AssetManager::GetMusic("menu_music"));
+
             UpdateMenu(dt);
             break;
 
         case State::PLAYING:
         {
+            // dont play music
+            menuMusicPlaying = false;
+
             // toggle pause via world flag
             if (!world.IsLevelUpActive())
             {
@@ -44,9 +58,12 @@ void Game::Update(float dt)
         }
 
         case State::GAMEOVER:
+            // dont play music
+            menuMusicPlaying = false;
             UpdateGameOver(dt);
             break;
     }
+    previousState = state;
 }
 
 void Game::Draw()

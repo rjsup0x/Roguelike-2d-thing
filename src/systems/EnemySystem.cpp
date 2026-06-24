@@ -7,7 +7,7 @@
 
 
 void EnemySystem::Update(
-    float dt,
+    const float deltaTime,
     std::vector<std::unique_ptr<Enemy>>& enemies,
     Spawner& spawner,
     Vector2 playerPos,
@@ -15,10 +15,10 @@ void EnemySystem::Update(
     float worldH,
     std::vector<XPOrb>& xpOrbs)
 {
-    spawner.Update(dt, enemies, worldW, worldH);
+    spawner.Update(deltaTime, enemies, worldW, worldH);
 
     for (auto& e : enemies)
-        e->Update(dt, playerPos);
+        e->Update(deltaTime, playerPos);
 }
 
 void EnemySystem::RemoveDead(

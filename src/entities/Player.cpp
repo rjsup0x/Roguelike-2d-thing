@@ -16,7 +16,7 @@ Player::Player()
       health{100},
       maxHealth{100},
       // depending on the sheet for the entity
-      animation{10, 1, 0.12f}
+      animation{4, 8, 0.12f}
 {
     // push weapons into the array
     // 1st BulletWeapon
@@ -53,7 +53,6 @@ void Player::Update(float deltaTime, Vector2 aimDir)
 
         if (fabs(velocity.x) > fabs(velocity.y))
         {
-            // is facing right of left
             if (velocity.x > 0)
                 facingDirection = Direction::Right;
             else
@@ -61,7 +60,6 @@ void Player::Update(float deltaTime, Vector2 aimDir)
         }
         else
         {
-            // is facing up or down
             if (velocity.y > 0)
                 facingDirection = Direction::Down;
             else
@@ -70,8 +68,8 @@ void Player::Update(float deltaTime, Vector2 aimDir)
     }
     else
     {
-        // otherwise idle
         animationState = AnimationState::Idle;
+        facingDirection = Direction::Down;  // always use idle down
     }
 
     // update anim state
@@ -79,7 +77,7 @@ void Player::Update(float deltaTime, Vector2 aimDir)
     animation.Update(deltaTime);
 
     // for all weapons
-    for (auto &w : weapons)
+    for (auto &w :  weapons)
     {
         // update each weapons deltatime, position, and aim direction
         w->Update(deltaTime, position, aimDir);
@@ -89,7 +87,7 @@ void Player::Update(float deltaTime, Vector2 aimDir)
 void Player::Draw() const
 {
     // get player texture
-    const Texture2D& PlayerTexture = AssetManager::GetTexture("player_testing");
+    const Texture2D& PlayerTexture = AssetManager::GetTexture("player");
 
     // use renderer to draw texture, use animations, get position
     Renderer::DrawAnimatedTexture(

@@ -16,20 +16,18 @@ void BatEnemy::Update(float dt, Vector2 playerPos)
 
     // --- BAT AI (your old Enemy::Update AI part) ---
 
-    Vector2 dir = Vector2Subtract(playerPos, position);
-
-    if (Vector2Length(dir) > 0.0f)
+    if (Vector2 direction = Vector2Subtract(playerPos, position); Vector2Length(direction) > 0.0f)
     {
-        dir = Vector2Normalize(dir);
+        direction = Vector2Normalize(direction);
 
-        position.x += dir.x * speed * dt;
-        position.y += dir.y * speed * dt;
+        position.x += direction.x * speed * dt;
+        position.y += direction.y * speed * dt;
 
         // optional facing
-        if (fabs(dir.x) > fabs(dir.y))
-            facingDirection = (dir.x > 0) ? Direction::Right : Direction::Left;
+        if (fabs(direction.x) > fabs(direction.y))
+            facingDirection = (direction.x > 0) ? Direction::Right : Direction::Left;
         else
-            facingDirection = (dir.y > 0) ? Direction::Down : Direction::Up;
+            facingDirection = (direction.y > 0) ? Direction::Down : Direction::Up;
     }
 
     animationState = AnimationState::Walk;

@@ -1,4 +1,5 @@
 #include <raylib.h>
+
 #include "Game.h"
 #include "AssetManager.h"
 
@@ -6,10 +7,12 @@ int main()
 {
     constexpr int screenWidth{1280};
     constexpr int screenHeight{720};
-    const char* title = "roli";
+    const auto title = "roli";
 
     InitWindow(screenWidth, screenHeight, title);
     SetTargetFPS(60);
+
+    InitAudioDevice();
 
     // init assets
     AssetManager::Load();
@@ -29,5 +32,6 @@ int main()
 
     // deinit assets
     AssetManager::Unload();
+    CloseAudioDevice();
     CloseWindow();
 }

@@ -60,7 +60,7 @@ void World::Update(float dt)
     constexpr float AUTO_TARGET_RADIUS = 350.0f;
 
     const Enemy* target =
-        targetingSystem.FindClosestEnemy(
+        TargetingSystem::FindClosestEnemy(
             player,
             enemies,
             AUTO_TARGET_RADIUS
@@ -79,9 +79,9 @@ void World::Update(float dt)
             );
     }
 
-    playerSystem.Update(player, dt, aimDir, bounds.width, bounds.height);
+    PlayerSystem::Update(player, dt, aimDir, bounds.width, bounds.height);
 
-    enemySystem.Update(dt, enemies, spawner, player.GetPos(), bounds.width, bounds.height, xpOrbs);
+    EnemySystem::Update(dt, enemies, spawner, player.GetPos(), bounds.width, bounds.height, xpOrbs);
 
     camera.target = player.GetPos();
 
@@ -91,13 +91,13 @@ void World::Update(float dt)
     camera.target.x = Clamp(camera.target.x, hw, bounds.width - hw);
     camera.target.y = Clamp(camera.target.y, hh, bounds.height - hh);
 
-    combatSystem.Update(player, enemies);
+    CombatSystem::Update(player, enemies);
 
-    collisionSystem.SeparateEnemies(enemies);
+    CollisionSystem::SeparateEnemies(enemies);
 
-    enemySystem.RemoveDead(enemies, xpOrbs);
+    EnemySystem::RemoveDead(enemies, xpOrbs);
 
-    xpSystem.Update(dt, xpOrbs, player);
+    XPSystem::Update(dt, xpOrbs, player);
 }
 
 void World::Draw() const {
@@ -130,10 +130,10 @@ void World::OnPlayerLevelUp(int level)
 void World::EnterLevelUp()
 {
     levelUpActive = true;
-    upgradeSystem.Enter(*this);
+    UpgradeSystem::Enter(*this);
 }
 
 void World::ApplyUpgrade(int index)
 {
-    upgradeSystem.Apply(*this, index);
+    UpgradeSystem::Apply(*this, index);
 }

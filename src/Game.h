@@ -24,6 +24,9 @@ private:
 
     // init screen as menu
     State state = State::MENU;
+    State previousState = State::MENU;
+
+    bool menuMusicPlaying = false;
 
     // init the world
     World world;

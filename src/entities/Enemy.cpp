@@ -43,12 +43,12 @@ void Enemy::Update(float dt, Vector2 playerPos)
 
 void Enemy::Draw() const
 {
-    const Texture2D& tex = AssetManager::GetTexture("enemy");
+    const Texture2D& EnemyTexture = AssetManager::GetTexture("enemy");
 
-    Color tint = (hitFlashTimer > 0.0f) ? RED : WHITE;
+    const Color tint = (hitFlashTimer >= 0.0f) ? Fade(WHITE, 1.0f) : Fade(RED, 1.0f);;
 
     Renderer::DrawAnimatedTexture(
-        tex,
+        EnemyTexture,
         animation,
         position,
         1.5f,
@@ -87,7 +87,7 @@ void Enemy::SetStats(int hp, float spd)
     speed = spd;
 }
 
-void Enemy::TakeDamage(int amount, Vector2 hitDir)
+void Enemy::TakeDamage(const int amount, const Vector2 hitDir)
 {
     health -= amount;
     if (health < 0) health = 0;

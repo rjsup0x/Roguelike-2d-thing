@@ -7,50 +7,51 @@
 
 BulletWeapon::BulletWeapon()
     : Weapon{10},
-      fireRate{0.15},
-      fireTimer{0.0f}
+      fireRate{0.15}
 {
 
 }
 
-void BulletWeapon::Update(float dt, Vector2 playerPos, Vector2 aimDir)
+void BulletWeapon::Update(float deltaTime, Vector2 playerPos, Vector2 aimDirection)
 {
-    fireTimer -= dt;
+    fireTimer -= deltaTime;
 
         bool hasTarget =
-            Vector2LengthSqr(aimDir) > 0.001f;
+            Vector2LengthSqr(aimDirection) > 0.001f;
 
         // only shoot if target exists
         if (hasTarget && fireTimer <= 0.0f)
         {
             fireTimer = fireRate;
 
+            Vector2 direction = Vector2Normalize(aimDirection);
             bullets.push_back({
                 playerPos,
-                Vector2Scale(aimDir, 600.0f)
+                Vector2Scale(aimDirection, 600.0f),
+                direction
             });
         }
 
         // always update existing bullets
-        for (auto& b : bullets)
+        for (auto& [pos, vel, direction] : bullets)
         {
-            b.pos = Vector2Add(
-                b.pos,
-                Vector2Scale(b.vel, dt)
+            pos = Vector2Add(
+                pos,
+                Vector2Scale(vel, deltaTime)
             );
         }
 
         bullets.erase(
-            std::ranges::remove_if(bullets
-                                   ,
-                                   [](const Bullet& b)
-                                   {
-                                       return b.pos.x < -200 ||
-                                              b.pos.x > 3000 ||
-                                              b.pos.y < -200 ||
-                                              b.pos.y > 2000;
-                                   }).begin(),
-            bullets.end()
+            std::ranges::remove_if(
+                bullets,
+                [](const Bullet& b)
+                {
+                    return b.pos.x < -200 ||
+                        b.pos.x > 3000 ||
+                            b.pos.y < -200 ||
+                                b.pos.y > 2000;
+                }).begin(),
+                bullets.end()
         );
 }
 
@@ -58,21 +59,40 @@ void BulletWeapon::Draw() const
 {
     // draw bulletweapon texture
     const Texture2D& BulletWeaponTexture = AssetManager::GetTexture("bullet_weapon");
-    Vector2 size = {
-        static_cast<float>(BulletWeaponTexture.width),
-        static_cast<float>(BulletWeaponTexture.height)
-    };
 
     // for all bullets
     for (const auto& b : bullets)
     {
-        // draw them with texture and location
-        DrawTextureV(
+        // rotate bullets based on direction its facing
+        float rotation = atan2(b.direction.y, b.direction.x) * RAD2DEG;
+
+        // the source of the bullet
+        Rectangle source{
+            0.0f,
+            0.0f,
+            static_cast<float>(BulletWeaponTexture.width),
+            static_cast<float>(BulletWeaponTexture.height)
+        };
+
+        // where it lives
+        Rectangle dest{
+            b.pos.x,
+            b.pos.y,
+            static_cast<float>(BulletWeaponTexture.width),
+            static_cast<float>(BulletWeaponTexture.height)
+        };
+
+        Vector2 origin{
+            BulletWeaponTexture.width / 2.0f,
+            BulletWeaponTexture.height / 2.0f
+        };
+
+        DrawTexturePro(
             BulletWeaponTexture,
-            {
-                b.pos.x - size.x / 2.0f,
-                b.pos.y - size.y / 2.0f
-            },
+            source,
+            dest,
+            origin,
+            rotation,
             WHITE
         );
     }
@@ -88,7 +108,7 @@ void BulletWeapon::HandleCollisions(Enemy& enemy)
             bullets[i].GetPos(),
             bullets[i].GetRadius(),
             enemy.GetPos(),
-            enemy.GetRadius()))
+            Enemy::GetRadius()))
         {
             // do bullets hit enemies
             Vector2 hitDir = Vector2Normalize(
@@ -97,6 +117,11 @@ void BulletWeapon::HandleCollisions(Enemy& enemy)
 
             // if so enemey takes damage
             enemy.TakeDamage(damage, hitDir);
+
+            // if hit enemy play sound
+            PlaySound(
+                AssetManager::GetSound("arrow_hit")
+            );
 
             // remove the bullet from data
             bullets.erase(bullets.begin() + i);

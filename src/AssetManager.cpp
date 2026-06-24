@@ -1,4 +1,5 @@
 #include "AssetManager.h"
+
 #include <raylib.h>
 
 void AssetManager::Load()
@@ -6,16 +7,20 @@ void AssetManager::Load()
     // init all assets
 
     // menu background
-    textures["menu_background"] = LoadTexture("/Users/ry/projects/roli/src/assets/backgroundImg.png");
+    textures["menu_background"] = LoadTexture("/Users/ry/projects/roli/src/assets/textures/backgroundImg.png");
     // characters
-    textures["player"] = LoadTexture("/Users/ry/projects/roli/src/assets/Player.png");
-    textures["enemy"]  = LoadTexture("/Users/ry/projects/roli/src/assets/Enemy.png");
+    textures["player"] = LoadTexture("/Users/ry/projects/roli/src/assets/textures/Player.png");
+    textures["enemy"]  = LoadTexture("/Users/ry/projects/roli/src/assets/textures/Enemy.png");
     // test char
-    textures["player_testing"] = LoadTexture("/Users/ry/projects/roli/src/assets/PlayerOld.png");
+    // textures["player_testing"] = LoadTexture("/Users/ry/projects/roli/src/assets/textures/PlayerFinal.png");
     // weapons
-    textures["bullet_weapon"] = LoadTexture("/Users/ry/projects/roli/src/assets/Bullet.png");
-    textures["orbital_weapon"] = LoadTexture("/Users/ry/projects/roli/src/assets/Bullet.png");
-    // world
+    textures["bullet_weapon"] = LoadTexture("/Users/ry/projects/roli/src/assets/textures/Arrow.png");
+    textures["orbital_weapon"] = LoadTexture("/Users/ry/projects/roli/src/assets/textures/Bullet.png");
+    // sounds
+    // hit arrow sound
+    sounds["arrow_hit"] = LoadSound("/Users/ry/projects/roli/src/assets/sounds/ArrowHit.wav");
+    // menu sound
+    music["menu_music"] = LoadMusicStream("/Users/ry/projects/roli/src/assets/sounds/Menu_Music.ogg");    // world
 
     // anything else
 }
@@ -28,6 +33,13 @@ void AssetManager::Unload()
         UnloadTexture(tex);
     }
     textures.clear();
+
+    // unload sounds
+    for (auto& [name, sound] : sounds)
+    {
+        UnloadSound(sound);
+    }
+    sounds.clear();
 }
 
 const Texture2D& AssetManager::GetTexture(const std::string& name)
@@ -35,4 +47,18 @@ const Texture2D& AssetManager::GetTexture(const std::string& name)
     return textures.at(name);
 }
 
+const Sound& AssetManager::GetSound(
+    const std::string& name)
+{
+    return sounds.at(name);
+}
+
+const Music& AssetManager::GetMusic(const std::string& name)
+{
+    return music.at(name);
+}
+
 std::unordered_map<std::string, Texture2D> AssetManager::textures;
+std::unordered_map<std::string, Sound> AssetManager::sounds;
+std::unordered_map<std::string, Music> AssetManager::music;
+

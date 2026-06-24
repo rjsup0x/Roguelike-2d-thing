@@ -10,7 +10,7 @@ class EnemySystem
 {
 public:
     static void Update(
-        float dt,
+        float deltaTime,
         std::vector<std::unique_ptr<Enemy>>& enemies,
         Spawner& spawner,
         Vector2 playerPos,

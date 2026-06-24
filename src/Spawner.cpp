@@ -1,6 +1,7 @@
 #include "Spawner.h"
-// #include <raymath.h>
 #include "entities/BatEnemy.h"
+
+// #include <raymath.h>
 
 Spawner::Spawner()
 {

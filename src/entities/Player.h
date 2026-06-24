@@ -54,7 +54,7 @@ public:
 private:
     Vector2 position{};
     Vector2 velocity{};
-    float scale{1.0f};
+    float scale{1.5f};
 
     float speed{};
     static constexpr float Radius{16.0f};
