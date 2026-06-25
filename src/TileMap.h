@@ -21,5 +21,5 @@ private:
     int mapHeight{0};
     int tilesPerRow{0};
 
-    std::vector<int> tiles;
+    std::vector<std::vector<int>> layers;
 };

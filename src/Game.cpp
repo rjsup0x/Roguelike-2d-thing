@@ -65,7 +65,7 @@ void Game::Draw()
         case State::PLAYING:
         {
             BeginDrawing();
-            ClearBackground(RAYWHITE);
+            ClearBackground(BLACK);
 
             // =========================
             // SPACE - UI

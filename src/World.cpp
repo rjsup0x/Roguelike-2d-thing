@@ -19,9 +19,9 @@ World::World()
     });
 
     // load map/level
-    // map.LoadFromFile(
-    // "/Users/ry/projects/roli/src/assets/maps/TestMap.tmj"
-    // );
+    map.LoadFromFile(
+    "/Users/ry/projects/roli/src/assets/maps/TestMap.tmj"
+    );
 }
 
 void World::Reset()
