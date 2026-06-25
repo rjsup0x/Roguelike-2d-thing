@@ -19,10 +19,9 @@ World::World()
     });
 
     // load map/level
-    map.LoadFromFile(
-    "/Users/ry/projects/roli/src/assets/maps/TestMap.tmj"
-    // "/Users/ry/projects/roli/src/assets/textures/Grass.png"
-    );
+    // map.LoadFromFile(
+    // "/Users/ry/projects/roli/src/assets/maps/TestMap.tmj"
+    // );
 }
 
 void World::Reset()
@@ -63,7 +62,8 @@ void World::Update(float dt)
 
     survivalTime += dt;
 
-    constexpr float AUTO_TARGET_RADIUS = 350.0f;
+    // distance between player and enemy before player shoots
+    constexpr float AUTO_TARGET_RADIUS = 500.0f;
 
     const Enemy* target =
         TargetingSystem::FindClosestEnemy(

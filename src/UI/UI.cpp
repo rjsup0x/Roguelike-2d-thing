@@ -125,7 +125,7 @@ void UI::DrawXPBar(int xp, int maxXP, int level)
     // next level (right side)
     DrawText(
         "NEXT LVL",
-        screenW - 80,
+        screenW - 90,
         panelY + 25,
         12,
         WHITE

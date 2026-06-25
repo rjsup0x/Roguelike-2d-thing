@@ -116,11 +116,12 @@ bool TileMap::LoadFromFile(const std::string& jsonPath)
 
 void TileMap::Draw() const
 {
-    if (tileset.id == 0)
-    {
-        TraceLog(LOG_ERROR, "Draw called but tileset not loaded!");
-        return;
-    }
+    // check if tileset loading
+    // if (tileset.id == 0)
+    // {
+    //     TraceLog(LOG_ERROR, "Draw called but tileset not loaded!");
+    //     return;
+    // }
 
     for (int y = 0; y < mapHeight; y++)
     {

@@ -2,7 +2,7 @@
 #include "UI/UI.h"
 #include "AssetManager.h"
 #include "renderer/Renderer.h"
-#include "weapons/BulletWeapon.h"
+#include "weapons/ArrowWeapon.h"
 
 #include <memory>
 #include <raylib.h>
@@ -19,9 +19,9 @@ Player::Player()
       animation{4, 8, 0.12f}
 {
     // push weapons into the array
-    // 1st BulletWeapon
+    // 1st ArrowWeapon
     // 2nd OrbitalWeapon
-    weapons.emplace_back(std::make_unique<BulletWeapon>());
+    weapons.emplace_back(std::make_unique<ArrowWeapon>());
 
     weapons.back()->SetDamage(
         weapons.back()->GetBaseDamage() + damageBonus

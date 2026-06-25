@@ -18,7 +18,7 @@ add_executable(roli
     src/entities/Bullet.cpp
     src/entities/BatEnemy.cpp
 
-    src/weapons/BulletWeapon.cpp
+        src/weapons/ArrowWeapon.cpp
     src/weapons/OrbitalWeapon.cpp
 
     src/renderer/Renderer.cpp

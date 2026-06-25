@@ -4,7 +4,7 @@
 void CollisionSystem::SeparateEnemies(
     const std::vector<std::unique_ptr<Enemy>>& enemies)
 {
-    constexpr float minDist = 28.0f;
+    constexpr float minDist = 30.0f;
 
     for (size_t i = 0; i < enemies.size(); i++)
     {

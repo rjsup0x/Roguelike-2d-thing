@@ -376,7 +376,7 @@ void Game::DrawGameOver() const {
     // );
 
     // fade background
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.35f));
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.75f));
 
     // get size of screen
     int screenWidth{GetScreenWidth()};
@@ -410,7 +410,7 @@ void Game::DrawGameOver() const {
         (screenWidth - MeasureText("Survived 00:00", 24)) / 2,
         220,
         24,
-        BLACK
+        WHITE
     );
 
     // add buttons
