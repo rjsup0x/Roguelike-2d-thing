@@ -15,6 +15,8 @@ public:
 
     [[nodiscard]] int GetValue() const;
 
+    float spinTime{0.0f};
+
 private:
     Vector2 position{};
     Vector2 velocity{};

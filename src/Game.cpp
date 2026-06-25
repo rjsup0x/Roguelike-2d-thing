@@ -67,15 +67,15 @@ void Game::Draw()
             BeginDrawing();
             ClearBackground(RAYWHITE);
 
-            // world timer
-            UI::DrawTimer(world);
-
             // =========================
             // SPACE - UI
             // =========================
             BeginMode2D(world.GetCamera());
             world.Draw();
             EndMode2D();
+
+            // world timer
+            UI::DrawTimer(world);
 
             // =========================
             // HUD (SCREEN SPACE) draw on screen UI here
@@ -99,7 +99,7 @@ void Game::Draw()
                 int x{(screenWidth - textWidth) / 2};
                 int y{(screenHeight / 4)};
 
-                DrawText(text, x, y, fontSize, GRAY);
+                DrawText(text, x, y, fontSize, BLACK);
             }
 
             // =========================

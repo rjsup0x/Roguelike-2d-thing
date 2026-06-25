@@ -36,6 +36,8 @@ add_executable(roli
     src/systems/CollisionSystem.cpp
     src/systems/UpgradeSystem.cpp
     src/systems/TargetingSystem.cpp
+        src/TileMap.h
+        src/TileMap.cpp
 )
 
 target_include_directories(roli PRIVATE

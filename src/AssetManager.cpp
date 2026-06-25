@@ -8,6 +8,7 @@ void AssetManager::Load()
 
     // menu background
     textures["menu_background"] = LoadTexture("/Users/ry/projects/roli/src/assets/textures/backgroundImg.png");
+    // textures["map"] = LoadTexture("/Users/ry/projects/roli/src/assets/textures/Grass.png");
     // characters
     textures["player"] = LoadTexture("/Users/ry/projects/roli/src/assets/textures/Player.png");
     textures["enemy"]  = LoadTexture("/Users/ry/projects/roli/src/assets/textures/Enemy.png");
@@ -16,6 +17,9 @@ void AssetManager::Load()
     // weapons
     textures["bullet_weapon"] = LoadTexture("/Users/ry/projects/roli/src/assets/textures/Arrow.png");
     textures["orbital_weapon"] = LoadTexture("/Users/ry/projects/roli/src/assets/textures/Bullet.png");
+    // coin texture
+    textures["coin"] = LoadTexture("/Users/ry/projects/roli/src/assets/textures/Coin.png");
+
     // sounds
     // hit arrow sound
     sounds["arrow_hit"] = LoadSound("/Users/ry/projects/roli/src/assets/sounds/ArrowHit.wav");

@@ -19,6 +19,8 @@
 
 #include <memory>
 
+#include "TileMap.h"
+
 struct UpgradeOption
 {
     UpgradeType type{};
@@ -57,6 +59,8 @@ public:
     void ApplyUpgrade(int index);
 
 private:
+    TileMap map;
+
     float survivalTime{};
     struct WorldBounds
     {

@@ -5,8 +5,8 @@
 
 World::World()
 {
-    bounds.width = 3000.0f;
-    bounds.height = 2000.0f;
+    bounds.width = 3008.0f;
+    bounds.height = 2016.0f;
 
     camera.zoom = 1.0f;
     camera.rotation = 0.0f;
@@ -17,6 +17,12 @@ World::World()
     {
         OnPlayerLevelUp(level);
     });
+
+    // load map/level
+    map.LoadFromFile(
+    "/Users/ry/projects/roli/src/assets/maps/TestMap.tmj"
+    // "/Users/ry/projects/roli/src/assets/textures/Grass.png"
+    );
 }
 
 void World::Reset()
@@ -101,6 +107,8 @@ void World::Update(float dt)
 }
 
 void World::Draw() const {
+    map.Draw();
+
     for (auto& e : enemies)
         e->Draw();
 

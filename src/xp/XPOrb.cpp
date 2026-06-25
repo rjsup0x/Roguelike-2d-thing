@@ -32,7 +32,31 @@ void XPOrb::Update(float dt, Vector2 playerPos)
 
 void XPOrb::Draw() const
 {
-    DrawCircleV(position, 4, GREEN);
+    const Texture2D& coin = AssetManager::GetTexture("coin");
+
+    Rectangle src = {
+        0.0f, 0.0f,
+        (float)coin.width,
+        (float)coin.height
+    };
+
+    Rectangle dest = {
+        position.x,
+        position.y,
+        24.0f,
+        24.0f
+    };
+
+    Vector2 origin = { 12.0f, 12.0f };
+
+    DrawTexturePro(
+        coin,
+        src,
+        dest,
+        origin,
+        0.0f,
+        WHITE
+    );
 }
 
 bool XPOrb::IsCollected() const
