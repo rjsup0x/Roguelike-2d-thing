@@ -6,12 +6,18 @@
 
 #include <string>
 
+// ----------------------------------------------------------------------------
+//                             GAME CONSTRUCTOR
+// ----------------------------------------------------------------------------
 Game::Game()
 {
     // stop "esc" closing window
     SetExitKey(0);
 }
 
+// ----------------------------------------------------------------------------
+//                        UPDATING THE GAME
+// ----------------------------------------------------------------------------
 void Game::Update(float dt)
 {
     UpdateMusicSystem();
@@ -22,8 +28,7 @@ void Game::Update(float dt)
             UpdateMenu(dt);
             break;
 
-        case State::PLAYING:
-        {
+        case State::PLAYING: {
             if (!world.IsLevelUpActive())
                 world.Update(dt);
 
@@ -36,11 +41,15 @@ void Game::Update(float dt)
             if (world.IsPlayerDead())
                 state = State::GAMEOVER;
 
-            if (IsKeyPressed(KEY_ESCAPE))
-                state = State::MENU;
+            if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_P))
+                state = State::PAUSE;
 
             break;
         }
+
+        case State::PAUSE:
+            UpdatePause(dt);
+            break;
 
         case State::GAMEOVER:
             UpdateGameOver(dt);
@@ -48,6 +57,9 @@ void Game::Update(float dt)
     }
 }
 
+// ----------------------------------------------------------------------------
+//                         DRAWING THE GAME
+// ----------------------------------------------------------------------------
 void Game::Draw()
 {
     // depending on state of game whhich to draw/show
@@ -182,6 +194,13 @@ void Game::Draw()
             break;
         }
 
+        case State::PAUSE:
+            BeginDrawing();
+            ClearBackground(RAYWHITE);
+            DrawPause();
+            EndDrawing();
+            break;
+
         case State::GAMEOVER:
             BeginDrawing();
             ClearBackground(RAYWHITE);
@@ -194,6 +213,9 @@ void Game::Draw()
     }
 }
 
+// ----------------------------------------------------------------------------
+//                      UPDATING THE MENU
+// ----------------------------------------------------------------------------
 void Game::UpdateMenu(float dt)
 {
     int screenW = GetScreenWidth();
@@ -246,6 +268,9 @@ void Game::UpdateMenu(float dt)
         }
 }
 
+// ----------------------------------------------------------------------------
+//                         DRAWING THE MENU
+// ----------------------------------------------------------------------------
 void Game::DrawMenu()
 {
     // get texture
@@ -317,6 +342,9 @@ void Game::DrawMenu()
     UI::DrawMenuButton(exitButton, "Exit");
 }
 
+// ----------------------------------------------------------------------------
+//                          UPDATE THE GAMEOVER
+// ----------------------------------------------------------------------------
 void Game::UpdateGameOver(float dt)
 {
     // get mouse pos for use of mouse
@@ -359,6 +387,9 @@ void Game::UpdateGameOver(float dt)
     }
 }
 
+// ----------------------------------------------------------------------------
+//                       DRAW THE GAMEOVER SCREEN
+// ----------------------------------------------------------------------------
 void Game::DrawGameOver() const {
     // d'know if i want a texture on gameover screen yet
     // const Texture2D& Menu_Background = AssetManager::GetTexture("menu_background");
@@ -435,10 +466,15 @@ void Game::DrawGameOver() const {
     UI::DrawMenuButton(menuButton, "Menu");
 }
 
+// ----------------------------------------------------------------------------
+//                             MUSIC SYSTEM UPDATE
+// ----------------------------------------------------------------------------
 void Game::UpdateMusicSystem()
 {
-    if (state == State::MENU)
+    // if the game is in menu or pause state
+    if (state == State::MENU || state == State::PAUSE)
     {
+        // otherwise dont play or reset music
         if (lastMusicState != State::MENU)
         {
             StopMusicStream(currentMusic);
@@ -461,6 +497,143 @@ void Game::UpdateMusicSystem()
     }
 }
 
+// ----------------------------------------------------------------------------
+//                     DRAW PAUSE SCREEN
+// ----------------------------------------------------------------------------
+void Game::DrawPause()
+{
+    // get texture
+    const Texture2D& Menu_Background = AssetManager::GetTexture("menu_background");
+
+    // draw texture as screen size
+    DrawTexturePro(
+      Menu_Background,
+      {0, 0, static_cast<float>(Menu_Background.width), static_cast<float>(Menu_Background.height)},
+      {0, 0, static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight())},
+      {0, 0},
+      0.0f,
+      WHITE
+    );
+
+    // fade living over the top of it
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.35f));
+
+    // set up buttons
+    int screenWidth{GetScreenWidth()};
+
+    constexpr int buttonWidth{280};
+    constexpr int buttonHeight{70};
+
+    Rectangle resumeButton =
+    {
+        (GetScreenWidth() - buttonWidth) / 2.0f,
+        280,
+        (float)buttonWidth,
+        (float)buttonHeight
+    };
+
+    Rectangle restartButton =
+    {
+        (GetScreenWidth() - buttonWidth) / 2.0f,
+        370,
+        (float)buttonWidth,
+        (float)buttonHeight
+    };
+
+    Rectangle menuButton =
+    {
+        (GetScreenWidth() - buttonWidth) / 2.0f,
+        460,
+        (float)buttonWidth,
+        (float)buttonHeight
+    };
+
+    const char* title = "PAUSED";
+
+    int titleSize = 72;
+
+    int titleWidth =
+        MeasureText(title, titleSize);
+
+    DrawText(
+           title,
+           (screenWidth - titleWidth) / 2,
+           120,
+           titleSize,
+           WHITE
+       );
+
+    // draw to ui
+    UI::DrawMenuButton(resumeButton, "Resume");
+    UI::DrawMenuButton(restartButton, "Restart");
+    UI::DrawMenuButton(menuButton, "Back To Menu");
+}
+
+// ----------------------------------------------------------------------------
+//                         UPDATE PAUSE SCREEN
+// ----------------------------------------------------------------------------
+void Game::UpdatePause(float deltaTime)
+{
+    // get mouse pos for use of mouse
+    Vector2 mouse = GetMousePosition();
+
+    // buttons
+    constexpr int buttonWidth{280};
+    constexpr int buttonHeight{70};
+
+    Rectangle resumeButton =
+    {
+        (GetScreenWidth() - buttonWidth) / 2.0f,
+        280,
+        (float)buttonWidth,
+        (float)buttonHeight
+    };
+
+    Rectangle restartButton =
+    {
+        (GetScreenWidth() - buttonWidth) / 2.0f,
+        370,
+        (float)buttonWidth,
+        (float)buttonHeight
+    };
+
+    Rectangle menuButton =
+    {
+        (GetScreenWidth() - buttonWidth) / 2.0f,
+        460,
+        (float)buttonWidth,
+        (float)buttonHeight
+    };
+
+    // check if mouse collides with buttons
+    if (CheckCollisionPointRec(mouse, resumeButton))
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            state = State::PLAYING;
+        }
+    }
+
+    if (CheckCollisionPointRec(mouse, restartButton))
+    {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            world.Reset();
+            state = State::PLAYING;
+        }
+    }
+
+    if (CheckCollisionPointRec(mouse, menuButton)) {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            world.Reset();
+            state = State::MENU;
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+//                        WHETHER TO EXIT THE GAME
+// ----------------------------------------------------------------------------
 bool Game::ShouldExit() const
 {
     return shouldExit;

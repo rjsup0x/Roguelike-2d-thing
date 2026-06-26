@@ -10,7 +10,9 @@ public:
 
     Game();
 
+
     void Update(float dt);
+
     void Draw();
 
 private:
@@ -20,24 +22,14 @@ private:
         MENU,
         PLAYING,
         GAMEOVER,
+        PAUSE
     };
 
     // init screen as menu
     State state = State::MENU;
 
     Music currentMusic{};
-
-    // Tracks which state the music system last reacted to, so we know
-    // when we've transitioned into/out of MENU and should swap tracks.
-    // Previously this lived as a `static State lastMusicState` local
-    // inside UpdateMusicSystem(), which worked but meant it wasn't
-    // actually part of Game's visible state — moved here as a real
-    // member instead. (The old `musicState` member was unused/shadowed
-    // by that local and has been removed; same for the unused
-    // `menuMusicStarted` flag and the `previousState` member, which was
-    // written every frame but never read anywhere.)
     State lastMusicState = State::GAMEOVER;
-
     void UpdateMusicSystem();
 
     // init the world
@@ -48,6 +40,9 @@ private:
 
     void UpdateGameOver(float dt);
     void DrawGameOver() const;
+
+    static void DrawPause();
+    void UpdatePause(float deltaTime);
 
     // void DrawPlaying();
 };

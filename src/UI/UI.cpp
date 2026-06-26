@@ -66,7 +66,7 @@ void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
         static_cast<int>(barPos.x + (barWidth / 2) - (static_cast<float>(textWidth) / 2)),
         static_cast<int>(barPos.y - 14), // ABOVE the bar
         fontSize,
-        BLACK
+        RAYWHITE
     );
 }
 
@@ -310,6 +310,6 @@ void UI::DrawTimer(const World& world)
         (screenWidth - textWidth) / 2,
         20,
         30,
-        BLACK
+        RAYWHITE
     );
 }
