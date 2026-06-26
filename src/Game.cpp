@@ -46,8 +46,6 @@ void Game::Update(float dt)
             UpdateGameOver(dt);
             break;
     }
-
-    previousState = state;
 }
 
 void Game::Draw()
@@ -439,8 +437,6 @@ void Game::DrawGameOver() const {
 
 void Game::UpdateMusicSystem()
 {
-    static State lastMusicState = State::GAMEOVER;
-
     if (state == State::MENU)
     {
         if (lastMusicState != State::MENU)

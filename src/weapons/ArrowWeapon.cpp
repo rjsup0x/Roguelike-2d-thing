@@ -41,15 +41,22 @@ void ArrowWeapon::Update(float deltaTime, Vector2 playerPos, Vector2 aimDirectio
             );
         }
 
+        // Off-screen bounds were previously -200/3000/-200/2000, which is
+        // SMALLER than the actual world bounds (3008 x 2016, set in
+        // World.cpp). That meant arrows could be erased while still
+        // inside the playable area near the world's right/bottom edge.
+        // Widened to give comfortable margin beyond the world bounds
+        // before despawning (matching the margin Bullet::IsOffScreen()
+        // already uses, for consistency).
         bullets.erase(
             std::ranges::remove_if(
                 bullets,
                 [](const Bullet& b)
                 {
                     return b.pos.x < -200 ||
-                        b.pos.x > 3000 ||
+                        b.pos.x > 3200 ||
                             b.pos.y < -200 ||
-                                b.pos.y > 2000;
+                                b.pos.y > 2200;
                 }).begin(),
                 bullets.end()
         );

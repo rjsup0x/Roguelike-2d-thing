@@ -40,22 +40,3 @@ void EnemySystem::RemoveDead(
                   });
 }
 
-Enemy* EnemySystem::GetClosestEnemy(
-    const std::vector<std::unique_ptr<Enemy>>& enemies,
-    Vector2 position)
-{
-    Enemy* closest = nullptr;
-    float bestDist = std::numeric_limits<float>::max();
-
-    for (auto& e : enemies)
-    {
-        float d = Vector2DistanceSqr(e->GetPos(), position);
-        if (d < bestDist)
-        {
-            bestDist = d;
-            closest = e.get();
-        }
-    }
-
-    return closest;
-}

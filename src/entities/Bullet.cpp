@@ -3,6 +3,7 @@
 #include "animation/Animation.h"
 #include "animation/AnimationState.h"
 #include "renderer/Renderer.h"
+#include "utils/MovementUtils.h"
 
 #include <raylib.h>
 #include <raymath.h>
@@ -32,23 +33,7 @@ void Bullet::Update(float deltaTime)
     if (Vector2Length(velocity) > 0.0f)
     {
         animationState = AnimationState::Walk;
-
-        if (fabs(velocity.x) > fabs(velocity.y))
-        {
-            // is facing right of left
-            if (velocity.x > 0.0f)
-                facingDirection = Direction::Right;
-            else
-                facingDirection = Direction::Left;
-        }
-        else
-        {
-            // is facing up or down
-            if (velocity.y > 0.0f)
-                facingDirection = Direction::Down;
-            else
-                facingDirection = Direction::Up;
-        }
+        facingDirection = DirectionFromVelocity(velocity, facingDirection);
     }
     else
     {

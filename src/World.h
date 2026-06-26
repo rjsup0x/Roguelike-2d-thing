@@ -36,7 +36,7 @@ public:
 
     World();
 
-    void Update(float dt);
+    void Update(float deltaTime);
     void Draw() const;
 
     [[nodiscard]] float GetSurvivalTime() const;
@@ -76,13 +76,4 @@ private:
     std::vector<XPOrb> xpOrbs;
 
     Spawner spawner;
-
-    // systems
-    PlayerSystem playerSystem;
-    EnemySystem enemySystem;
-    CombatSystem combatSystem;
-    XPSystem xpSystem;
-    CollisionSystem collisionSystem;
-    UpgradeSystem upgradeSystem;
-    TargetingSystem targetingSystem;
 };

@@ -7,5 +7,8 @@ class BatEnemy : public Enemy
 public:
     BatEnemy(Vector2 startPos);
 
-    void Update(float dt, Vector2 playerPos) override;
+protected:
+    // Bat-specific chase behavior. Called by Enemy::Update() once per
+    // frame, only while not frozen — no need to check freezeTimer here.
+    void UpdateAI(float dt, Vector2 playerPos) override;
 };

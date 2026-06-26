@@ -24,5 +24,8 @@ public:
 
     static void DrawTimer(const World& world);
 
-    static constexpr int fontSize{6};
+    // Was 6 — at that size, health numbers and upgrade-box text are
+    // basically unreadable. Bumped to a size that's actually legible and
+    // closer to what the rest of the UI uses elsewhere (12-30px).
+    static constexpr int fontSize{16};
 };

@@ -1,20 +1,20 @@
 #include "BatEnemy.h"
+#include "utils/MovementUtils.h"
 #include <raymath.h>
+
+#include "utils/MovementUtils.h"
 
 BatEnemy::BatEnemy(Vector2 startPos)
     : Enemy(startPos)
 {
 }
 
-void BatEnemy::Update(float dt, Vector2 playerPos)
+void BatEnemy::UpdateAI(float dt, Vector2 playerPos)
 {
-    // run shared enemy systems first
-    Enemy::Update(dt, playerPos);
-
-    if (freezeTimer > 0.0f)
-        return;
-
-    // --- BAT AI (your old Enemy::Update AI part) ---
+    // Enemy::Update() already ran shared systems (freeze/hitflash/damage
+    // numbers/knockback) and already guarantees this is only called while
+    // freezeTimer <= 0, so no manual checks are needed here — this is
+    // purely "what makes a bat a bat": chase the player directly.
 
     if (Vector2 direction = Vector2Subtract(playerPos, position); Vector2Length(direction) > 0.0f)
     {
@@ -23,11 +23,7 @@ void BatEnemy::Update(float dt, Vector2 playerPos)
         position.x += direction.x * speed * dt;
         position.y += direction.y * speed * dt;
 
-        // optional facing
-        if (fabs(direction.x) > fabs(direction.y))
-            facingDirection = (direction.x > 0) ? Direction::Right : Direction::Left;
-        else
-            facingDirection = (direction.y > 0) ? Direction::Down : Direction::Up;
+        facingDirection = DirectionFromVelocity(direction, facingDirection);
     }
 
     animationState = AnimationState::Walk;

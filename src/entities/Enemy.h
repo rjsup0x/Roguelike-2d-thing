@@ -21,7 +21,16 @@ public:
     Enemy(Vector2 startPos);
     virtual ~Enemy() = default;
 
-    virtual void Update(float dt, Vector2 playerPos);
+    // Runs shared systems (freeze timer, hit flash, damage numbers,
+    // knockback integration) every frame, then calls UpdateAI() for
+    // subclass-specific behavior — but only when not frozen, so each
+    // enemy type doesn't need to re-check freezeTimer itself.
+    // This is intentionally NOT virtual anymore: subclasses customize
+    // behavior via UpdateAI(), not by overriding Update() wholesale,
+    // so the shared systems can never accidentally be skipped or
+    // duplicated by a subclass.
+    void Update(float dt, Vector2 playerPos);
+
     virtual void Draw() const;
 
     // shared API
@@ -37,10 +46,13 @@ public:
     void SetStats(int hp, float spd);
 
 protected:
-    // shared helper for subclasses
-    void UpdateCommon(float dt);
+    // Subclass-specific AI/movement/animation logic. Called from Update()
+    // once per frame, only while the enemy is not frozen (freezeTimer <= 0).
+    // This is where BatEnemy (and future enemy types) implement what makes
+    // them unique, without needing to duplicate the freeze/hitflash/
+    // knockback/damage-number handling that's shared by all enemies.
+    virtual void UpdateAI(float dt, Vector2 playerPos) = 0;
 
-protected:
     Vector2 position{};
     Vector2 velocity{};
 

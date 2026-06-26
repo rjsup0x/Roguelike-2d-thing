@@ -38,6 +38,7 @@ add_executable(roli
     src/systems/TargetingSystem.cpp
         src/TileMap.h
         src/TileMap.cpp
+        src/utils/MovementUtils.h
 )
 
 target_include_directories(roli PRIVATE

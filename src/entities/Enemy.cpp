@@ -18,7 +18,8 @@ Enemy::Enemy(Vector2 startPos)
 
 void Enemy::Update(float dt, Vector2 playerPos)
 {
-    // base update just runs shared systems
+    // --- shared systems (run for every enemy type, every frame) ---
+
     if (hitFlashTimer > 0.0f)
         hitFlashTimer -= dt;
 
@@ -39,6 +40,17 @@ void Enemy::Update(float dt, Vector2 playerPos)
     // movement integration (knockback etc)
     position = Vector2Add(position, Vector2Scale(velocity, dt));
     velocity = Vector2Scale(velocity, 0.90f);
+
+    // --- subclass-specific AI ---
+    // Previously each subclass (e.g. BatEnemy) had to call Enemy::Update()
+    // itself and then separately check `if (freezeTimer > 0.0f) return;`
+    // before running its own AI. That meant every new enemy type had to
+    // remember to re-implement that guard correctly. Now it's handled once,
+    // here, so a frozen enemy always skips AI consistently.
+    if (freezeTimer > 0.0f)
+        return;
+
+    UpdateAI(dt, playerPos);
 }
 
 void Enemy::Draw() const

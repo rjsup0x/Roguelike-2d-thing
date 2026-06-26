@@ -3,6 +3,7 @@
 #include "AssetManager.h"
 #include "renderer/Renderer.h"
 #include "weapons/ArrowWeapon.h"
+#include "utils/MovementUtils.h"
 
 #include <memory>
 #include <raylib.h>
@@ -50,21 +51,7 @@ void Player::Update(float deltaTime, Vector2 aimDir)
     if (Vector2Length(velocity) > 0.0f)
     {
         animationState = AnimationState::Walk;
-
-        if (fabs(velocity.x) > fabs(velocity.y))
-        {
-            if (velocity.x > 0)
-                facingDirection = Direction::Right;
-            else
-                facingDirection = Direction::Left;
-        }
-        else
-        {
-            if (velocity.y > 0)
-                facingDirection = Direction::Down;
-            else
-                facingDirection = Direction::Up;
-        }
+        facingDirection = DirectionFromVelocity(velocity, facingDirection);
     }
     else
     {

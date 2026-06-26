@@ -1,7 +1,48 @@
 #include "Spawner.h"
 #include "entities/BatEnemy.h"
 
+#include <iterator> // std::size
+
 // #include <raymath.h>
+
+namespace
+{
+    struct WaveConfig
+    {
+        int enemyCount;
+        int health;
+        float speed;
+    };
+
+    // Wave configs, in order. The last entry is reused for any wave beyond
+    // the table's length, matching the previous "else" fallback behavior
+    // (wave 4+ used enemyCount=20, health=120, speed=130.0f).
+    // Previously this was an if/else-if ladder in StartWave() — adding a
+    // new wave meant adding another branch. Now it's just another row.
+    constexpr WaveConfig kWaveConfigs[] = {
+        {10, 50,  90.0f},  // wave 1
+        {10, 80,  110.0f}, // wave 2
+        {15, 100, 130.0f}, // wave 3
+        {20, 120, 130.0f}, // wave 4+ (fallback)
+    };
+
+    constexpr int kWaveConfigCount = static_cast<int>(std::size(kWaveConfigs));
+
+    const WaveConfig& GetWaveConfig(int wave)
+    {
+        // wave is 1-based; clamp to the last entry for any wave beyond
+        // the table (same fallback behavior as the original else branch).
+        int index = wave - 1;
+
+        if (index < 0)
+            index = 0;
+
+        if (index >= kWaveConfigCount)
+            index = kWaveConfigCount - 1;
+
+        return kWaveConfigs[index];
+    }
+}
 
 Spawner::Spawner()
 {
@@ -74,36 +115,9 @@ void Spawner::StartWave(
     blinkTimer = 0.3f;
     blinkCount = 0;
 
-    int enemyCount{};
-    int health{};
-    float speed{};
+    const WaveConfig& config = GetWaveConfig(wave);
 
-    if (wave == 1)
-    {
-        enemyCount = 10;
-        health = 50;
-        speed = 90.0f;
-    }
-    else if (wave == 2)
-    {
-        enemyCount = 10;
-        health = 80;
-        speed = 110.0f;
-    }
-    else if (wave == 3)
-    {
-        enemyCount = 15;
-        health = 100;
-        speed = 130.0f;
-    }
-    else
-    {
-        enemyCount = 20;
-        health = 120;
-        speed = 130.0f;
-    }
-
-    for (int i = 0; i < enemyCount; i++)
+    for (int i = 0; i < config.enemyCount; i++)
     {
         int side = GetRandomValue(0, 3);
 
@@ -119,12 +133,12 @@ void Spawner::StartWave(
             pos = { worldWidth + 32, static_cast<float>(GetRandomValue(0, static_cast<int>(worldHeight))) };
 
         // init enemies
-        auto e = std::make_unique<BatEnemy>(pos);
+        auto enemy = std::make_unique<BatEnemy>(pos);
         // set the enemies stats
-        e->SetStats(health, speed);
+        enemy->SetStats(config.health, config.speed);
 
         // move enemies into the array
-        enemies.push_back(std::move(e));
+        enemies.push_back(std::move(enemy));
     }
 }
 

@@ -23,9 +23,4 @@ public:
         std::vector<std::unique_ptr<Enemy>>& enemies,
         std::vector<XPOrb>& xpOrbs
     );
-
-    static Enemy* GetClosestEnemy(
-        const std::vector<std::unique_ptr<Enemy>>& enemies,
-        Vector2 position
-    );
 };

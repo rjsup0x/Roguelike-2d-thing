@@ -5,6 +5,8 @@
 
 World::World()
 {
+    constexpr const char* kTestMapPath = "/Users/ry/projects/roli/src/assets/maps/TestMap.tmj";
+
     bounds.width = 3008.0f;
     bounds.height = 2016.0f;
 
@@ -19,9 +21,7 @@ World::World()
     });
 
     // load map/level
-    map.LoadFromFile(
-    "/Users/ry/projects/roli/src/assets/maps/TestMap.tmj"
-    );
+    map.LoadFromFile(kTestMapPath);
 }
 
 void World::Reset()
@@ -55,12 +55,12 @@ bool World::IsPlayerDead() const
     return player.isDead();
 }
 
-void World::Update(float dt)
+void World::Update(float deltaTime)
 {
     if (levelUpActive)
         return;
 
-    survivalTime += dt;
+    survivalTime += deltaTime;
 
     // distance between player and enemy before player shoots
     constexpr float AUTO_TARGET_RADIUS = 500.0f;
@@ -85,9 +85,9 @@ void World::Update(float dt)
             );
     }
 
-    PlayerSystem::Update(player, dt, aimDir, bounds.width, bounds.height);
+    PlayerSystem::Update(player, deltaTime, aimDir, bounds.width, bounds.height, map);
 
-    EnemySystem::Update(dt, enemies, spawner, player.GetPos(), bounds.width, bounds.height, xpOrbs);
+    EnemySystem::Update(deltaTime, enemies, spawner, player.GetPos(), bounds.width, bounds.height, xpOrbs);
 
     camera.target = player.GetPos();
 
@@ -103,7 +103,7 @@ void World::Update(float dt)
 
     EnemySystem::RemoveDead(enemies, xpOrbs);
 
-    XPSystem::Update(dt, xpOrbs, player);
+    XPSystem::Update(deltaTime, xpOrbs, player);
 }
 
 void World::Draw() const {

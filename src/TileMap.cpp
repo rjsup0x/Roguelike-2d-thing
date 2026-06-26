@@ -16,9 +16,11 @@ bool TileMap::LoadFromFile(const std::string& jsonPath)
     nlohmann::json data;
     file >> data;
 
+#if TILEMAP_DEBUG
     std::cout << "===== TILEMAP DEBUG DUMP =====\n";
     std::cout << data.dump(2) << "\n";
     std::cout << "==============================\n";
+#endif
 
     // ----------------------------
     // BASIC MAP INFO
@@ -26,13 +28,6 @@ bool TileMap::LoadFromFile(const std::string& jsonPath)
     mapWidth  = data.value("width", 0);
     mapHeight = data.value("height", 0);
     tileSize  = data.value("tilewidth", 0);
-
-    std::cout << "[DEBUG] Map size: "
-              << mapWidth << "x"
-              << mapHeight << "\n";
-
-    std::cout << "[DEBUG] Tile size: "
-              << tileSize << "\n";
 
     if (mapWidth <= 0 || mapHeight <= 0 || tileSize <= 0)
     {
@@ -52,42 +47,21 @@ bool TileMap::LoadFromFile(const std::string& jsonPath)
     std::string imagePath =
         data["tilesets"][0].value("image", "");
 
-    std::cout << "[DEBUG] Raw tileset image path: "
-              << imagePath << "\n";
-
     if (imagePath.empty())
     {
         TraceLog(LOG_ERROR, "Tileset image path is empty");
         return false;
     }
 
-    if (!FileExists(imagePath.c_str()))
-    {
-        TraceLog(LOG_ERROR,
-                 "Texture file NOT FOUND: %s",
-                 imagePath.c_str());
-    }
-
     tileset = LoadTexture(imagePath.c_str());
-
-    std::cout << "[DEBUG] Texture ID: "
-              << tileset.id << "\n";
-
-    std::cout << "[DEBUG] Texture size: "
-              << tileset.width << "x"
-              << tileset.height << "\n";
 
     if (tileset.id == 0)
     {
-        TraceLog(LOG_ERROR,
-                 "Failed to load tileset texture");
+        TraceLog(LOG_ERROR, "Failed to load tileset texture");
         return false;
     }
 
     tilesPerRow = tileset.width / tileSize;
-
-    std::cout << "[DEBUG] Tiles per row: "
-              << tilesPerRow << "\n";
 
     // ----------------------------
     // LOAD ALL TILE LAYERS
@@ -99,8 +73,7 @@ bool TileMap::LoadFromFile(const std::string& jsonPath)
     }
 
     layers.clear();
-
-    int tileLayerCount = 0;
+    layerNames.clear();
 
     for (const auto& layer : data["layers"])
     {
@@ -116,72 +89,46 @@ bool TileMap::LoadFromFile(const std::string& jsonPath)
         std::vector<int> layerTiles =
             layer["data"].get<std::vector<int>>();
 
-        std::cout
-            << "[DEBUG] Loaded layer: "
-            << layer.value("name", "Unnamed")
-            << " | tiles="
-            << layerTiles.size()
-            << "\n";
-
         layers.push_back(std::move(layerTiles));
-
-        tileLayerCount++;
+        layerNames.push_back(layer.value("name", "Unnamed"));
     }
-
-    std::cout
-        << "[DEBUG] Total tile layers loaded: "
-        << tileLayerCount
-        << "\n";
 
     if (layers.empty())
     {
-        TraceLog(LOG_ERROR,
-                 "No tile layers loaded");
+        TraceLog(LOG_ERROR, "No tile layers loaded");
         return false;
     }
 
-    std::cout
-        << "[DEBUG] Expected tiles per layer: "
-        << (mapWidth * mapHeight)
-        << "\n";
+    // ----------------------------
+    // FIND COLLISION LAYER BY NAME (FIX)
+    // ----------------------------
+    collisionLayerIndex = -1;
 
-    for (size_t i = 0; i < layers.size(); i++)
+    for (int i = 0; i < (int)layerNames.size(); i++)
     {
-        std::cout
-            << "[DEBUG] Layer "
-            << i
-            << " tile count: "
-            << layers[i].size()
-            << "\n";
+        if (layerNames[i] == "Collision")
+        {
+            collisionLayerIndex = i;
+            break;
+        }
     }
+
+    // fallback safety
+    if (collisionLayerIndex == -1)
+    {
+        collisionLayerIndex = (int)layers.size() - 1;
+    }
+
+#if TILEMAP_DEBUG
+    std::cout << "[DEBUG] Collision layer index: "
+              << collisionLayerIndex << "\n";
+#endif
 
     return true;
 }
 
 void TileMap::Draw() const
 {
-    static bool printedOnce = false;
-
-    if (!printedOnce)
-    {
-        std::cout << "\n===== DRAW DEBUG =====\n";
-        std::cout << "Map Width: " << mapWidth << "\n";
-        std::cout << "Map Height: " << mapHeight << "\n";
-        std::cout << "Tile Size: " << tileSize << "\n";
-        std::cout << "Layer Count: " << layers.size() << "\n";
-        std::cout << "Texture ID: " << tileset.id << "\n";
-        std::cout << "Texture Size: "
-                  << tileset.width << "x"
-                  << tileset.height << "\n";
-        std::cout << "Tiles Per Row: "
-                  << tilesPerRow << "\n";
-        std::cout << "======================\n";
-
-        printedOnce = true;
-    }
-
-    static int debugCount = 0;
-
     for (const auto& layer : layers)
     {
         for (int y = 0; y < mapHeight; y++)
@@ -198,7 +145,7 @@ void TileMap::Draw() const
                 if (tileID == 0)
                     continue;
 
-                tileID -= 1; // Tiled is 1-based
+                tileID -= 1;
 
                 int srcX = (tileID % tilesPerRow) * tileSize;
                 int srcY = (tileID / tilesPerRow) * tileSize;
@@ -215,24 +162,7 @@ void TileMap::Draw() const
                     (float)(y * tileSize)
                 };
 
-                if (debugCount < 10)
-                {
-                    std::cout
-                        << "Tile #" << debugCount
-                        << " | tileID=" << tileID
-                        << " | src=(" << srcX << "," << srcY << ")"
-                        << " | pos=(" << pos.x << "," << pos.y << ")"
-                        << "\n";
-
-                    debugCount++;
-                }
-
-                DrawTextureRec(
-                    tileset,
-                    src,
-                    pos,
-                    WHITE
-                );
+                DrawTextureRec(tileset, src, pos, WHITE);
             }
         }
     }
@@ -246,14 +176,29 @@ bool TileMap::IsSolid(int x, int y) const
     if (layers.empty())
         return false;
 
+    const auto& collisionLayer = layers[collisionLayerIndex];
+
     int index = y * mapWidth + x;
 
-    if (index < 0 || index >= (int)layers[0].size())
+    if (index < 0 || index >= (int)collisionLayer.size())
         return true;
 
-    // use top layer (walls) for now
-    if (layers.size() > 1)
-        return layers[2][index] != 0;
+    return collisionLayer[index] != 0;
+}
 
-    return layers[0][index] != 0;
+bool TileMap::IsSolidAtWorldPos(Vector2 worldPos) const
+{
+    if (tileSize <= 0)
+        return false;
+
+    int tileX = static_cast<int>(worldPos.x) / tileSize;
+    int tileY = static_cast<int>(worldPos.y) / tileSize;
+
+    if (worldPos.x < 0.0f && worldPos.x != static_cast<float>(tileX * tileSize))
+        tileX -= 1;
+
+    if (worldPos.y < 0.0f && worldPos.y != static_cast<float>(tileY * tileSize))
+        tileY -= 1;
+
+    return IsSolid(tileX, tileY);
 }
