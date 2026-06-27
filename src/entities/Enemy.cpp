@@ -53,7 +53,8 @@ void Enemy::Update(const float deltaTime, const Vector2 playerPos)
 
 void Enemy::Draw() const
 {
-    const Texture2D& EnemyTexture = AssetManager::GetTexture("enemy");
+    // there will be many enemies therefore, we must get the texture name for each
+    const Texture2D& EnemyTexture = AssetManager::GetTexture(GetTextureName());
 
     const Color tint = hitFlashTimer >= 0.0f ? Fade(WHITE, 1.0f) : Fade(RED, 1.0f);;
 

@@ -32,6 +32,8 @@ public:
 
     virtual void Draw() const;
 
+    [[nodiscard]] virtual const char* GetTextureName() const = 0;
+
     // shared API
     [[nodiscard]] Vector2 GetPos() const;
     void SetPos(Vector2 newPos);

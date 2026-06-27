@@ -39,6 +39,8 @@ add_executable(roli
         src/TileMap.h
         src/TileMap.cpp
         src/utils/MovementUtils.h
+        src/entities/TreeEnemy.h
+        src/entities/TreeEnemy.cpp
 )
 
 target_include_directories(roli PRIVATE

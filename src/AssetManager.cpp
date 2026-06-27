@@ -23,6 +23,7 @@ void AssetManager::Load()
     // characters
     textures["player"] = LoadTexture((std::string(kAssetRoot) + "/textures/Player.png").c_str());
     textures["enemy"]  = LoadTexture((std::string(kAssetRoot) + "/textures/Enemy.png").c_str());
+    textures["tree_enemy"] = LoadTexture((std::string(kAssetRoot) + "/textures/TreeEnemy.png").c_str());
     // test char
 
     // weapons

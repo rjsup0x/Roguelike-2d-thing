@@ -3,13 +3,22 @@
 
 #include <iterator> // std::size
 
-namespace
+#include "entities/TreeEnemy.h"
+
+namespace EnemySetup
 {
     struct WaveConfig
     {
         int enemyCount;
         int health;
         float speed;
+    };
+
+    // determine the types of enemies possible
+    enum class EnemyType
+    {
+        Bat,
+        Tree
     };
 
     // Wave configs, in order. The last entry is reused for any wave beyond
@@ -26,7 +35,7 @@ namespace
 
     constexpr int kWaveConfigCount = std::size(kWaveConfigs);
 
-    const WaveConfig& GetWaveConfig(int wave)
+    const WaveConfig& GetWaveConfig(const int wave)
     {
         // wave is 1-based; clamp to the last entry for any wave beyond
         // the table (same fallback behavior as the original else branch).
@@ -113,10 +122,13 @@ void Spawner::StartWave(
     blinkTimer = 0.3f;
     blinkCount = 0;
 
-    const auto&[enemyCount, health, speed] = GetWaveConfig(wave);
+    // configure wave stats for enemy
+    const auto&[enemyCount, health, speed] = EnemySetup::GetWaveConfig(wave);
 
+    // for all enemies
     for (int i = 0; i < enemyCount; i++)
     {
+        // chose which side to start them
         const int side = GetRandomValue(0, 3);
 
         Vector2 pos;
@@ -130,13 +142,56 @@ void Spawner::StartWave(
         else
             pos = { worldWidth + 32, static_cast<float>(GetRandomValue(0, static_cast<int>(worldHeight))) };
 
-        // init enemies
-        auto enemy = std::make_unique<BatEnemy>(pos);
-        // set the enemies stats
-        enemy->SetStats(health, speed);
+        // determine what type of enemies are availabe per wave
+        std::vector<EnemySetup::EnemyType> availableEnemies;
 
-        // move enemies into the array
-        enemies.push_back(std::move(enemy));
+        if (wave < 3)
+        {
+            // waves 1-2: bats only
+            availableEnemies = {EnemySetup::EnemyType::Bat };
+        }
+        else if (wave < 5)
+        {
+            // waves 3-4: bats and trees
+            availableEnemies = {
+                EnemySetup::EnemyType::Bat,
+                EnemySetup::EnemyType::Tree
+            };
+        }
+        else
+        {
+            // wave 5+: trees only
+            availableEnemies = {EnemySetup::EnemyType::Tree };
+        }
+
+        // pick a random enemy from the available pool
+        const EnemySetup::EnemyType type = availableEnemies[
+                GetRandomValue(
+                    0,
+                    static_cast<int>(availableEnemies.size()) - 1
+                )
+            ];
+
+        // match enemy type and create it
+        switch (type)
+        {
+            case EnemySetup::EnemyType::Bat:
+            {
+                auto enemy = std::make_unique<BatEnemy>(pos);
+                enemy->SetStats(health, speed);
+                enemies.push_back(std::move(enemy));
+                break;
+            }
+
+            case EnemySetup::EnemyType::Tree:
+            {
+                auto enemy = std::make_unique<TreeEnemy>(pos);
+                enemy->SetStats(health, speed);
+                enemies.push_back(std::move(enemy));
+                break;
+            }
+        }
+
     }
 }
 
