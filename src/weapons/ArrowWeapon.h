@@ -22,7 +22,7 @@ private:
 
 
         [[nodiscard]] Vector2 GetPos() const { return pos; }
-        [[nodiscard]] float GetRadius() const { return 5.0f; }
+        static float GetRadius() { return 5.0f; }
     };
 
     std::vector<Bullet> bullets;

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <raylib.h>
-// #include <raymath.h>
 
 #include <memory>
 #include <vector>
@@ -16,7 +15,7 @@ class Player
 public:
     Player();
 
-    void Update(float dt, Vector2 aimDir);
+    void Update(float dt, Vector2 aimDirection);
     void Draw() const;
 
     [[nodiscard]] Vector2 GetPos() const;
@@ -32,7 +31,7 @@ public:
 
     [[nodiscard]] Vector2 GetVelocity() const;
 
-    // only inspects weapons doesnt chnage them
+    // only inspects weapons doesnt change them
     [[nodiscard]] const std::vector<std::unique_ptr<Weapon>>& GetWeapons() const;
     // to add weapons
     void AddWeapon(std::unique_ptr<Weapon> weapon);
@@ -68,6 +67,9 @@ private:
     int level{1};
     int xpToNextLevel{100};
 
+    static constexpr int32_t kFrameCount{4};
+    static constexpr int32_t kRowCount{8};
+    static constexpr float kFrameTime{0.12f};
     Animation animation;
     AnimationState animationState {AnimationState::Idle};
 

@@ -16,12 +16,12 @@ public:
     void Draw();
 
 private:
-    // controlles which "screen" to show
+    // controls which "screen" to show
     enum class State
     {
         MENU,
         PLAYING,
-        GAMEOVER,
+        GAME_OVER,
         PAUSE
     };
 
@@ -29,16 +29,16 @@ private:
     State state = State::MENU;
 
     Music currentMusic{};
-    State lastMusicState = State::GAMEOVER;
+    State lastMusicState = State::GAME_OVER;
     void UpdateMusicSystem();
 
     // init the world
     World world;
 
-    void UpdateMenu(float dt);
+    void UpdateMenu(float deltaTime);
     static void DrawMenu();
 
-    void UpdateGameOver(float dt);
+    void UpdateGameOver(float deltaTime);
     void DrawGameOver() const;
 
     static void DrawPause();

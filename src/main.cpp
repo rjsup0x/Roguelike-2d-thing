@@ -22,7 +22,7 @@ int main()
 
     while (!WindowShouldClose() && !game.ShouldExit())
     {
-        // get deltatime
+        // get delta time
         const float deltaTime = GetFrameTime();
 
         // update game state
@@ -30,7 +30,7 @@ int main()
         game.Draw();
     }
 
-    // deinit assets
+    // deinitialize assets
     AssetManager::Unload();
     CloseAudioDevice();
     CloseWindow();

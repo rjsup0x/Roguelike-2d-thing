@@ -15,11 +15,11 @@ public:
     bool LoadFromFile(const std::string& jsonPath);
     void Draw() const;
 
-    bool IsSolid(int x, int y) const;
+    [[nodiscard]] bool IsSolid(int x, int y) const;
 
-    bool IsSolidAtWorldPos(Vector2 worldPos) const;
+    [[nodiscard]] bool IsSolidAtWorldPos(Vector2 worldPos) const;
 
-    int GetTileSize() const { return tileSize; }
+    [[nodiscard]] int GetTileSize() const { return tileSize; }
 
 private:
     Texture2D tileset{};
@@ -33,7 +33,5 @@ private:
 
     std::vector<std::vector<int>> layers;
     std::vector<std::string> layerNames;
-
-    // ✅ ADDED: solid tile lookup from Tiled properties
     std::unordered_set<int> solidTiles;
 };

@@ -9,8 +9,7 @@
 OrbitalWeapon::OrbitalWeapon()
     : Weapon{15},
       orbitRadius{80.0f},
-      rotationSpeed{180.0f},
-      currentAngle{0.0f}
+      rotationSpeed{180.0f}
 {
     orbitalPositions.resize(4);
 }
@@ -18,7 +17,7 @@ OrbitalWeapon::OrbitalWeapon()
 void OrbitalWeapon::Update(float deltaTime, Vector2 playerPos, Vector2 aimDir)
 {
     // 0 += 180 * dt
-    // spin 180 degrees * deltatime
+    // spin 180 degrees * delta time
     currentAngle += rotationSpeed * deltaTime;
 
     //
@@ -26,7 +25,7 @@ void OrbitalWeapon::Update(float deltaTime, Vector2 playerPos, Vector2 aimDir)
 
     for (int i = 0; i < 4; i++)
     {
-        float angle = baseAngle + ((PI / 2.0f) * i);
+        const float angle = baseAngle + ((PI / 2.0f) * static_cast<float>(i));
 
         orbitalPositions[i] =
         {
@@ -77,7 +76,7 @@ void OrbitalWeapon::HandleCollisions(Enemy& enemy)
                 pos,
                 12.0f,
                 enemy.GetPos(),
-                enemy.GetRadius()))
+                Enemy::GetRadius()))
         {
             Vector2 hitDir = Vector2Normalize(
                 Vector2Subtract(

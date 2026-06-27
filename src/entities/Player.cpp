@@ -12,12 +12,11 @@
 
 Player::Player()
     : position{400.0f, 225.0f},
-      velocity{},
       speed{250.0f},
       health{100},
       maxHealth{100},
       // depending on the sheet for the entity
-      animation{4, 8, 0.12f}
+      animation{kFrameCount, kRowCount, kFrameTime}
 {
     // push weapons into the array
     // 1st ArrowWeapon
@@ -29,7 +28,7 @@ Player::Player()
     );
 }
 
-void Player::Update(float deltaTime, Vector2 aimDir)
+void Player::Update(float deltaTime, Vector2 aimDirection)
 {
     // update player movement
     // same as {0.0f, 0.0f}
@@ -40,7 +39,7 @@ void Player::Update(float deltaTime, Vector2 aimDir)
     if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) velocity.x -= 1;
     if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) velocity.x += 1;
 
-    // normaize the movement - when moving on angle stop it going faster
+    // normalize the movement - when moving on angle stop it going faster
     if (Vector2Length(velocity) > 0.0f)
     {
         velocity = Vector2Normalize(velocity);
@@ -66,8 +65,8 @@ void Player::Update(float deltaTime, Vector2 aimDir)
     // for all weapons
     for (auto &w :  weapons)
     {
-        // update each weapons deltatime, position, and aim direction
-        w->Update(deltaTime, position, aimDir);
+        // update each weapon delta time, position, and aim direction
+        w->Update(deltaTime, position, aimDirection);
     }
 }
 
@@ -90,13 +89,13 @@ void Player::Draw() const
         w->Draw();
     }
 
-    // add healthbar to player - beside them
+    // add health bar to player - beside them
     UI::DrawHealthBar(position, health, maxHealth);
 }
 
 const std::vector<std::unique_ptr<Weapon>>& Player::GetWeapons() const
 {
-    // get all waepons player can use
+    // get all weapons player can use
     return weapons;
 }
 
@@ -109,7 +108,7 @@ void Player::AddWeapon(std::unique_ptr<Weapon> weapon)
     weapons.push_back(std::move(weapon));
 }
 
-// get player atrtibutes
+// get player attributes
 Vector2 Player::GetPos() const { return position; }
 
 void Player::SetPos(Vector2 newPos) { position = newPos; }
@@ -152,7 +151,7 @@ void Player::AddXP(int amount)
         xp -= xpToNextLevel;
         level++;
 
-        xpToNextLevel = static_cast<int>(xpToNextLevel * 1.25f);
+        xpToNextLevel = static_cast<int>(static_cast<float>(xpToNextLevel) * 1.25f);
 
         if (onLevelUp)
             onLevelUp(level);

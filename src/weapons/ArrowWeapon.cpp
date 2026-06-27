@@ -64,7 +64,7 @@ void ArrowWeapon::Update(float deltaTime, Vector2 playerPos, Vector2 aimDirectio
 
 void ArrowWeapon::Draw() const
 {
-    // draw bulletweapon texture
+    // draw bullet weapon texture
     const Texture2D& ArrowWeaponTexture = AssetManager::GetTexture("arrow_weapon");
 
     // for all bullets
@@ -90,8 +90,8 @@ void ArrowWeapon::Draw() const
         };
 
         Vector2 origin{
-            ArrowWeaponTexture.width / 2.0f,
-            ArrowWeaponTexture.height / 2.0f
+            static_cast<float>(ArrowWeaponTexture.width) / 2.0f,
+            static_cast<float>(ArrowWeaponTexture.height) / 2.0f
         };
 
         DrawTexturePro(
@@ -108,7 +108,7 @@ void ArrowWeapon::Draw() const
 void ArrowWeapon::HandleCollisions(Enemy& enemy)
 {
     // for all bullets
-    for (size_t i{}; i < bullets.size(); ++i)
+    for (int i = 0; i < bullets.size(); ++i)
     {
         // check if they collide with anything ever
         if (CheckCollisionCircles(
@@ -122,7 +122,7 @@ void ArrowWeapon::HandleCollisions(Enemy& enemy)
                 Vector2Subtract(enemy.GetPos(), bullets[i].GetPos())
             );
 
-            // if so enemey takes damage
+            // if so enemy takes damage
             enemy.TakeDamage(damage, hitDir);
 
             // if hit enemy play sound

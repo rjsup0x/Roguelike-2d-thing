@@ -8,11 +8,7 @@
 
 Enemy::Enemy(Vector2 startPos)
     : position(startPos),
-      velocity{},
-      speed(100.0f),
-      health(50),
-      maxHealth(50),
-      animation(8, 1, 0.12f)
+      animation(kFrameCount, kRowCount, kFrameTime)
 {
 }
 
@@ -37,7 +33,7 @@ void Enemy::Update(float dt, Vector2 playerPos)
     std::erase_if(damageNumbers,
                   [](const DamageNumber& d) { return d.timer <= 0.0f; });
 
-    // movement integration (knockback etc)
+    // movement integration (knockback etc.)
     position = Vector2Add(position, Vector2Scale(velocity, dt));
     velocity = Vector2Scale(velocity, 0.90f);
 

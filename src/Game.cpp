@@ -39,7 +39,7 @@ void Game::Update(float dt)
             }
 
             if (world.IsPlayerDead())
-                state = State::GAMEOVER;
+                state = State::GAME_OVER;
 
             if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_P))
                 state = State::PAUSE;
@@ -51,7 +51,7 @@ void Game::Update(float dt)
             UpdatePause(dt);
             break;
 
-        case State::GAMEOVER:
+        case State::GAME_OVER:
             UpdateGameOver(dt);
             break;
     }
@@ -62,7 +62,7 @@ void Game::Update(float dt)
 // ----------------------------------------------------------------------------
 void Game::Draw()
 {
-    // depending on state of game whhich to draw/show
+    // depending on state of game which to draw/show
     switch (state)
     {
         case State::MENU:
@@ -117,8 +117,8 @@ void Game::Draw()
             // =========================
             if (world.IsLevelUpActive())
             {
-                float t = GetTime();
-                float pulse = 1.0f + sinf(t * 6.0f) * 0.03f;
+                const auto time = static_cast<float>(GetTime());
+                const float pulse = 1.0f + sinf(time * 6.0f) * 0.03f;
 
                 int screenW = GetScreenWidth();
                 int screenH = GetScreenHeight();
@@ -126,9 +126,9 @@ void Game::Draw()
                 int panelW{600};
                 int panelH{250};
 
-                Rectangle panel = {
-                    (screenW - panelW) * 0.5f,
-                    (screenH - panelH) * 0.5f,
+                const Rectangle panel = {
+                    static_cast<float>(screenW - panelW) * 0.5f,
+                    static_cast<float>(screenH - panelH) * 0.5f,
                     static_cast<float>(panelW),
                     static_cast<float>(panelH)
                 };
@@ -136,24 +136,31 @@ void Game::Draw()
                 DrawRectangleRec(panel, Fade(BLACK, 0.65f));
                 DrawRectangleLinesEx(panel, 2, WHITE);
 
-                DrawText("LEVEL UP!", panel.x + 20, panel.y + 15, 28, WHITE);
+                DrawText(
+                    "LEVEL UP!",
+                    static_cast<int>(panel.x + 20.0f),
+                    static_cast<int>(panel.y + 15.0f),
+                    28,
+                    WHITE
+                );
 
                 constexpr int boxW{160};
                 int spacing{20};
 
-                float startX = panel.x + (panelW - (boxW * 3 + spacing * 2)) * 0.5f;
-                float y = panel.y + 80;
+                const float startX = panel.x + static_cast<float>(panelW - (boxW * 3 + spacing * 2)) * 0.5f;
+
+                float y = panel.y + 80.0f;
 
                 for (int i = 0; i < 3; i++)
                 {
-                    int boxH{100};
-                    float x = startX + i * (boxW + spacing);
+                    constexpr int boxH{100};
+                    const float x = startX + static_cast<float>(i * (boxW + spacing));
 
-                    float w = boxW * pulse;
-                    float h = boxH * pulse;
+                    const float w = static_cast<float>(boxW) * pulse;
+                    const float h = static_cast<float>(boxH) * pulse;
 
-                    float ox = (w - boxW) * 0.5f;
-                    float oy = (h - boxH) * 0.5f;
+                    const float ox = (w - boxW) * 0.5f;
+                    const float oy = (h - boxH) * 0.5f;
 
                     Rectangle rect = {
                         x - ox,
@@ -201,7 +208,7 @@ void Game::Draw()
             EndDrawing();
             break;
 
-        case State::GAMEOVER:
+        case State::GAME_OVER:
             BeginDrawing();
             ClearBackground(RAYWHITE);
 
@@ -216,38 +223,38 @@ void Game::Draw()
 // ----------------------------------------------------------------------------
 //                      UPDATING THE MENU
 // ----------------------------------------------------------------------------
-void Game::UpdateMenu(float dt)
+void Game::UpdateMenu(float deltaTime)
 {
     int screenW = GetScreenWidth();
 
         constexpr int buttonW = 280;
         constexpr int buttonH = 70;
 
-        Rectangle playButton =
+        const Rectangle playButton =
         {
-            (screenW - buttonW) / 2.0f,
+            static_cast<float>(screenW - buttonW) / 2.0f,
             280,
             static_cast<float>(buttonW),
             static_cast<float>(buttonH)
         };
 
-        Rectangle settingsButton =
+        const Rectangle settingsButton =
         {
-            (screenW - buttonW) / 2.0f,
+            static_cast<float>(screenW - buttonW) / 2.0f,
             370,
             static_cast<float>(buttonW),
             static_cast<float>(buttonH)
         };
 
-        Rectangle exitButton =
+        const Rectangle exitButton =
         {
-            (screenW - buttonW) / 2.0f,
+            static_cast<float>(screenW - buttonW) / 2.0f,
             460,
             static_cast<float>(buttonW),
             static_cast<float>(buttonH)
         };
 
-        Vector2 mouse = GetMousePosition();
+        const Vector2 mouse = GetMousePosition();
 
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
@@ -295,38 +302,37 @@ void Game::DrawMenu()
     constexpr int buttonWidth{280};
     constexpr int buttonHeight{70};
 
-    // playe button
-    Rectangle playButton =
+    // player button
+    const Rectangle playButton =
     {
-        (screenWidth - buttonWidth) / 2.0f,
+        static_cast<float>(screenWidth - buttonWidth) / 2.0f,
         280,
         static_cast<float>(buttonWidth),
         static_cast<float>(buttonHeight),
     };
 
     // settings
-    Rectangle settingsButton =
+    const Rectangle settingsButton =
     {
-        (screenWidth - buttonWidth) / 2.0f,
+        static_cast<float>(screenWidth - buttonWidth) / 2.0f,
         370,
         static_cast<float>(buttonWidth),
         static_cast<float>(buttonHeight),
     };
 
-    Rectangle exitButton =
+    const Rectangle exitButton =
     {
-        (screenWidth - buttonWidth) / 2.0f,
+        static_cast<float>(screenWidth - buttonWidth) / 2.0f,
         460,
         static_cast<float>(buttonWidth),
         static_cast<float>(buttonHeight),
     };
 
-    const char* title = "ROLI";
+    const auto title = "ROLI";
 
-    int titleSize = 72;
+    constexpr int titleSize{72};
 
-    int titleWidth =
-        MeasureText(title, titleSize);
+    int titleWidth = MeasureText(title, titleSize);
 
     DrawText(
            title,
@@ -343,23 +349,23 @@ void Game::DrawMenu()
 }
 
 // ----------------------------------------------------------------------------
-//                          UPDATE THE GAMEOVER
+//                          UPDATE THE GAME_OVER
 // ----------------------------------------------------------------------------
-void Game::UpdateGameOver(float dt)
+void Game::UpdateGameOver(float deltaTime)
 {
     // get mouse pos for use of mouse
     Vector2 mouse = GetMousePosition();
 
     // buttons
-    Rectangle restartButton =
+    const Rectangle restartButton =
     {
-        static_cast<float>(GetScreenWidth()) / 2 - 260,
-        350,
-        220,
-        70
+        static_cast<float>(GetScreenWidth()) / 2.0f - 260.0f,
+        350.0f,
+        220.0f,
+        70.0f
     };
 
-    Rectangle menuButton =
+    const Rectangle menuButton =
     {
         static_cast<float>(GetScreenWidth()) / 2 + 40,
         350,
@@ -388,10 +394,9 @@ void Game::UpdateGameOver(float dt)
 }
 
 // ----------------------------------------------------------------------------
-//                       DRAW THE GAMEOVER SCREEN
+//                       DRAW THE GAME_OVER SCREEN
 // ----------------------------------------------------------------------------
 void Game::DrawGameOver() const {
-    // d'know if i want a texture on gameover screen yet
     // const Texture2D& Menu_Background = AssetManager::GetTexture("menu_background");
 
     // // draw texture as screen size
@@ -409,18 +414,17 @@ void Game::DrawGameOver() const {
 
     // get size of screen
     int screenWidth{GetScreenWidth()};
-    int screenHeight{GetScreenHeight()};
 
     // set up button sizing
     constexpr int buttonWidth{220};
     constexpr int buttonHeight{70};
 
     // set up title + sizing
-    const char* title = "GameOver";
-    int titleSize = 60;
-    int titleWidth = MeasureText(title, titleSize);
+    const auto title = "GameOver";
+    constexpr int titleSize{60};
+    const int titleWidth = MeasureText(title, titleSize);
 
-    // draw title with sizings
+    // draw title with sizing
     DrawText(
            title,
            (screenWidth - titleWidth) / 2,
@@ -429,10 +433,10 @@ void Game::DrawGameOver() const {
            RED
     );
 
-    int totalSeconds = static_cast<int>(world.GetSurvivalTime());
+    const int totalSeconds = static_cast<int>(world.GetSurvivalTime());
 
-    int minutes = totalSeconds / 60;
-    int seconds = totalSeconds % 60;
+    const int minutes = totalSeconds / 60;
+    const int seconds = totalSeconds % 60;
 
     DrawText(
         TextFormat("Survived %02d:%02d", minutes, seconds),
@@ -444,18 +448,18 @@ void Game::DrawGameOver() const {
 
     // add buttons
     // restart button
-    Rectangle restartButton =
+    const Rectangle restartButton =
     {
-        static_cast<float>(screenWidth) / 2 - 260,
+        static_cast<float>(GetScreenWidth()) / 2 - 260,
         350,
-        buttonWidth,
-        buttonHeight
+        220,
+        70
     };
 
     // back to menu
-    Rectangle menuButton =
+    const Rectangle menuButton =
     {
-        static_cast<float>(screenWidth) / 2 + 40,
+        static_cast<float>(GetScreenWidth()) / 2 + 40,
         350,
         buttonWidth,
         buttonHeight
@@ -519,41 +523,40 @@ void Game::DrawPause()
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.35f));
 
     // set up buttons
-    int screenWidth{GetScreenWidth()};
+    const int screenWidth{GetScreenWidth()};
 
     constexpr int buttonWidth{280};
     constexpr int buttonHeight{70};
 
-    Rectangle resumeButton =
+    const Rectangle resumeButton =
     {
-        (GetScreenWidth() - buttonWidth) / 2.0f,
+        static_cast<float>(GetScreenWidth() - buttonWidth) / 2.0f,
         280,
-        (float)buttonWidth,
-        (float)buttonHeight
+        static_cast<float>(buttonWidth),
+        static_cast<float>(buttonHeight)
     };
 
-    Rectangle restartButton =
+    const Rectangle restartButton =
     {
-        (GetScreenWidth() - buttonWidth) / 2.0f,
+        static_cast<float>(GetScreenWidth() - buttonWidth) / 2.0f,
         370,
-        (float)buttonWidth,
-        (float)buttonHeight
+        static_cast<float>(buttonWidth),
+        static_cast<float>(buttonHeight)
     };
 
-    Rectangle menuButton =
+    const Rectangle menuButton =
     {
-        (GetScreenWidth() - buttonWidth) / 2.0f,
+        static_cast<float>(GetScreenWidth() - buttonWidth) / 2.0f,
         460,
-        (float)buttonWidth,
-        (float)buttonHeight
+        static_cast<float>(buttonWidth),
+        static_cast<float>(buttonHeight)
     };
 
-    const char* title = "PAUSED";
+    const auto title = "PAUSED";
 
-    int titleSize = 72;
+    constexpr int titleSize{72};
 
-    int titleWidth =
-        MeasureText(title, titleSize);
+    const int titleWidth = MeasureText(title, titleSize);
 
     DrawText(
            title,
@@ -575,34 +578,34 @@ void Game::DrawPause()
 void Game::UpdatePause(float deltaTime)
 {
     // get mouse pos for use of mouse
-    Vector2 mouse = GetMousePosition();
+    const Vector2 mouse = GetMousePosition();
 
     // buttons
     constexpr int buttonWidth{280};
     constexpr int buttonHeight{70};
 
-    Rectangle resumeButton =
+    const Rectangle resumeButton =
     {
-        (GetScreenWidth() - buttonWidth) / 2.0f,
+        static_cast<float>(GetScreenWidth() - buttonWidth) / 2.0f,
         280,
-        (float)buttonWidth,
-        (float)buttonHeight
+        static_cast<float>(buttonWidth),
+        static_cast<float>(buttonHeight)
     };
 
-    Rectangle restartButton =
+    const Rectangle restartButton =
     {
-        (GetScreenWidth() - buttonWidth) / 2.0f,
+        static_cast<float>(GetScreenWidth() - buttonWidth) / 2.0f,
         370,
-        (float)buttonWidth,
-        (float)buttonHeight
+        static_cast<float>(buttonWidth),
+        static_cast<float>(buttonHeight)
     };
 
-    Rectangle menuButton =
+    const Rectangle menuButton =
     {
-        (GetScreenWidth() - buttonWidth) / 2.0f,
+        static_cast<float>(GetScreenWidth() - buttonWidth) / 2.0f,
         460,
-        (float)buttonWidth,
-        (float)buttonHeight
+        static_cast<float>(buttonWidth),
+        static_cast<float>(buttonHeight)
     };
 
     // check if mouse collides with buttons

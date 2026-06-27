@@ -13,7 +13,7 @@ Bullet::Bullet(Vector2 startPos, Vector2 direction, Vector2 playerVelocity, int 
     : position{startPos},
       damage{damage},
       speed{600.0f},
-      animation{5, 1, 0.12f}
+      animation{kFrameCount, kRowCount, kFrameTime}
 {
     Vector2 dirNorm = Vector2Normalize(direction);
 

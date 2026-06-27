@@ -1,5 +1,6 @@
 #include "AssetManager.h"
 
+#include <ranges>
 #include <raylib.h>
 
 namespace
@@ -57,14 +58,14 @@ void AssetManager::Load()
 void AssetManager::Unload()
 {
     // remove all assets from memory
-    for (auto& [name, tex] : textures)
+    for (const auto &tex: textures | std::views::values)
     {
         UnloadTexture(tex);
     }
     textures.clear();
 
     // unload sounds
-    for (auto& [name, sound] : sounds)
+    for (auto &sound: sounds | std::views::values)
     {
         UnloadSound(sound);
     }

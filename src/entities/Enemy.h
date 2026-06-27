@@ -2,7 +2,6 @@
 
 #include "raylib.h"
 #include <vector>
-// #include <raymath.h>
 
 #include "animation/Animation.h"
 #include "animation/AnimationState.h"
@@ -68,6 +67,10 @@ protected:
 
     std::vector<DamageNumber> damageNumbers;
 
+    // animation things - only used for enemies
+    static constexpr int32_t kFrameCount{8};
+    static constexpr int32_t kRowCount{1};
+    static constexpr float_t kFrameTime{0.12f};
     Animation animation;
     AnimationState animationState{AnimationState::Idle};
 

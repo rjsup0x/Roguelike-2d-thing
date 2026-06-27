@@ -36,8 +36,8 @@ void XPOrb::Draw() const
 
     Rectangle src = {
         0.0f, 0.0f,
-        (float)coin.width,
-        (float)coin.height
+        static_cast<float>(coin.width),
+        static_cast<float>(coin.height)
     };
 
     Rectangle dest = {

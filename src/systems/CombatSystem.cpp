@@ -20,9 +20,9 @@ void CombatSystem::Update(
     {
         if (CheckCollisionCircles(
             player.GetPos(),
-            player.GetRadius(),
+            Player::GetRadius(),
             enemy->GetPos(),
-            enemy->GetRadius()))
+            Enemy::GetRadius()))
         {
             player.TakeDamage(1);
         }

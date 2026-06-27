@@ -1,25 +1,15 @@
 #pragma once
-
-#include <vector>
-
 #include <raylib.h>
 
 #include "entities/Player.h"
 #include "entities/Enemy.h"
 #include "Spawner.h"
-#include "systems/UpgradeSystem.h"
+#include "TileMap.h"
 #include "xp/XPOrb.h"
 #include "UpgradeType.h"
-#include "systems/PlayerSystem.h"
-#include "systems/EnemySystem.h"
-#include "systems/CombatSystem.h"
-#include "systems/XPSystem.h"
-#include "systems/CollisionSystem.h"
-#include "systems/TargetingSystem.h"
 
 #include <memory>
-
-#include "TileMap.h"
+#include <vector>
 
 struct UpgradeOption
 {

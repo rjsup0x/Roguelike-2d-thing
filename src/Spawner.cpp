@@ -3,8 +3,6 @@
 
 #include <iterator> // std::size
 
-// #include <raymath.h>
-
 namespace
 {
     struct WaveConfig

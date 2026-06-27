@@ -1,7 +1,8 @@
 #pragma once
 
 #include <raylib.h>
-// #include <raymath.h>
+
+#include <cstdint>
 
 #include "animation/Animation.h"
 #include "animation/AnimationState.h"
@@ -30,7 +31,10 @@ private:
 
     static constexpr float BulletRadius{5.0f};
 
-    // anims
+    // animations
+    static constexpr int32_t kFrameCount{5};
+    static constexpr  int32_t kRowCount{1};
+    static constexpr float kFrameTime{0.12f};
     Animation animation;
     AnimationState animationState{AnimationState::Idle};
 

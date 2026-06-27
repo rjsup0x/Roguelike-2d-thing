@@ -3,9 +3,16 @@
 
 #include <raymath.h>
 
+#include "systems/CollisionSystem.h"
+#include "systems/CombatSystem.h"
+#include "systems/EnemySystem.h"
+#include "systems/PlayerSystem.h"
+#include "systems/TargetingSystem.h"
+#include "systems/XPSystem.h"
+
 World::World()
 {
-    constexpr const char* kTestMapPath = "/Users/ry/projects/roli/src/assets/maps/TestMap.tmj";
+    constexpr auto kTestMapPath = "/Users/ry/projects/roli/src/assets/maps/TestMap.tmj";
 
     bounds.width = 3008.0f;
     bounds.height = 2016.0f;
@@ -63,7 +70,7 @@ void World::Update(float deltaTime)
     survivalTime += deltaTime;
 
     // distance between player and enemy before player shoots
-    constexpr float AUTO_TARGET_RADIUS = 500.0f;
+    constexpr float AUTO_TARGET_RADIUS{500.0f};
 
     const Enemy* target =
         TargetingSystem::FindClosestEnemy(
@@ -72,7 +79,10 @@ void World::Update(float deltaTime)
             AUTO_TARGET_RADIUS
         );
 
-    Vector2 aimDir{0.0f, 0.0f};
+    float  aimDirX{0.0f};
+    float aimDirY{0.0f};
+
+    Vector2 aimDir{aimDirX, aimDirY};
 
     if (target)
     {
@@ -109,8 +119,8 @@ void World::Update(float deltaTime)
 void World::Draw() const {
     map.Draw();
 
-    for (auto& e : enemies)
-        e->Draw();
+    for (auto& enemy : enemies)
+        enemy->Draw();
 
     for (auto& orb : xpOrbs)
         orb.Draw();

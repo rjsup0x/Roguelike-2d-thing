@@ -72,8 +72,8 @@ void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
 
 void UI::DrawXPBar(int xp, int maxXP, int level)
 {
-    float screenW = GetScreenWidth();
-    float screenH = GetScreenHeight();
+    auto screenW = static_cast<float>(GetScreenWidth());
+    auto screenH = static_cast<float>(GetScreenHeight());
 
     // =========================
     // HUD BACKGROUND PANEL
@@ -158,7 +158,8 @@ void UI::HandleLevelUpInput(World& world)
     float startX = panel.x + (panelW - (boxW * 3 + spacing * 2)) * 0.5f;
     float y = panel.y + 80;
 
-    for (int i = 0; i < 3; i++)
+    // make 3 boxes for upgrade option
+    for (size_t i{}; i < 3; i++)
     {
         int boxH{100};
         Rectangle rect = {

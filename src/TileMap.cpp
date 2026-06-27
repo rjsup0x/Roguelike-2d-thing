@@ -86,8 +86,7 @@ bool TileMap::LoadFromFile(const std::string& jsonPath)
         if (!layer.contains("data"))
             continue;
 
-        std::vector<int> layerTiles =
-            layer["data"].get<std::vector<int>>();
+        std::vector<int> layerTiles = layer["data"].get<std::vector<int>>();
 
         layers.push_back(std::move(layerTiles));
         layerNames.push_back(layer.value("name", "Unnamed"));
@@ -104,7 +103,7 @@ bool TileMap::LoadFromFile(const std::string& jsonPath)
     // ----------------------------
     collisionLayerIndex = -1;
 
-    for (int i = 0; i < (int)layerNames.size(); i++)
+    for (int i = 0; i < static_cast<int>(layerNames.size()); i++)
     {
         if (layerNames[i] == "Collision")
         {
@@ -116,7 +115,7 @@ bool TileMap::LoadFromFile(const std::string& jsonPath)
     // fallback safety
     if (collisionLayerIndex == -1)
     {
-        collisionLayerIndex = (int)layers.size() - 1;
+        collisionLayerIndex = static_cast<int>(layers.size()) - 1;
     }
 
 #if TILEMAP_DEBUG
@@ -137,7 +136,7 @@ void TileMap::Draw() const
             {
                 int index = y * mapWidth + x;
 
-                if (index < 0 || index >= (int)layer.size())
+                if (index < 0 || index >= static_cast<int>(layer.size()))
                     continue;
 
                 int tileID = layer[index];
@@ -151,15 +150,15 @@ void TileMap::Draw() const
                 int srcY = (tileID / tilesPerRow) * tileSize;
 
                 Rectangle src = {
-                    (float)srcX,
-                    (float)srcY,
-                    (float)tileSize,
-                    (float)tileSize
+                    static_cast<float>(srcX),
+                    static_cast<float>(srcY),
+                    static_cast<float>(tileSize),
+                    static_cast<float>(tileSize)
                 };
 
                 Vector2 pos = {
-                    (float)(x * tileSize),
-                    (float)(y * tileSize)
+                    static_cast<float>(x * tileSize),
+                    static_cast<float>(y * tileSize)
                 };
 
                 DrawTextureRec(tileset, src, pos, WHITE);
@@ -180,7 +179,7 @@ bool TileMap::IsSolid(int x, int y) const
 
     int index = y * mapWidth + x;
 
-    if (index < 0 || index >= (int)collisionLayer.size())
+    if (index < 0 || index >= static_cast<int>(collisionLayer.size()))
         return true;
 
     return collisionLayer[index] != 0;

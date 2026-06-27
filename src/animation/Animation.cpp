@@ -73,8 +73,8 @@ Rectangle Animation::GetSourceRect(const Texture2D& tex) const
         static_cast<float>(tex.height) / static_cast<float>(rowCount);
 
     return {
-        currentFrame * frameWidth,
-        currentRow * frameHeight,
+        (static_cast<float>(currentFrame) * frameWidth),
+        static_cast<float>(currentRow) * frameHeight,
         frameWidth,
         frameHeight
     };
