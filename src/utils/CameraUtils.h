@@ -7,7 +7,7 @@
 inline Vector2 ScreenToWorld(const Camera2D &camera, const Vector2 mouse)
 {
     // transform from screenspace to world space
-    Matrix mat = GetCameraMatrix2D(camera);
-    Matrix inv = MatrixInvert(mat);
+    const Matrix mat = GetCameraMatrix2D(camera);
+    const Matrix inv = MatrixInvert(mat);
     return Vector2Transform(mouse, inv);
 }

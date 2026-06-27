@@ -5,7 +5,7 @@
 class BatEnemy : public Enemy
 {
 public:
-    BatEnemy(Vector2 startPos);
+    explicit BatEnemy(Vector2 startPos);
 
 protected:
     // Bat-specific chase behavior. Called by Enemy::Update() once per

@@ -11,7 +11,7 @@ public:
 
     void Update(float deltaTime, Vector2 playerPos, Vector2 aimDirection) override;
     void Draw() const override;
-    void HandleCollisions(class Enemy& enemy) override;
+    void HandleCollisions(Enemy& enemy) override;
 
 private:
     struct Bullet

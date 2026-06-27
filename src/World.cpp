@@ -20,11 +20,11 @@ World::World()
     camera.zoom = 1.0f;
     camera.rotation = 0.0f;
     camera.offset = {640, 360};
-    camera.target = {0, 0};
+    camera.target = {player.GetPos().x, player.GetPos().y};
 
-    player.SetLevelUpCallback([this](int level)
+    player.SetLevelUpCallback([this](const int level)
     {
-        OnPlayerLevelUp(level);
+        OnPlayerLevelUp();
     });
 
     // load map/level
@@ -40,9 +40,9 @@ void World::Reset()
 
     player = Player();
 
-    player.SetLevelUpCallback([this](int level)
+    player.SetLevelUpCallback([this](const int level)
     {
-        OnPlayerLevelUp(level);
+        OnPlayerLevelUp();
     });
 
     spawner.Reset();
@@ -79,8 +79,8 @@ void World::Update(float deltaTime)
             AUTO_TARGET_RADIUS
         );
 
-    float  aimDirX{0.0f};
-    float aimDirY{0.0f};
+    constexpr float aimDirX{0.0f};
+    constexpr float aimDirY{0.0f};
 
     Vector2 aimDir{aimDirX, aimDirY};
 
@@ -97,12 +97,12 @@ void World::Update(float deltaTime)
 
     PlayerSystem::Update(player, deltaTime, aimDir, bounds.width, bounds.height, map);
 
-    EnemySystem::Update(deltaTime, enemies, spawner, player.GetPos(), bounds.width, bounds.height, xpOrbs);
+    EnemySystem::Update(deltaTime, enemies, spawner, player.GetPos(), bounds.width, bounds.height);
 
     camera.target = player.GetPos();
 
-    float hw = camera.offset.x / camera.zoom;
-    float hh = camera.offset.y / camera.zoom;
+    const float hw = camera.offset.x / camera.zoom;
+    const float hh = camera.offset.y / camera.zoom;
 
     camera.target.x = Clamp(camera.target.x, hw, bounds.width - hw);
     camera.target.y = Clamp(camera.target.y, hh, bounds.height - hh);
@@ -140,7 +140,7 @@ Spawner& World::GetSpawner() { return spawner; }
 
 // ---------------- LEVEL / UPGRADES ----------------
 
-void World::OnPlayerLevelUp(int level)
+void World::OnPlayerLevelUp()
 {
     EnterLevelUp();
 }
@@ -151,7 +151,7 @@ void World::EnterLevelUp()
     UpgradeSystem::Enter(*this);
 }
 
-void World::ApplyUpgrade(int index)
+void World::ApplyUpgrade(const int index)
 {
     UpgradeSystem::Apply(*this, index);
 }

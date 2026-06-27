@@ -19,13 +19,13 @@ namespace
     }
 }
 
-void PlayerSystem::Update(Player& player, float deltaTime, Vector2 aimDirection, float worldWidth, float worldHeight, const TileMap& map)
+void PlayerSystem::Update(Player& player, const float deltaTime, const Vector2 aimDirection, const float worldWidth, const float worldHeight, const TileMap& map)
 {
     const Vector2 posBeforeMove = player.GetPos();
 
     player.Update(deltaTime, aimDirection);
 
-    Vector2 posAfterMove = player.GetPos();
+    auto [x, y] = player.GetPos();
     const float radius = Player::GetRadius();
 
     // Resolve wall collision per-axis: try X movement alone, then Y
@@ -34,13 +34,11 @@ void PlayerSystem::Update(Player& player, float deltaTime, Vector2 aimDirection,
     // instant either axis touches a wall.
     Vector2 resolved = posBeforeMove;
 
-    Vector2 tryX = { posAfterMove.x, posBeforeMove.y };
-    if (!OverlapsSolidTile(map, tryX, radius))
-        resolved.x = posAfterMove.x;
+    if (const Vector2 tryX = { x, posBeforeMove.y }; !OverlapsSolidTile(map, tryX, radius))
+        resolved.x = x;
 
-    Vector2 tryY = { resolved.x, posAfterMove.y };
-    if (!OverlapsSolidTile(map, tryY, radius))
-        resolved.y = posAfterMove.y;
+    if (const Vector2 tryY = { resolved.x, y }; !OverlapsSolidTile(map, tryY, radius))
+        resolved.y = y;
 
     Vector2 p = resolved;
     p.x = Clamp(p.x, 0.0f, worldWidth);
@@ -48,7 +46,7 @@ void PlayerSystem::Update(Player& player, float deltaTime, Vector2 aimDirection,
     player.SetPos(p);
 }
 
-Vector2 PlayerSystem::GetClampedPosition(const Player& player, float worldWidth, float worldHeight)
+Vector2 PlayerSystem::GetClampedPosition(const Player& player, const float worldWidth, const float worldHeight)
 {
     Vector2 p = player.GetPos();
     p.x = Clamp(p.x, 0.0f, worldWidth);

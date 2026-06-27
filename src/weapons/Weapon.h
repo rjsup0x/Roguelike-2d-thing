@@ -5,7 +5,7 @@
 class Weapon
 {
 public:
-    explicit Weapon(int damage)
+    explicit Weapon(const int damage)
         : baseDamage{damage},
           damage{damage}
     {
@@ -17,7 +17,7 @@ public:
     virtual void Draw() const = 0;
     virtual void HandleCollisions(class Enemy& enemy) = 0;
 
-    virtual void SetDamage(int newDamage)
+    virtual void SetDamage(const int newDamage)
     {
         damage = newDamage;
     }

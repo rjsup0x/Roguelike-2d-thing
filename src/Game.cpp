@@ -18,19 +18,19 @@ Game::Game()
 // ----------------------------------------------------------------------------
 //                        UPDATING THE GAME
 // ----------------------------------------------------------------------------
-void Game::Update(float dt)
+void Game::Update(float deltaTime)
 {
     UpdateMusicSystem();
 
     switch (state)
     {
         case State::MENU:
-            UpdateMenu(dt);
+            UpdateMenu(deltaTime);
             break;
 
         case State::PLAYING: {
             if (!world.IsLevelUpActive())
-                world.Update(dt);
+                world.Update(deltaTime);
 
             if (world.IsLevelUpActive())
             {
@@ -48,11 +48,11 @@ void Game::Update(float dt)
         }
 
         case State::PAUSE:
-            UpdatePause(dt);
+            UpdatePause(deltaTime);
             break;
 
         case State::GAME_OVER:
-            UpdateGameOver(dt);
+            UpdateGameOver(deltaTime);
             break;
     }
 }
@@ -100,14 +100,14 @@ void Game::Draw()
             {
                 const char* text = TextFormat("WAVE %d STARTING", world.GetSpawner().GetWave());
 
-                int fontSize{30};
-                int screenWidth = GetScreenWidth();
-                int screenHeight = GetScreenHeight();
+                constexpr int fontSize{30};
+                const int screenWidth = GetScreenWidth();
+                const int screenHeight = GetScreenHeight();
 
-                int textWidth = MeasureText(text, fontSize);
+                const int textWidth = MeasureText(text, fontSize);
 
-                int x{(screenWidth - textWidth) / 2};
-                int y{(screenHeight / 4)};
+                const int x{(screenWidth - textWidth) / 2};
+                const int y{(screenHeight / 4)};
 
                 DrawText(text, x, y, fontSize, BLACK);
             }
@@ -120,11 +120,11 @@ void Game::Draw()
                 const auto time = static_cast<float>(GetTime());
                 const float pulse = 1.0f + sinf(time * 6.0f) * 0.03f;
 
-                int screenW = GetScreenWidth();
-                int screenH = GetScreenHeight();
+                const int screenW = GetScreenWidth();
+                const int screenH = GetScreenHeight();
 
-                int panelW{600};
-                int panelH{250};
+                constexpr int panelW{600};
+                constexpr int panelH{250};
 
                 const Rectangle panel = {
                     static_cast<float>(screenW - panelW) * 0.5f,
@@ -145,11 +145,11 @@ void Game::Draw()
                 );
 
                 constexpr int boxW{160};
-                int spacing{20};
+                constexpr int spacing{20};
 
                 const float startX = panel.x + static_cast<float>(panelW - (boxW * 3 + spacing * 2)) * 0.5f;
 
-                float y = panel.y + 80.0f;
+                const float y = panel.y + 80.0f;
 
                 for (int i = 0; i < 3; i++)
                 {
@@ -162,17 +162,17 @@ void Game::Draw()
                     const float ox = (w - boxW) * 0.5f;
                     const float oy = (h - boxH) * 0.5f;
 
-                    Rectangle rect = {
+                    const Rectangle rect = {
                         x - ox,
                         y - oy,
                         w,
                         h
                     };
 
-                    bool hovered = (world.hoveredUpgradeIndex == i);
+                    const bool hovered = (world.hoveredUpgradeIndex == i);
 
-                    Color base = hovered ? YELLOW : DARKGRAY;
-                    Color border = hovered ? YELLOW : WHITE;
+                    const Color base = hovered ? YELLOW : DARKGRAY;
+                    const Color border = hovered ? YELLOW : WHITE;
 
                     DrawRectangleRec(rect, base);
                     DrawRectangleLinesEx(rect, 2, border);
@@ -225,7 +225,7 @@ void Game::Draw()
 // ----------------------------------------------------------------------------
 void Game::UpdateMenu(float deltaTime)
 {
-    int screenW = GetScreenWidth();
+    const int screenW = GetScreenWidth();
 
         constexpr int buttonW = 280;
         constexpr int buttonH = 70;
@@ -297,7 +297,7 @@ void Game::DrawMenu()
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.35f));
 
     // set up buttons
-    int screenWidth{GetScreenWidth()};
+    const int screenWidth{GetScreenWidth()};
 
     constexpr int buttonWidth{280};
     constexpr int buttonHeight{70};
@@ -332,7 +332,7 @@ void Game::DrawMenu()
 
     constexpr int titleSize{72};
 
-    int titleWidth = MeasureText(title, titleSize);
+    const int titleWidth = MeasureText(title, titleSize);
 
     DrawText(
            title,
@@ -354,7 +354,7 @@ void Game::DrawMenu()
 void Game::UpdateGameOver(float deltaTime)
 {
     // get mouse pos for use of mouse
-    Vector2 mouse = GetMousePosition();
+    const Vector2 mouse = GetMousePosition();
 
     // buttons
     const Rectangle restartButton =
@@ -413,7 +413,7 @@ void Game::DrawGameOver() const {
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.75f));
 
     // get size of screen
-    int screenWidth{GetScreenWidth()};
+    const int screenWidth{GetScreenWidth()};
 
     // set up button sizing
     constexpr int buttonWidth{220};

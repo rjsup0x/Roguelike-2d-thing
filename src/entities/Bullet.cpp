@@ -9,13 +9,13 @@
 #include <raymath.h>
 
 // bullet constructor
-Bullet::Bullet(Vector2 startPos, Vector2 direction, Vector2 playerVelocity, int damage)
+Bullet::Bullet(const Vector2 startPos, const Vector2 direction, const Vector2 playerVelocity, const int damage)
     : position{startPos},
       damage{damage},
       speed{600.0f},
       animation{kFrameCount, kRowCount, kFrameTime}
 {
-    Vector2 dirNorm = Vector2Normalize(direction);
+    const Vector2 dirNorm = Vector2Normalize(direction);
 
     velocity = Vector2Add(
         Vector2Scale(dirNorm, speed),
@@ -23,7 +23,7 @@ Bullet::Bullet(Vector2 startPos, Vector2 direction, Vector2 playerVelocity, int 
     );
 }
 
-void Bullet::Update(float deltaTime)
+void Bullet::Update(const float deltaTime)
 {
     // update bullet position constant time
     position.x += velocity.x * deltaTime;

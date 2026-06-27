@@ -44,7 +44,7 @@ bool TileMap::LoadFromFile(const std::string& jsonPath)
         return false;
     }
 
-    std::string imagePath =
+    const std::string imagePath =
         data["tilesets"][0].value("image", "");
 
     if (imagePath.empty())
@@ -86,7 +86,7 @@ bool TileMap::LoadFromFile(const std::string& jsonPath)
         if (!layer.contains("data"))
             continue;
 
-        std::vector<int> layerTiles = layer["data"].get<std::vector<int>>();
+        auto layerTiles = layer["data"].get<std::vector<int>>();
 
         layers.push_back(std::move(layerTiles));
         layerNames.push_back(layer.value("name", "Unnamed"));
@@ -134,7 +134,7 @@ void TileMap::Draw() const
         {
             for (int x = 0; x < mapWidth; x++)
             {
-                int index = y * mapWidth + x;
+                const int index = y * mapWidth + x;
 
                 if (index < 0 || index >= static_cast<int>(layer.size()))
                     continue;
@@ -146,17 +146,17 @@ void TileMap::Draw() const
 
                 tileID -= 1;
 
-                int srcX = (tileID % tilesPerRow) * tileSize;
-                int srcY = (tileID / tilesPerRow) * tileSize;
+                const int srcX = (tileID % tilesPerRow) * tileSize;
+                const int srcY = (tileID / tilesPerRow) * tileSize;
 
-                Rectangle src = {
+                const Rectangle src = {
                     static_cast<float>(srcX),
                     static_cast<float>(srcY),
                     static_cast<float>(tileSize),
                     static_cast<float>(tileSize)
                 };
 
-                Vector2 pos = {
+                const Vector2 pos = {
                     static_cast<float>(x * tileSize),
                     static_cast<float>(y * tileSize)
                 };
@@ -177,7 +177,7 @@ bool TileMap::IsSolid(int x, int y) const
 
     const auto& collisionLayer = layers[collisionLayerIndex];
 
-    int index = y * mapWidth + x;
+    const int index = y * mapWidth + x;
 
     if (index < 0 || index >= static_cast<int>(collisionLayer.size()))
         return true;

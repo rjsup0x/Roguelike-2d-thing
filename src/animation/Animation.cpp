@@ -1,9 +1,9 @@
 #include "Animation.h"
 
 Animation::Animation(
-    int frameCount,
-    int rowCount,
-    float frameTime)
+    const int frameCount,
+    const int rowCount,
+    const float frameTime)
 {
     this->frameCount = frameCount;
     this->rowCount = rowCount;
@@ -14,9 +14,9 @@ Animation::Animation(
     timer = 0.0f;
 }
 
-void Animation::Update(float dt)
+void Animation::Update(const float deltaTime)
 {
-    timer += dt;
+    timer += deltaTime;
 
     if (timer >= frameTime)
     {
@@ -29,12 +29,12 @@ void Animation::Update(float dt)
     }
 }
 
-void Animation::SetRow(int row)
+void Animation::SetRow(const int row)
 {
     currentRow = row;
 }
 
-void Animation::SetState(AnimationState state, Direction dir)
+void Animation::SetState(const AnimationState state, Direction dir)
 {
     int row{};
 
@@ -66,11 +66,9 @@ void Animation::SetState(AnimationState state, Direction dir)
 
 Rectangle Animation::GetSourceRect(const Texture2D& tex) const
 {
-    float frameWidth =
-        static_cast<float>(tex.width) / static_cast<float>(frameCount);
+    const float frameWidth = static_cast<float>(tex.width) / static_cast<float>(frameCount);
 
-    float frameHeight =
-        static_cast<float>(tex.height) / static_cast<float>(rowCount);
+    const float frameHeight = static_cast<float>(tex.height) / static_cast<float>(rowCount);
 
     return {
         (static_cast<float>(currentFrame) * frameWidth),

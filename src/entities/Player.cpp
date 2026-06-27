@@ -63,10 +63,10 @@ void Player::Update(float deltaTime, Vector2 aimDirection)
     animation.Update(deltaTime);
 
     // for all weapons
-    for (auto &w :  weapons)
+    for (const auto &weapon :  weapons)
     {
         // update each weapon delta time, position, and aim direction
-        w->Update(deltaTime, position, aimDirection);
+        weapon->Update(deltaTime, position, aimDirection);
     }
 }
 
@@ -84,9 +84,9 @@ void Player::Draw() const
     );
 
     // draw weapon
-    for (auto& w : weapons)
+    for (auto& weapon : weapons)
     {
-        w->Draw();
+        weapon->Draw();
     }
 
     // add health bar to player - beside them
@@ -111,7 +111,7 @@ void Player::AddWeapon(std::unique_ptr<Weapon> weapon)
 // get player attributes
 Vector2 Player::GetPos() const { return position; }
 
-void Player::SetPos(Vector2 newPos) { position = newPos; }
+void Player::SetPos(const Vector2 newPos) { position = newPos; }
 
 float Player::GetRadius() { return Radius; }
 
@@ -120,7 +120,7 @@ int Player::GetHealth() const { return health; }
 int Player::GetMaxHealth() const { return maxHealth; }
 
 // make player take damage
-void Player::TakeDamage(int amount)
+void Player::TakeDamage(const int amount)
 {
     health -= amount;
     if (health < 0) health = 0;
@@ -142,7 +142,7 @@ Vector2 Player::GetVelocity() const
 }
 
 // xp functions
-void Player::AddXP(int amount)
+void Player::AddXP(const int amount)
 {
     xp += amount;
 
@@ -178,7 +178,7 @@ void Player::IncreaseDamage(int amount)
 {
     damageBonus += amount;
 
-    for (auto& weapon : weapons)
+    for (const auto& weapon : weapons)
     {
         weapon->SetDamage(
             weapon->GetBaseDamage() + damageBonus

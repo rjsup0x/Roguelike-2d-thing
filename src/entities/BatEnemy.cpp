@@ -2,12 +2,12 @@
 #include "utils/MovementUtils.h"
 #include <raymath.h>
 
-BatEnemy::BatEnemy(Vector2 startPos)
+BatEnemy::BatEnemy(const Vector2 startPos)
     : Enemy(startPos)
 {
 }
 
-void BatEnemy::UpdateAI(float deltaTime, Vector2 playerPos)
+void BatEnemy::UpdateAI(const float deltaTime, const Vector2 playerPos)
 {
     // Enemy::Update() already ran shared systems (freeze/hit flash/damage
     // numbers/knockback) and already guarantees this is only called while

@@ -44,7 +44,7 @@ public:
 
     [[nodiscard]] bool IsLevelUpActive() const { return levelUpActive; }
 
-    void OnPlayerLevelUp(int level);
+    void OnPlayerLevelUp();
     void EnterLevelUp();
     void ApplyUpgrade(int index);
 

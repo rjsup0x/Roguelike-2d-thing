@@ -11,12 +11,11 @@ class EnemySystem
 public:
     static void Update(
         float deltaTime,
-        std::vector<std::unique_ptr<Enemy>>& enemies,
-        Spawner& spawner,
+        std::vector<std::unique_ptr<Enemy>> &enemies,
+        Spawner &spawner,
         Vector2 playerPos,
         float worldW,
-        float worldH,
-        std::vector<XPOrb>& xpOrbs
+        float worldH
     );
 
     static void RemoveDead(

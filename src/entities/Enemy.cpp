@@ -6,35 +6,37 @@
 #include <raymath.h>
 
 
-Enemy::Enemy(Vector2 startPos)
+Enemy::Enemy(const Vector2 startPos)
     : position(startPos),
       animation(kFrameCount, kRowCount, kFrameTime)
 {
 }
 
-void Enemy::Update(float dt, Vector2 playerPos)
+void Enemy::Update(const float deltaTime, const Vector2 playerPos)
 {
     // --- shared systems (run for every enemy type, every frame) ---
 
     if (hitFlashTimer > 0.0f)
-        hitFlashTimer -= dt;
+        hitFlashTimer -= deltaTime;
 
     if (freezeTimer > 0.0f)
-        freezeTimer -= dt;
+        freezeTimer -= deltaTime;
 
     // damage numbers
-    for (auto& d : damageNumbers)
+    for (auto& damage_number : damageNumbers)
     {
-        d.timer -= dt;
-        d.pos.y -= 30.0f * dt;
-        d.alpha = d.timer / 0.6f;
+        damage_number.timer -= deltaTime;
+        damage_number.pos.y -= 30.0f * deltaTime;
+        damage_number.alpha = damage_number.timer / 0.6f;
     }
 
-    std::erase_if(damageNumbers,
-                  [](const DamageNumber& d) { return d.timer <= 0.0f; });
+    std::erase_if(damageNumbers, [](const DamageNumber& d)
+    {
+        return d.timer <= 0.0f;
+    });
 
     // movement integration (knockback etc.)
-    position = Vector2Add(position, Vector2Scale(velocity, dt));
+    position = Vector2Add(position, Vector2Scale(velocity, deltaTime));
     velocity = Vector2Scale(velocity, 0.90f);
 
     // --- subclass-specific AI ---
@@ -46,14 +48,14 @@ void Enemy::Update(float dt, Vector2 playerPos)
     if (freezeTimer > 0.0f)
         return;
 
-    UpdateAI(dt, playerPos);
+    UpdateAI(deltaTime, playerPos);
 }
 
 void Enemy::Draw() const
 {
     const Texture2D& EnemyTexture = AssetManager::GetTexture("enemy");
 
-    const Color tint = (hitFlashTimer >= 0.0f) ? Fade(WHITE, 1.0f) : Fade(RED, 1.0f);;
+    const Color tint = hitFlashTimer >= 0.0f ? Fade(WHITE, 1.0f) : Fade(RED, 1.0f);;
 
     Renderer::DrawAnimatedTexture(
         EnemyTexture,
@@ -67,20 +69,20 @@ void Enemy::Draw() const
 
     UI::DrawHealthBar(position, health, maxHealth);
 
-    for (const auto& d : damageNumbers)
+    for (const auto& number : damageNumbers)
     {
         DrawText(
-            TextFormat("%d", d.value),
-            static_cast<int>(d.pos.x),
-            static_cast<int>(d.pos.y),
+            TextFormat("%d", number.value),
+            static_cast<int>(number.pos.x),
+            static_cast<int>(number.pos.y),
             18,
-            Fade(RED, d.alpha)
+            Fade(RED, number.alpha)
         );
     }
 }
 
 Vector2 Enemy::GetPos() const { return position; }
-void Enemy::SetPos(Vector2 newPos) { position = newPos; }
+void Enemy::SetPos(const Vector2 newPos) { position = newPos; }
 
 float Enemy::GetRadius() { return Radius; }
 
@@ -88,7 +90,7 @@ bool Enemy::isDead() const { return health <= 0; }
 
 int Enemy::GetHealth() const { return health; }
 
-void Enemy::SetStats(int hp, float spd)
+void Enemy::SetStats(const int hp, const float spd)
 {
     health = hp;
     maxHealth = hp;

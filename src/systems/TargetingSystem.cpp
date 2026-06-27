@@ -6,19 +6,17 @@
 const Enemy* TargetingSystem::FindClosestEnemy(
     const Player& player,
     const std::vector<std::unique_ptr<Enemy>>& enemies,
-    float radius)
+    const float radius)
 {
     const Enemy* closest = nullptr;
     float bestDist = radius * radius;
 
-    for (const auto& e : enemies)
+    for (const auto& enemy : enemies)
     {
-        float d = Vector2DistanceSqr(player.GetPos(), e->GetPos());
-
-        if (d < bestDist)
+        if (const float d = Vector2DistanceSqr(player.GetPos(), enemy->GetPos()); d < bestDist)
         {
             bestDist = d;
-            closest = e.get();
+            closest = enemy.get();
         }
     }
 

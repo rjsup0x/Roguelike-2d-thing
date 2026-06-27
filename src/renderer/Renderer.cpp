@@ -5,11 +5,11 @@
 void Renderer::DrawAnimatedTexture(
     const Texture2D& tex,
     const Animation& animation,
-    Vector2 position,
-    float scale,
-    float rotation,
-    Color tint,
-    bool flipX)
+    const Vector2 position,
+    const float scale,
+    const float rotation,
+    const Color tint,
+    const bool flipX)
 {
     Rectangle source =
         animation.GetSourceRect(tex);
@@ -19,7 +19,7 @@ void Renderer::DrawAnimatedTexture(
         source.width *= -1;
     }
 
-    Rectangle dest =
+    const Rectangle dest =
     {
         position.x,
         position.y,
@@ -27,7 +27,7 @@ void Renderer::DrawAnimatedTexture(
         source.height * scale
     };
 
-    Vector2 origin =
+    const Vector2 origin =
     {
         dest.width * 0.5f,
         dest.height * 0.5f

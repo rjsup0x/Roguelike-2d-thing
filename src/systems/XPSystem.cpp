@@ -3,11 +3,11 @@
 #include "AssetManager.h"
 // #include <algorithm>
 
-void XPSystem::Update(float dt, std::vector<XPOrb>& orbs, Player& player)
+void XPSystem::Update(float deltaTime, std::vector<XPOrb>& orbs, Player& player)
 {
     for (auto& orb : orbs)
     {
-        orb.Update(dt, player.GetPos());
+        orb.Update(deltaTime, player.GetPos());
 
         if (orb.IsCollected())
         {

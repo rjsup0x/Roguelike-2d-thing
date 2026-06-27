@@ -11,7 +11,7 @@ public:
     Spawner();
 
     void Update(
-        float dt,
+        float deltaTime,
         std::vector<std::unique_ptr<Enemy>>& enemies,
         float worldWidth,
         float worldHeight

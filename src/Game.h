@@ -11,7 +11,7 @@ public:
     Game();
 
 
-    void Update(float dt);
+    void Update(float deltaTime);
 
     void Draw();
 

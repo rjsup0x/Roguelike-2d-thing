@@ -7,13 +7,13 @@
 class Animation
 {
 public:
-    Animation(
+    explicit Animation(
         int frameCount = 1,
         int rowCount = 1,
         float frameTime = 0.15f
     );
 
-    void Update(float dt);
+    void Update(float deltaTime);
 
     void SetRow(int row);
 

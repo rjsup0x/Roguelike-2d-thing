@@ -10,7 +10,7 @@ namespace
     // means there's exactly one place to change if the project moves, and
     // it can be swapped for a relative/CWD-based path or
     // GetApplicationDirectory() later without touching every line below.
-    constexpr const char* kAssetRoot = "/Users/ry/projects/roli/src/assets";
+    constexpr auto kAssetRoot = "/Users/ry/projects/roli/src/assets";
 }
 
 void AssetManager::Load()
@@ -65,7 +65,7 @@ void AssetManager::Unload()
     textures.clear();
 
     // unload sounds
-    for (auto &sound: sounds | std::views::values)
+    for (const auto &sound: sounds | std::views::values)
     {
         UnloadSound(sound);
     }

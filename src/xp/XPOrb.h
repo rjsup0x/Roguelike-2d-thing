@@ -7,7 +7,7 @@ class XPOrb
 public:
     XPOrb(Vector2 pos, int value);
 
-    void Update(float dt, Vector2 playerPos);
+    void Update(float deltaTime, Vector2 playerPos);
     void Draw() const;
 
     [[nodiscard]] bool IsCollected() const;

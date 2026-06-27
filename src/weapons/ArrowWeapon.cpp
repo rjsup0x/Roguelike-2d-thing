@@ -12,7 +12,7 @@ ArrowWeapon::ArrowWeapon()
 
 }
 
-void ArrowWeapon::Update(float deltaTime, Vector2 playerPos, Vector2 aimDirection)
+void ArrowWeapon::Update(const float deltaTime, const Vector2 playerPos, const Vector2 aimDirection)
 {
     fireTimer -= deltaTime;
 
@@ -71,10 +71,10 @@ void ArrowWeapon::Draw() const
     for (const auto& b : bullets)
     {
         // rotate bullets based on direction its facing
-        float rotation = atan2(b.direction.y, b.direction.x) * RAD2DEG;
+        const float rotation = atan2(b.direction.y, b.direction.x) * RAD2DEG;
 
         // the source of the bullet
-        Rectangle source{
+        const Rectangle source{
             0.0f,
             0.0f,
             static_cast<float>(ArrowWeaponTexture.width),
@@ -82,14 +82,14 @@ void ArrowWeapon::Draw() const
         };
 
         // where it lives
-        Rectangle dest{
+        const Rectangle dest{
             b.pos.x,
             b.pos.y,
             static_cast<float>(ArrowWeaponTexture.width),
             static_cast<float>(ArrowWeaponTexture.height)
         };
 
-        Vector2 origin{
+        const Vector2 origin{
             static_cast<float>(ArrowWeaponTexture.width) / 2.0f,
             static_cast<float>(ArrowWeaponTexture.height) / 2.0f
         };
@@ -118,7 +118,7 @@ void ArrowWeapon::HandleCollisions(Enemy& enemy)
             Enemy::GetRadius()))
         {
             // do bullets hit enemies
-            Vector2 hitDir = Vector2Normalize(
+            const Vector2 hitDir = Vector2Normalize(
                 Vector2Subtract(enemy.GetPos(), bullets[i].GetPos())
             );
 

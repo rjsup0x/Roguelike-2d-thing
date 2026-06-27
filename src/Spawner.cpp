@@ -24,7 +24,7 @@ namespace
         {20, 120, 130.0f}, // wave 4+ (fallback)
     };
 
-    constexpr int kWaveConfigCount = static_cast<int>(std::size(kWaveConfigs));
+    constexpr int kWaveConfigCount = std::size(kWaveConfigs);
 
     const WaveConfig& GetWaveConfig(int wave)
     {
@@ -64,14 +64,14 @@ bool Spawner::ShouldShowWaveText() const
 }
 
 void Spawner::Update(
-    float dt,
+    const float deltaTime,
     std::vector<std::unique_ptr<Enemy>>& enemies,
-    float worldWidth,
-    float worldHeight)
+    const float worldWidth,
+    const float worldHeight)
 {
     if (showWaveText)
     {
-        blinkTimer -= dt;
+        blinkTimer -= deltaTime;
 
         if (blinkTimer <= 0.0f)
         {
@@ -102,8 +102,8 @@ void Spawner::Update(
 
 void Spawner::StartWave(
     std::vector<std::unique_ptr<Enemy>>& enemies,
-    float worldWidth,
-    float worldHeight)
+    const float worldWidth,
+    const float worldHeight)
 {
     wave++;
     waveActive = true;
@@ -113,11 +113,11 @@ void Spawner::StartWave(
     blinkTimer = 0.3f;
     blinkCount = 0;
 
-    const WaveConfig& config = GetWaveConfig(wave);
+    const auto&[enemyCount, health, speed] = GetWaveConfig(wave);
 
-    for (int i = 0; i < config.enemyCount; i++)
+    for (int i = 0; i < enemyCount; i++)
     {
-        int side = GetRandomValue(0, 3);
+        const int side = GetRandomValue(0, 3);
 
         Vector2 pos;
 
@@ -133,7 +133,7 @@ void Spawner::StartWave(
         // init enemies
         auto enemy = std::make_unique<BatEnemy>(pos);
         // set the enemies stats
-        enemy->SetStats(config.health, config.speed);
+        enemy->SetStats(health, speed);
 
         // move enemies into the array
         enemies.push_back(std::move(enemy));

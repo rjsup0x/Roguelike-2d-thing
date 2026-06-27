@@ -14,14 +14,14 @@ OrbitalWeapon::OrbitalWeapon()
     orbitalPositions.resize(4);
 }
 
-void OrbitalWeapon::Update(float deltaTime, Vector2 playerPos, Vector2 aimDir)
+void OrbitalWeapon::Update(const float deltaTime, Vector2 playerPos, Vector2 aimDir)
 {
     // 0 += 180 * dt
     // spin 180 degrees * delta time
     currentAngle += rotationSpeed * deltaTime;
 
     //
-    float baseAngle = currentAngle * DEG2RAD;
+    const float baseAngle = currentAngle * DEG2RAD;
 
     for (int i = 0; i < 4; i++)
     {
@@ -48,19 +48,19 @@ void OrbitalWeapon::Draw() const
     // TEXTURE for orbital weapon
     const Texture2D& OrbitalTexture = AssetManager::GetTexture("orbital_weapon");
 
-    Vector2 size =
+    const Vector2 size =
     {
         static_cast<float>(OrbitalTexture.width),
         static_cast<float>(OrbitalTexture.height)
     };
 
-    for (const auto& pos : orbitalPositions)
+    for (const auto&[x, y] : orbitalPositions)
     {
         DrawTextureV(
             OrbitalTexture,
             {
-                pos.x - size.x / 2.0f,
-                pos.y - size.y / 2.0f
+                x - size.x / 2.0f,
+                y - size.y / 2.0f
             },
             WHITE
         );
@@ -78,7 +78,7 @@ void OrbitalWeapon::HandleCollisions(Enemy& enemy)
                 enemy.GetPos(),
                 Enemy::GetRadius()))
         {
-            Vector2 hitDir = Vector2Normalize(
+            const Vector2 hitDir = Vector2Normalize(
                 Vector2Subtract(
                     enemy.GetPos(),
                     pos

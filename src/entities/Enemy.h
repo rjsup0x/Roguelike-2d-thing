@@ -17,7 +17,7 @@ struct DamageNumber
 class Enemy
 {
 public:
-    Enemy(Vector2 startPos);
+    explicit Enemy(Vector2 startPos);
     virtual ~Enemy() = default;
 
     // Runs shared systems (freeze timer, hit flash, damage numbers,
@@ -28,7 +28,7 @@ public:
     // behavior via UpdateAI(), not by overriding Update() wholesale,
     // so the shared systems can never accidentally be skipped or
     // duplicated by a subclass.
-    void Update(float dt, Vector2 playerPos);
+    void Update(float deltaTime, Vector2 playerPos);
 
     virtual void Draw() const;
 

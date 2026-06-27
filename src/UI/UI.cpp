@@ -5,26 +5,26 @@
 // =========================
 // WORLD SPACE HEALTH BAR
 // =========================
-void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
+void UI::DrawHealthBar(Vector2 worldPosition, const int health, const int maxHealth)
 {
     constexpr float barWidth{6.0f};
     constexpr float barHeight{32.0f};
 
-    float healthPercent = Clamp(
+    const float healthPercent = Clamp(
         static_cast<float>(health) / static_cast<float>(maxHealth),
         0.0f,
         1.0f
     );
 
     // small gap from texture
-    Vector2 barPos = {
-        position.x + -26.0f,
-        position.y - barHeight * 0.5f
+    const Vector2 barPos = {
+        worldPosition.x + -26.0f,
+        worldPosition.y - barHeight * 0.5f
     };
 
-    float fillHeight{barHeight * healthPercent};
+    const float fillHeight{barHeight * healthPercent};
 
-    Color fillColor = {
+    const Color fillColor = {
         static_cast<unsigned char>(255 * (1.0f - healthPercent)),
         static_cast<unsigned char>(255 * healthPercent),
         0,
@@ -59,7 +59,7 @@ void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
 
     const char* text = TextFormat("%d / %d", health, maxHealth);
 
-    int textWidth = MeasureText(text, fontSize);
+    const int textWidth = MeasureText(text, fontSize);
 
     DrawText(
         text,
@@ -70,7 +70,7 @@ void UI::DrawHealthBar(Vector2 position, int health, int maxHealth)
     );
 }
 
-void UI::DrawXPBar(int xp, int maxXP, int level)
+void UI::DrawXPBar(const int xp, const int maxXP, const int level)
 {
     auto screenW = static_cast<float>(GetScreenWidth());
     auto screenH = static_cast<float>(GetScreenHeight());
@@ -78,8 +78,8 @@ void UI::DrawXPBar(int xp, int maxXP, int level)
     // =========================
     // HUD BACKGROUND PANEL
     // =========================
-    float panelHeight = 60.0f;
-    float panelY = screenH - panelHeight;
+    constexpr float panelHeight{60.0f};
+    const float panelY = screenH - panelHeight;
 
     DrawRectangle(
         0,
@@ -92,13 +92,13 @@ void UI::DrawXPBar(int xp, int maxXP, int level)
     // =========================
     // XP BAR
     // =========================
-    float barWidth = screenW - 200;
-    float barHeight = 12.0f;
+    const float barWidth = screenW - 200;
+    constexpr float barHeight{12.0f};
 
-    float screenX = screenW * 0.5f - barWidth * 0.5f;
+    const float screenX = screenW * 0.5f - barWidth * 0.5f;
 
     // move bar down INTO the panel
-    float screenY = panelY + (panelHeight * 0.5f) - (barHeight * 0.5f);
+    const float screenY = panelY + panelHeight * 0.5f - barHeight * 0.5f;
 
     float percent = static_cast<float>(xp) / static_cast<float>(maxXP);
     if (percent > 1.0f) percent = 1.0f;
@@ -137,13 +137,13 @@ void UI::HandleLevelUpInput(World& world)
     if (!world.IsLevelUpActive())
         return;
 
-    Vector2 mouse = GetMousePosition();
+    const Vector2 mouse = GetMousePosition();
 
-    int screenW = GetScreenWidth();
-    int screenH = GetScreenHeight();
+    const int screenW = GetScreenWidth();
+    const int screenH = GetScreenHeight();
 
-    int panelW{600};
-    int panelH{250};
+    constexpr int panelW{600};
+    constexpr int panelH{250};
 
     Rectangle panel = {
         (screenW - panelW) * 0.5f,
@@ -152,17 +152,17 @@ void UI::HandleLevelUpInput(World& world)
         static_cast<float>(panelH)
     };
 
-    int boxW{160};
-    int spacing{20};
+    constexpr int boxW{160};
+    constexpr int spacing{20};
 
-    float startX = panel.x + (panelW - (boxW * 3 + spacing * 2)) * 0.5f;
-    float y = panel.y + 80;
+    const float startX = panel.x + (panelW - (boxW * 3 + spacing * 2)) * 0.5f;
+    const float y = panel.y + 80;
 
     // make 3 boxes for upgrade option
-    for (size_t i{}; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
-        int boxH{100};
-        Rectangle rect = {
+        constexpr int boxH{100};
+        const Rectangle rect = {
             startX + i * (boxW + spacing),
             y,
             static_cast<float>(boxW),
@@ -184,14 +184,14 @@ void UI::DrawLevelUp(const World& world)
     if (!world.IsLevelUpActive())
         return;
 
-    float time = GetTime();
-    float pulse = 1.0f + sinf(time * 6.0f) * 0.03f;
+    const auto time = static_cast<float>(GetTime());
+    const float pulse = 1.0f + sinf(time * 6.0f) * 0.03f;
 
-    int screenW = GetScreenWidth();
-    int screenH = GetScreenHeight();
+    const int screenW = GetScreenWidth();
+    const int screenH = GetScreenHeight();
 
-    int panelW{600};
-    int panelH{250};
+    constexpr int panelW{600};
+    constexpr int panelH{250};
 
     Rectangle panel = {
         (screenW - panelW) * 0.5f,
@@ -206,33 +206,33 @@ void UI::DrawLevelUp(const World& world)
 
     DrawText("LEVEL UP!", panel.x + 20, panel.y + 15, 28, WHITE);
 
-    int boxW{160};
-    int spacing{20};
+    constexpr int boxW{160};
+    constexpr int spacing{20};
 
-    float startX = panel.x + (panelW - (boxW * 3 + spacing * 2)) * 0.5f;
-    float y = panel.y + 80;
+    const float startX = panel.x + (panelW - (boxW * 3 + spacing * 2)) * 0.5f;
+    const float y = panel.y + 80;
 
     for (int i = 0; i < 3; i++)
     {
         constexpr int boxH{100};
-        float x = startX + i * (boxW + spacing);
+        const float x = startX + i * (boxW + spacing);
 
-        float w = boxW * pulse;
-        float h = boxH * pulse;
+        const float w = boxW * pulse;
+        const float h = boxH * pulse;
 
-        float ox = (w - boxW) * 0.5f;
-        float oy = (h - boxH) * 0.5f;
+        const float ox = (w - boxW) * 0.5f;
+        const float oy = (h - boxH) * 0.5f;
 
-        Rectangle rect = {
+        const Rectangle rect = {
             x - ox,
             y - oy,
             w,
             h
         };
 
-        bool hovered = CheckCollisionPointRec(GetMousePosition(), rect);
+        const bool hovered = CheckCollisionPointRec(GetMousePosition(), rect);
 
-        Color base = hovered ? YELLOW : Fade(DARKGRAY, 0.9f);
+        const Color base = hovered ? YELLOW : Fade(DARKGRAY, 0.9f);
 
         DrawRectangleRec(rect, base);
         DrawRectangleLinesEx(rect, 2, hovered ? YELLOW : WHITE);
@@ -261,21 +261,19 @@ void UI::DrawLevelUp(const World& world)
 
 void UI::DrawMenuButton(const Rectangle rect, const char* text)
 {
-    bool hovered =
+    const bool hovered =
         CheckCollisionPointRec(
             GetMousePosition(),
             rect
         );
 
-    Color fill =
+    const Color fill =
         hovered
         ? Fade(DARKGRAY, 0.9f)
         : Fade(BLACK, 0.7f);
 
     DrawRectangleRec(rect, fill);
     DrawRectangleLinesEx(rect, 2, WHITE);
-
-    int fontSize{24};
 
     int textWidth =
         MeasureText(text, fontSize);
@@ -294,17 +292,17 @@ void UI::DrawTimer(const World& world)
     // get seconds
     int seconds = static_cast<int>(world.GetSurvivalTime());
     // get minutes
-    int minutes = seconds / 60;
+    const int minutes = seconds / 60;
     // seconds
     seconds %= 60;
 
     // length of screen
-    int screenWidth = GetScreenWidth();
+    const int screenWidth = GetScreenWidth();
 
     // text to display
     const char* text = TextFormat("%02d:%02d", minutes, seconds);
     // text width
-    int textWidth = MeasureText(text, 30);
+    const int textWidth = MeasureText(text, 30);
 
     DrawText(
         text,

@@ -14,7 +14,7 @@ void UpgradeSystem::Enter(World& world)
     world.options.push_back({UpgradeType::Damage, "Damage +1"});
 }
 
-void UpgradeSystem::Apply(World& world, int index)
+void UpgradeSystem::Apply(World& world, const int index)
 {
     if (index < 0 || index >= static_cast<int>(world.options.size()))
         return;
